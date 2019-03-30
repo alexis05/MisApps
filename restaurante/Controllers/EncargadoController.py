@@ -6,32 +6,48 @@ from mongoengine import errors
 from Utilidades.Config import app, connect
 from bson.objectid import ObjectId
 from Documents.Models import Encargado
+from Utilidades.Excepciones import InvalidUsage
 
 mongo = PyMongo(app)
+
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 
 class EncargadoseGet(Resource):
     def get(self):
         output = []
         for e in Encargado.objects:
+            print(e.usuario.nombre)
             output.append({
                 "id": str(e.id),
-                'restaurante': e.restaurante,
-                'usuario': e.usuario,
-                'role': e.role
+                'restaurante': str(e.restaurante.id),
+                'usuario': str(e.usuario.id),
+                'role': e.role,
+                'estado': e.estado
             })
         return jsonify({'resultado': output})
 
 class EncargadoPorId(Resource):
     def get(self, id):
+        if id is None or id is "":
+            raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
         output = []
-        for e in Encargado.objects(id=id):
-            output.append({
-                "id": str(e.id),
-                'restaurante': e.restaurante,
-                'usuario': e.usuario,
-                'role': e.role
-            })
-        return jsonify({'resultado': output})
+        try:
+            for e in Encargado.objects(id=id):
+                output.append({
+                    "id": str(e.id),
+                    'restaurante': str(e.restaurante.id),
+                    'usuario': str(e.usuario.id),
+                    'role': e.role,
+                    'estado': e.estado
+                })
+            return jsonify({'resultado': output})
+        except errors.ValidationError:
+            return jsonify({'error': "No existe, " + id})
 
 class CrearEncargado(Resource):
     def post(self):
@@ -39,46 +55,36 @@ class CrearEncargado(Resource):
         _usuario = request.json['usuario']
         _role = request.json['role']
         if _restaurante is None or _restaurante is "":
-            raise ValueError("Se debe ingresar un nombre")
+            raise InvalidUsage("Se debe ingresar un restaurante", status_code=400)
         if _usuario is None or _usuario is "":
-            raise ValueError("Se debe ingresar un numero de telefono")
+            raise InvalidUsage("Se debe ingresar un usuario", status_code=400)
         if _role is None or _role is "":
-            raise ValueError("Se debe ingresar un email")
+            raise InvalidUsage("Se debe ingresar un role", status_code=400)
 
         encargado = Encargado(restaurante=_restaurante,
-                                  usuario=_usuario,
-                                  role=_role)
+                              usuario=_usuario,
+                              role=_role,
+                              estado='1')
         try:
             encargado.save()
         except errors.NotUniqueError:
-            return jsonify({'error': "Usuario duplicado, "+ _usuario })
+            return jsonify({'error': "Encargado duplicado, "+ _usuario })
         return jsonify({'resultado': "Ok"})
 
 class ActualizarEncargado(Resource):
     def put(self):
+        _role = request.json['role']
+        _estado = request.json['estado']
         _id = request.json['id']
-        _nombre = request.json['nombre']
-        _telefono = request.json['telefono']
-        _email = request.json['email']
-        _horario = request.json['horario']
-        _logo = request.json['logo']
-        if _nombre is None or _nombre is "":
-            raise ValueError("Se debe ingresar un nombre")
-        if _telefono is None or _telefono is "":
-            raise ValueError("Se debe ingresar un numero de telefono")
-        if _email is None or _email is "":
-            raise ValueError("Se debe ingresar un email")
-        if _horario is None or _horario is "":
-            raise ValueError("Se debe ingresar un horario")
+        if _role is None or _role is "":
+            raise InvalidUsage("Se debe ingresar un role", status_code=400)
         if _id is None or _id is "":
-            raise ValueError("Se debe ingresar un detalle del producto.")
-        restaurante = Encargado.objects(id=_id)
+            raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
+
+        e = Encargado.objects(id=_id)
         try:
-            restaurante.update(nombre=_nombre)
-            restaurante.update(telefono=_telefono)
-            restaurante.update(email=_email)
-            restaurante.update(horario=_horario)
-            restaurante.update(logo=_logo)
+            e.update(role=_role)
+            e.update(estado=_estado)
         except errors.NotUniqueError:
-            return jsonify({'error': "Producto duplicado, "+ _nombre })
+            return jsonify({'error': "Encargado duplicado, "+ _id })
         return jsonify({'resultado': "Ok"})

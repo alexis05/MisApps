@@ -9,6 +9,7 @@ from flask_pymongo import PyMongo
 from Controllers.ProductoController import ProductoPorId, ProductosGet, CrearProducto, ActualizarProducto
 from Controllers.RestauranteController import RestauranteGet, RestaurantePorId, CrearRestaurante, ActualizarRestaurante
 from Controllers.UsuarioController import UsuariosGet, UsuarioPorId, CrearUsuario, ActualizarUsuario
+from Controllers.EncargadoController import EncargadoseGet, EncargadoPorId, CrearEncargado, ActualizarEncargado
 from Utilidades.Config import app
 
 #app = Flask(__name__)
@@ -48,6 +49,12 @@ api.add_resource(UsuariosGet, '/Usuarios')
 api.add_resource(UsuarioPorId, '/Usuario/<string:id>')
 api.add_resource(CrearUsuario, '/Usuario/Nuevo')
 api.add_resource(ActualizarUsuario, '/Usuario/Actualizar')
+
+api.add_resource(EncargadoseGet, '/Encargados')
+api.add_resource(EncargadoPorId, '/Encargado/<string:id>')
+api.add_resource(CrearEncargado, '/Encargado/Nuevo')
+api.add_resource(ActualizarEncargado, '/Encargado/Actualizar')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

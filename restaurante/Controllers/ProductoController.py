@@ -35,6 +35,8 @@ class ProductosGet(Resource):
 
 class ProductoPorId(Resource):
     def get(self, id):
+        if id is None or id is "":
+            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
         output = []
         try:
             for prod in Producto.objects(id=id):
@@ -50,7 +52,7 @@ class ProductoPorId(Resource):
                 })
             return jsonify({'resultado': output})
         except errors.ValidationError:
-            return jsonify({'resultado': "No se existe."})
+            return jsonify({'resultado': "No se existe." + id})
 
 class CrearProducto(Resource):
     def post(self):

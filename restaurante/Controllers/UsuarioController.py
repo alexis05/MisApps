@@ -36,19 +36,25 @@ class UsuariosGet(Resource):
 
 class UsuarioPorId(Resource):
     def get(self, id):
+        if id is None or id is "":
+            raise InvalidUsage("Se debe ingresar un id del usuario.", status_code=400)
         output = []
-        for user in Usuario.objects(id=id):
-            output.append({
-                "id": str(user.id),
-                'nombre': user.nombre,
-                'email': user.email,
-                'telefono': user.telefono,
-                'direccion': user.direccion,
-                'creado': user.creado,
-                'foto': user.foto,
-                'estado': user.estado
-            })
-        return jsonify({'resultado': output})
+        try:
+
+            for user in Usuario.objects(id=id):
+                output.append({
+                    "id": str(user.id),
+                    'nombre': user.nombre,
+                    'email': user.email,
+                    'telefono': user.telefono,
+                    'direccion': user.direccion,
+                    'creado': user.creado,
+                    'foto': user.foto,
+                    'estado': user.estado
+                })
+            return jsonify({'resultado': output})
+        except errors.ValidationError:
+            return jsonify({'resultado': "No se existe." + id})
 
 class CrearUsuario(Resource):
     def post(self):
@@ -106,7 +112,7 @@ class ActualizarUsuario(Resource):
         #if _clave is None or _clave is "":
         #    raise ValueError("Se debe ingresar un detalle del producto.")
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
+            raise InvalidUsage("Se debe ingresar un id del usuario.", status_code=400)
 
         user = Usuario.objects(id=_id)
         try:
