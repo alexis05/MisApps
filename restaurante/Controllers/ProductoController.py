@@ -71,8 +71,7 @@ class CrearProducto(Resource):
                             precio=_precio,
                             detalle=_detalle,
                             fotos= _fotos,
-                            registrado_por=_registrado_por,
-                            estado='1')
+                            registrado_por=_registrado_por)
         try:
             producto.save()
         except errors.NotUniqueError as exc:

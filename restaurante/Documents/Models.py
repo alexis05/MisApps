@@ -11,7 +11,7 @@ class Restaurante(Document):
     horario = StringField()
     logo = StringField()
     creado = DateTimeField(default=datetime.datetime.now())
-    estado = StringField(choices=ESTADO, default=1)
+    estado = StringField(choices=ESTADO, default='1')
 
 class Usuario(Document):
     nombre = StringField(required=True, max_length=200)
@@ -21,7 +21,7 @@ class Usuario(Document):
     creado = DateTimeField(default=datetime.datetime.now())
     clave = StringField()
     foto = StringField()
-    estado = StringField(choices=ESTADO, default=1)
+    estado = StringField(choices=ESTADO, default='1')
 
 ROLES = (('1', 'SuperAdmin'),
         ('2', 'Admin'),
@@ -32,7 +32,7 @@ class Encargado(Document):
     restaurante = ReferenceField(Restaurante)
     usuario = ReferenceField(Usuario, unique=True)
     role = StringField(choices=ROLES)
-    estado = StringField(choices=ESTADO)
+    estado = StringField(choices=ESTADO, default='1')
 
 class Producto(Document):
     nombre = StringField(required=True, max_length=300, unique=True)
@@ -41,4 +41,4 @@ class Producto(Document):
     creado = DateTimeField(default=datetime.datetime.now())
     fotos = StringField()
     registrado_por = ReferenceField(Encargado)
-    estado = StringField(choices=ESTADO)
+    estado = StringField(choices=ESTADO, default='1')

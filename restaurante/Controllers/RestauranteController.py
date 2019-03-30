@@ -72,8 +72,7 @@ class CrearRestaurante(Resource):
                                   telefono=_telefono,
                                   email=_email,
                                   horario=_horario,
-                                  logo=_logo,
-                                  estado='1')
+                                  logo=_logo)
         try:
             restaurante.save()
         except errors.NotUniqueError:

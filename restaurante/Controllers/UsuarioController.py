@@ -56,7 +56,7 @@ class CrearUsuario(Resource):
         _telefono = request.json['telefono']
         _email = request.json['email']
         _direccion = request.json['direccion']
-        _logo = request.json['logo']
+        _foto = request.json['foto']
         _clave = request.json['clave']
         _foto = request.json['foto']
         if _nombre is None or _nombre is "":
