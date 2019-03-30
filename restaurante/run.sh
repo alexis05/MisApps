@@ -1,6 +1,7 @@
 #!/bin/sh
 cd ..
+cd ..
 source venv/bin/activate
-cd restaurante
+cd MisApps/restaurante
 pip3 install -r r.txt
 FLASK_APP=main.py flask run

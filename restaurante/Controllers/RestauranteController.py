@@ -40,9 +40,9 @@ class RestaurantePorId(Resource):
                 output.append({
                     "id": str(rest.id),
                     'nombre': rest.nombre,
-                    'telefono': rest.precio,
-                    'email': rest.detalle,
-                    'horario': rest.creado,
+                    'telefono': rest.telefono,
+                    'email': rest.email,
+                    'horario': rest.horario,
                     'logo': rest.logo,
                     'creado': rest.creado,
                     'estado': rest.estado
