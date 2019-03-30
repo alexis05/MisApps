@@ -28,7 +28,7 @@ class ProductosGet(Resource):
                 'detalle': prod.detalle,
                 'creado': prod.creado,
                 'fotos': prod.fotos,
-                'registrado_por': prod.registrado_por,
+                'registrado_por': str(prod.registrado_por.id),
                 'estado': prod.estado
             })
         return jsonify({'resultado': output})
@@ -47,7 +47,7 @@ class ProductoPorId(Resource):
                     'detalle': prod.detalle,
                     'creado': prod.creado,
                     'fotos': prod.fotos,
-                    'registrado_por': prod.registrado_por,
+                    'registrado_por': str(prod.registrado_por.id),
                     'estado': prod.estado
                 })
             return jsonify({'resultado': output})
@@ -90,7 +90,7 @@ class ActualizarProducto(Resource):
         _estado = request.json['estado']
         if _nombre is None or _nombre is "":
             raise InvalidUsage("Se debe ingresar un nombre", status_code=400)
-        if _precio is None or _precio is "":
+        if _precio is None or _precio is "" or _precio == 0:
             raise InvalidUsage("Se debe ingresar un precio", status_code=400)
         if _detalle is None or _detalle is "":
             raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
