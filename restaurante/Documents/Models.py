@@ -8,7 +8,7 @@ class Restaurante(Document):
     nombre = StringField(required=True, unique=True)
     telefono = StringField()
     email = StringField(required=True,unique=True)
-    horario = StringField()
+    horario = StringField(required=True)
     logo = StringField()
     creado = DateTimeField(default=datetime.datetime.now())
     estado = StringField(choices=ESTADO, default='1')
@@ -19,7 +19,7 @@ class Usuario(Document):
     telefono = StringField(required=False, max_length=50)
     direccion = StringField(required=False)
     creado = DateTimeField(default=datetime.datetime.now())
-    clave = StringField()
+    clave = StringField(required=True, min_length=8)
     foto = StringField()
     estado = StringField(choices=ESTADO, default='1')
 

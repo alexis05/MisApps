@@ -74,7 +74,7 @@ class CrearUsuario(Resource):
                        email=_email,
                        telefono=_telefono,
                        direccion=_direccion,
-                       clave=bcrypt.generate_password_hash(_clave),
+                       clave=str(bcrypt.generate_password_hash(_clave)),
                        foto=_foto)
         try:
             user.save()
@@ -94,15 +94,17 @@ class ActualizarUsuario(Resource):
         _id = request.json['id']
 
         if _nombre is None or _nombre is "":
-            raise ValueError("Se debe ingresar un nombre.")
+            raise InvalidUsage("Se debe ingresar un nombre.", status_code=400)
         if _telefono is None or _telefono is "":
-            raise ValueError("Se debe ingresar un numero de telefono.")
+            raise InvalidUsage("Se debe ingresar un numero de telefono.", status_code=400)
         if _email is None or _email is "":
-            raise ValueError("Se debe ingresar un email.")
+            raise InvalidUsage("Se debe ingresar un email.", status_code=400)
         if _direccion is None or _direccion is "":
-            raise ValueError("Se debe ingresar una direccion.")
-        if _clave is None or _clave is "":
-            raise ValueError("Se debe ingresar un detalle del producto.")
+            raise InvalidUsage("Se debe ingresar una direccion.", status_code=400)
+        if len(_clave) < 8 and len(_clave) >0:
+            raise InvalidUsage("La clave debe tener minimo 8 caracteres.", status_code=400)
+        #if _clave is None or _clave is "":
+        #    raise ValueError("Se debe ingresar un detalle del producto.")
         if _id is None or _id is "":
             raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
 
@@ -112,7 +114,8 @@ class ActualizarUsuario(Resource):
             user.update(telefono=_telefono)
             user.update(email=_email)
             user.update(direccion=_direccion)
-            user.update(calve=_clave)
+            if len(_clave) > 8:
+                user.update(clave=str(bcrypt.generate_password_hash(_clave))),
             user.update(foto=_foto)
         except errors.NotUniqueError:
             return jsonify({'error': "Usuario duplicado, "+ _nombre })
