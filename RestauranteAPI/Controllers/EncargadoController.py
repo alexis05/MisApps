@@ -24,7 +24,7 @@ class EncargadoseGet(Resource):
             print(e.usuario.nombre)
             output.append({
                 "id": str(e.id),
-                'restaurante': str(e.restaurante.id),
+                'RestauranteAPI': str(e.restaurante.id),
                 'usuario': str(e.usuario.id),
                 'role': e.role,
                 'estado': e.estado
@@ -40,7 +40,7 @@ class EncargadoPorId(Resource):
             for e in Encargado.objects(id=id):
                 output.append({
                     "id": str(e.id),
-                    'restaurante': str(e.restaurante.id),
+                    'RestauranteAPI': str(e.restaurante.id),
                     'usuario': str(e.usuario.id),
                     'role': e.role,
                     'estado': e.estado
@@ -51,11 +51,11 @@ class EncargadoPorId(Resource):
 
 class CrearEncargado(Resource):
     def post(self):
-        _restaurante = request.json['restaurante']
+        _restaurante = request.json['RestauranteAPI']
         _usuario = request.json['usuario']
         _role = request.json['role']
         if _restaurante is None or _restaurante is "":
-            raise InvalidUsage("Se debe ingresar un restaurante", status_code=400)
+            raise InvalidUsage("Se debe ingresar un RestauranteAPI", status_code=400)
         if _usuario is None or _usuario is "":
             raise InvalidUsage("Se debe ingresar un usuario", status_code=400)
         if _role is None or _role is "":

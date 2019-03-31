@@ -35,7 +35,7 @@ class RestauranteGet(Resource):
 class RestaurantePorId(Resource):
     def get(self, id):
         if id is None or id is "":
-            raise InvalidUsage("Se debe ingresar un id del restaurante.", status_code=400)
+            raise InvalidUsage("Se debe ingresar un id del RestauranteAPI.", status_code=400)
         output = []
         try:
             for rest in Restaurante.objects(id=id):
@@ -99,7 +99,7 @@ class ActualizarRestaurante(Resource):
         if _horario is None or _horario is "":
             raise InvalidUsage("Se debe ingresar un horario", status_code=400)
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un id del restaurante.", status_code=400)
+            raise InvalidUsage("Se debe ingresar un id del RestauranteAPI.", status_code=400)
         if _estado != '1' and _estado !='0':
             raise InvalidUsage("Solo se puede ingresar 1 o 0.", status_code=400)
         restaurante = Restaurante.objects(id=_id)
