@@ -52,7 +52,7 @@ api.add_resource(UsuarioPorId, '/Usuario/<string:id>')
 api.add_resource(CrearUsuario, '/Usuario/Nuevo')
 api.add_resource(ActualizarUsuario, '/Usuario/Actualizar')
 
-api.add_resource(EncargadoseGet, '/Encargados')
+api.add_resource(EncargadoseGet, '/Encargados/<string:id>')
 api.add_resource(EncargadoPorId, '/Encargado/<string:id>')
 api.add_resource(CrearEncargado, '/Encargado/Nuevo')
 api.add_resource(ActualizarEncargado, '/Encargado/Actualizar')
