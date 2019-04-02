@@ -124,7 +124,7 @@ class ActualizarProducto(Resource):
         if _detalle is None or _detalle is "":
             raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
+            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
         if _estado is None or _estado is "":
             raise InvalidUsage("Se debe ingresar un estado.", status_code=400)
         if _estado != '1' and _estado !='0':
@@ -142,4 +142,15 @@ class ActualizarProducto(Resource):
             producto.update(disponible=_disponible)
         except errors.NotUniqueError as exc:
             return jsonify({'error': "Producto duplicado, "+ _nombre })
+        return jsonify({'resultado': "Ok"})
+
+class BorrarProducto(Resource):
+    def delete(self):
+        _id = request.json['id']
+        if _id is None or _id is "":
+            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
+        try:
+            Producto.objects(id=_id).delete()
+        except errors.ValidationError:
+            return jsonify({'error': "No se pudo eliminar, " + _id})
         return jsonify({'resultado': "Ok"})
