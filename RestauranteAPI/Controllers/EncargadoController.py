@@ -33,6 +33,7 @@ class EncargadoseGet(Resource):
 
 class EncargadoPorId(Resource):
     def get(self, id):
+        # TODO: Se debe listar encargados por restaurante
         if id is None or id is "":
             raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
         output = []

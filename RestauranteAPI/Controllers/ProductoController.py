@@ -88,6 +88,21 @@ class CrearProducto(Resource):
             return jsonify({'error': "Producto duplicado, "+ _nombre })
         return jsonify({'resultado': "Ok"})
 
+class MarcarDisponibilidadDelProducto(Resource):
+    def post(self):
+        _producto = request.json['producto']
+        _esta_disponible = request.json['esta_disponible']
+        if _producto is None or _producto is "":
+            raise InvalidUsage("Se requiere un producto", status_code=400)
+        if _esta_disponible is None or _esta_disponible is "":
+            raise InvalidUsage("Se debe enviar la disponiblidad", status_code=400)
+        producto_a_marcar = Producto.objects(id=_producto)
+        try:
+            producto_a_marcar.update(disponible=_esta_disponible)
+        except errors.NotUniqueError as exc:
+            return jsonify({'error': "Producto duplicado, "+ _producto })
+        return jsonify({'resultado': "Ok"})
+
 class ActualizarProducto(Resource):
     def put(self):
         _nombre = request.json['nombre']
