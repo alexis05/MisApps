@@ -23,7 +23,7 @@ class EncargadoseGet(Resource):
         for e in Encargado.objects(restaurante=id):
             output.append({
                 "id": str(e.id),
-                'RestauranteAPI': str(e.restaurante.id),
+                'restaurante': str(e.restaurante.id),
                 'usuario': str(e.usuario.id),
                 'role': e.role,
                 'estado': e.estado
@@ -39,7 +39,7 @@ class EncargadoPorId(Resource):
             for e in Encargado.objects(id=id):
                 output.append({
                     "id": str(e.id),
-                    'RestauranteAPI': str(e.restaurante.id),
+                    'restaurante': str(e.restaurante.id),
                     'usuario': str(e.usuario.id),
                     'role': e.role,
                     'estado': e.estado
@@ -50,11 +50,11 @@ class EncargadoPorId(Resource):
 
 class CrearEncargado(Resource):
     def post(self):
-        _restaurante = request.json['RestauranteAPI']
+        _restaurante = request.json['restaurante']
         _usuario = request.json['usuario']
         _role = request.json['role']
         if _restaurante is None or _restaurante is "":
-            raise InvalidUsage("Se debe ingresar un RestauranteAPI", status_code=400)
+            raise InvalidUsage("Se debe ingresar un restaurante", status_code=400)
         if _usuario is None or _usuario is "":
             raise InvalidUsage("Se debe ingresar un usuario", status_code=400)
         if _role is None or _role is "":
@@ -79,7 +79,6 @@ class ActualizarEncargado(Resource):
             raise InvalidUsage("Se debe ingresar un role", status_code=400)
         if _id is None or _id is "":
             raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
-
         e = Encargado.objects(id=_id)
         try:
             e.update(role=_role)

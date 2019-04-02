@@ -36,7 +36,7 @@ class Personas(Resource):
 
 api.add_resource(Personas, '/')
 
-api.add_resource(ProductosGet, '/Productos')
+api.add_resource(ProductosGet, '/Productos/<string:id>')
 api.add_resource(ProductoPorId, '/Producto/<string:id>')
 api.add_resource(CrearProducto, '/Producto/Nuevo')
 api.add_resource(ActualizarProducto, '/Producto/Actualizar')

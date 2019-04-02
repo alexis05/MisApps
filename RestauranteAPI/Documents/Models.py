@@ -55,6 +55,7 @@ class Producto(Document):
     estado = StringField(choices=ESTADO, default='1')
     disponible = BooleanField(required=True,default=True)
     comentarios = ListField(ReferenceField(Comentarios))
+    restaurante = ReferenceField(Restaurante)
 
 class Carrito(Document):
     productos = ListField(ReferenceField(Producto))

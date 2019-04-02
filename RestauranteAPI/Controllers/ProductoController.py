@@ -18,10 +18,9 @@ def handle_invalid_usage(error):
 
 
 class ProductosGet(Resource):
-    def get(self):
-        # TODO: Se debe limitar la busqueda por restaurante para evitar errores de performance
+    def get(self, id):
         output = []
-        for prod in Producto.objects:
+        for prod in Producto.objects(restaurante=id):
             output.append({
                 "id": str(prod.id),
                 'nombre': prod.nombre,
@@ -31,7 +30,8 @@ class ProductosGet(Resource):
                 'fotos': prod.fotos,
                 'registrado_por': str(prod.registrado_por.id),
                 'estado': prod.estado,
-                'disponible': prod.disponible
+                'disponible': prod.disponible,
+                'restaurante': str(prod.restaurante.id)
                 #'comentario': prod.
             })
         return jsonify({'resultado': output})
@@ -52,7 +52,8 @@ class ProductoPorId(Resource):
                     'fotos': prod.fotos,
                     'registrado_por': str(prod.registrado_por.id),
                     'estado': prod.estado,
-                    'disponible': prod.disponible
+                    'disponible': prod.disponible,
+                    'restaurante': prod.restaurante
                 })
             return jsonify({'resultado': output})
         except errors.ValidationError:
@@ -66,6 +67,7 @@ class CrearProducto(Resource):
         _registrado_por = request.json['registrado_por']
         _fotos = request.json['fotos']
         _disponible = request.json['disponible']
+        _restaurante = request.json['restaurante']
         if _nombre is None or _nombre is "":
             raise InvalidUsage("Se debe ingresar un nombre", status_code=400)
         if _precio is None or _precio is "":
@@ -76,12 +78,15 @@ class CrearProducto(Resource):
             raise InvalidUsage("Se debe ingresar un usuario como creador del producto.", status_code=400)
         if _disponible is None or _disponible is "":
             raise InvalidUsage("El producto debe ser marcado como disponible o no.", status_code=400)
+        if _restaurante is None or _restaurante is "":
+            raise InvalidUsage("Todo producto debe estar asociado a un restaurante.", status_code=400)
         producto = Producto(nombre=_nombre,
                             precio=_precio,
                             detalle=_detalle,
                             fotos= _fotos,
                             registrado_por=_registrado_por,
-                            disponible=_disponible)
+                            disponible=_disponible,
+                            restaurante=_restaurante)
         try:
             producto.save()
         except errors.NotUniqueError as exc:
