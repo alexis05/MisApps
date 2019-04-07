@@ -105,3 +105,6 @@ venv.bak/
 
 #Visual
 .vscode/
+
+#ide
+.idea/
