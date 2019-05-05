@@ -1,6 +1,10 @@
 import datetime
 from mongoengine import *
 
+# TODO: ver si se puede adaptar a turismo 
+# viajes
+# guias 
+
 ESTADO = (('1', 'Activo'),
         ('0', 'Inactivo'))
 

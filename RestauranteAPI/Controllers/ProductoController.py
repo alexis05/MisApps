@@ -10,6 +10,7 @@ from Utilidades.Excepciones import InvalidUsage
 
 mongo = PyMongo(app)
 
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
@@ -32,14 +33,16 @@ class ProductosGet(Resource):
                 'estado': prod.estado,
                 'disponible': prod.disponible,
                 'restaurante': str(prod.restaurante.id)
-                #'comentario': prod.
+                # 'comentario': prod.
             })
         return jsonify({'resultado': output})
+
 
 class ProductoPorId(Resource):
     def get(self, id):
         if id is None or id is "":
-            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del producto.", status_code=400)
         output = []
         try:
             for prod in Producto.objects(id=id):
@@ -59,6 +62,7 @@ class ProductoPorId(Resource):
         except errors.ValidationError:
             return jsonify({'resultado': "No se existe." + id})
 
+
 class CrearProducto(Resource):
     def post(self):
         _nombre = request.json['nombre']
@@ -73,25 +77,30 @@ class CrearProducto(Resource):
         if _precio is None or _precio is "":
             raise InvalidUsage("Se debe ingresar un precio", status_code=400)
         if _detalle is None or _detalle is "":
-            raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un detalle del producto.", status_code=400)
         if _registrado_por is None or _registrado_por is "":
-            raise InvalidUsage("Se debe ingresar un usuario como creador del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un usuario como creador del producto.", status_code=400)
         if _disponible is None or _disponible is "":
-            raise InvalidUsage("El producto debe ser marcado como disponible o no.", status_code=400)
+            raise InvalidUsage(
+                "El producto debe ser marcado como disponible o no.", status_code=400)
         if _restaurante is None or _restaurante is "":
-            raise InvalidUsage("Todo producto debe estar asociado a un restaurante.", status_code=400)
+            raise InvalidUsage(
+                "Todo producto debe estar asociado a un restaurante.", status_code=400)
         producto = Producto(nombre=_nombre,
                             precio=_precio,
                             detalle=_detalle,
-                            fotos= _fotos,
+                            fotos=_fotos,
                             registrado_por=_registrado_por,
                             disponible=_disponible,
                             restaurante=_restaurante)
         try:
             producto.save()
         except errors.NotUniqueError as exc:
-            return jsonify({'error': "Producto duplicado, "+ _nombre })
+            return jsonify({'error': "Producto duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})
+
 
 class MarcarDisponibilidadDelProducto(Resource):
     def post(self):
@@ -100,13 +109,15 @@ class MarcarDisponibilidadDelProducto(Resource):
         if _producto is None or _producto is "":
             raise InvalidUsage("Se requiere un producto", status_code=400)
         if _esta_disponible is None or _esta_disponible is "":
-            raise InvalidUsage("Se debe enviar la disponiblidad", status_code=400)
+            raise InvalidUsage(
+                "Se debe enviar la disponiblidad", status_code=400)
         producto_a_marcar = Producto.objects(id=_producto)
         try:
             producto_a_marcar.update(disponible=_esta_disponible)
         except errors.NotUniqueError as exc:
-            return jsonify({'error': "Producto duplicado, "+ _producto })
+            return jsonify({'error': "Producto duplicado, " + _producto})
         return jsonify({'resultado': "Ok"})
+
 
 class ActualizarProducto(Resource):
     def put(self):
@@ -122,15 +133,19 @@ class ActualizarProducto(Resource):
         if _precio is None or _precio is "" or _precio == 0:
             raise InvalidUsage("Se debe ingresar un precio", status_code=400)
         if _detalle is None or _detalle is "":
-            raise InvalidUsage("Se debe ingresar un detalle del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un detalle del producto.", status_code=400)
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del producto.", status_code=400)
         if _estado is None or _estado is "":
             raise InvalidUsage("Se debe ingresar un estado.", status_code=400)
-        if _estado != '1' and _estado !='0':
-            raise InvalidUsage("Solo se puede ingresar 1 o 0.", status_code=400)
+        if _estado != '1' and _estado != '0':
+            raise InvalidUsage(
+                "Solo se puede ingresar 1 o 0.", status_code=400)
         if _disponible is None or _disponible is "":
-            raise InvalidUsage("El producto debe ser marcado como disponible o no.", status_code=400)
+            raise InvalidUsage(
+                "El producto debe ser marcado como disponible o no.", status_code=400)
 
         producto = Producto.objects(id=_id)
         try:
@@ -141,16 +156,25 @@ class ActualizarProducto(Resource):
             producto.update(estado=_estado)
             producto.update(disponible=_disponible)
         except errors.NotUniqueError as exc:
-            return jsonify({'error': "Producto duplicado, "+ _nombre })
+            return jsonify({'error': "Producto duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})
+
 
 class BorrarProducto(Resource):
     def delete(self):
         _id = request.json['id']
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un id del producto.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del producto.", status_code=400)
         try:
             Producto.objects(id=_id).delete()
         except errors.ValidationError:
             return jsonify({'error': "No se pudo eliminar, " + _id})
         return jsonify({'resultado': "Ok"})
+
+
+class CantidadDeProductos(Resource):
+    def get(self, id):
+        cantidad = 0
+        cantidad = Producto.objects(restaurante=id).count()
+        return jsonify({'cantidad': cantidad})
