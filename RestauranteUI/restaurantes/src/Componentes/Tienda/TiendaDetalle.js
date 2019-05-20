@@ -61,7 +61,7 @@ class TiendaDetalle extends React.Component {
           <div className="container">
             <div className="row">
               {this.state.data.resultado.map(producto => (
-                <div className="col-sm">
+                <div className="col-sm" key={producto.id}>
                   <div className="card">
                     <img className="card-img-top" src={img} alt="Card" />
                     <div className="card-body">
