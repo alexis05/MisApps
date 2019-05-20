@@ -1,28 +1,24 @@
 import React from "react";
 import ListaTienda from "./ListaTiendas";
-import axios from "axios";
+import API from "../../API";
 
-class Tienda extends React.Component {
+class Tiendas extends React.Component {
   state = {
     loading: true,
     error: null,
     data: undefined
+    //apiDomain: Configuraciones._currentValue.apiRoot
   };
-
   componentDidMount() {
-    this.fechData();
+    this.fechDataTiendas();
   }
 
-  fechData = async () => {
+  fechDataTiendas = async () => {
     this.setState({ loading: true, error: null });
 
     try {
-      var config = {
-        headers: { "Access-Control-Allow-Origin": "*" }
-      };
-      axios.get(`http://127.0.0.1:5000/Restaurantes`, config).then(res => {
-        const data = res.data;
-        this.setState({ loading: false, data: data });
+      await API.get(`Restaurante/Producto/Cantidad`).then(res => {
+        this.setState({ loading: false, data: res.data });
       });
     } catch (error) {
       this.setState({ loading: false, error: error });
@@ -38,4 +34,4 @@ class Tienda extends React.Component {
   }
 }
 
-export default Tienda;
+export default Tiendas;

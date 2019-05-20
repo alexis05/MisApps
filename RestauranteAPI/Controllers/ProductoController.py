@@ -5,7 +5,7 @@ from flask_pymongo import PyMongo
 from mongoengine import errors
 from Utilidades.Config import app, connect
 from bson.objectid import ObjectId
-from Documents.Models import Producto
+from Documents.Models import Producto, Restaurante
 from Utilidades.Excepciones import InvalidUsage
 
 mongo = PyMongo(app)
@@ -173,8 +173,19 @@ class BorrarProducto(Resource):
         return jsonify({'resultado': "Ok"})
 
 
-class CantidadDeProductos(Resource):
-    def get(self, id):
-        cantidad = 0
-        cantidad = Producto.objects(restaurante=id).count()
-        return jsonify({'cantidad': cantidad})
+class RestYCantidadDeProductos(Resource):
+    def get(self):
+        output = []
+        for rest in Restaurante.objects:
+            output.append({
+                "id": str(rest.id),
+                'nombre': rest.nombre,
+                'telefono': rest.telefono,
+                'email': rest.email,
+                'horario': rest.horario,
+                'logo': rest.logo,
+                'creado': rest.creado,
+                'estado': rest.estado,
+                'cantidadDeProductos': Producto.objects(restaurante=rest.id).count()
+            })
+        return jsonify({'resultado': output})

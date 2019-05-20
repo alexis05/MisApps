@@ -34,7 +34,6 @@ class RestauranteGet(Resource):
                 'creado': rest.creado,
                 'estado': rest.estado
             })
-        print(Restaurante.objects.count())
         return jsonify({'resultado': output})
 
 
@@ -68,7 +67,6 @@ class CrearRestaurante(Resource):
         _telefono = request.json['telefono']
         _email = request.json['email']
         _horario = request.json['horario']
-        _logo = request.json['logo']
         _direccion = request.json['direccion']
         _clave = request.json['clave']
         if _nombre is None or _nombre is "":
@@ -85,8 +83,8 @@ class CrearRestaurante(Resource):
                                   telefono=_telefono,
                                   email=_email,
                                   horario=_horario,
-                                  logo=_logo)
-        user = Usuario(nombre=_nombre,
+                                  logo="")
+        user = Usuario(nombre="admin " + _nombre,
                        email=_email,
                        telefono=_telefono,
                        direccion=_direccion,
@@ -99,8 +97,19 @@ class CrearRestaurante(Resource):
                               estado='1')
         try:
             restaurante.save()
-            user.save()
-            encargado.save()
+            try:
+                user.save()
+                try:
+                    encargado.save()
+                except errors.NotUniqueError:
+                    # TODO: borrar rest y usuario
+                    # Producto.objects(id=_id).delete()
+                    Usuario.objects(id=user.id).delete()
+                    return jsonify({'error': "encargado duplicado"})
+            except errors.NotUniqueError:
+                # TODO: borrar rest
+                Restaurante.objects(id=restaurante).delete()
+                return jsonify({'error': "Usuario duplicado"})
         except errors.NotUniqueError:
             return jsonify({'error': "Restaurante duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})
