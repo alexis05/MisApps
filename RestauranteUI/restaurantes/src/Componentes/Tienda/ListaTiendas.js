@@ -7,8 +7,7 @@ function ListaTiendas(props) {
 
   useEffect(() => {
     // Update the document title using the browser API
-
-    console.log(`You clicked ${count} times`);
+    //console.log(`You clicked ${count} times`);
     //document.title =
   });
 

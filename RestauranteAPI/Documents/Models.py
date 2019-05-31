@@ -1,12 +1,12 @@
 import datetime
 from mongoengine import *
 
-# TODO: ver si se puede adaptar a turismo 
+# TODO: ver si se puede adaptar a turismo
 # viajes
-# guias 
+# guias
 
 ESTADO = (('1', 'Activo'),
-        ('0', 'Inactivo'))
+          ('0', 'Inactivo'))
 
 CALIFICACION = (
     (1, 'Excelente'),
@@ -16,22 +16,27 @@ CALIFICACION = (
     (5, 'Pesimo'))
 
 ROLES = (('1', 'SuperAdmin'),
-        ('2', 'Admin'),
-        ('3', 'Asistente'),
-        ('4', 'Soporte'))
+         ('2', 'Admin'),
+         ('3', 'Asistente'),
+         ('4', 'Soporte'))
+
+
 class Comentarios(Document):
     texto = StringField()
+
 
 class Restaurante(Document):
     nombre = StringField(required=True, unique=True)
     telefono = StringField()
-    email = StringField(required=True,unique=True)
+    email = StringField(required=True, unique=True)
     horario = StringField(required=True)
     logo = StringField()
     creado = DateTimeField(default=datetime.datetime.now())
     estado = StringField(choices=ESTADO, default='1')
+    eslogan = StringField()
     #comentarios = ListField(ReferenceField(Comentarios))
     #calificaciones = ListField(IntField())
+
 
 class Usuario(Document):
     nombre = StringField(required=True, max_length=200)
@@ -43,11 +48,13 @@ class Usuario(Document):
     foto = StringField()
     estado = StringField(choices=ESTADO, default='1')
 
+
 class Encargado(Document):
     restaurante = ReferenceField(Restaurante)
     usuario = ReferenceField(Usuario, unique=True)
     role = StringField(choices=ROLES)
     estado = StringField(choices=ESTADO, default='1')
+
 
 class Producto(Document):
     nombre = StringField(required=True, max_length=300, unique=True)
@@ -57,14 +64,16 @@ class Producto(Document):
     fotos = StringField()
     registrado_por = ReferenceField(Encargado)
     estado = StringField(choices=ESTADO, default='1')
-    disponible = BooleanField(required=True,default=True)
+    disponible = BooleanField(required=True, default=True)
     comentarios = ListField(ReferenceField(Comentarios))
     restaurante = ReferenceField(Restaurante)
+
 
 class Carrito(Document):
     productos = ListField(ReferenceField(Producto))
     restaurante = ReferenceField(Restaurante)
     usuario = ReferenceField(Usuario)
+
 
 class Pedido(Document):
     carrito = ReferenceField(Carrito)

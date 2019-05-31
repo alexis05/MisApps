@@ -32,7 +32,8 @@ class RestauranteGet(Resource):
                 'horario': rest.horario,
                 'logo': rest.logo,
                 'creado': rest.creado,
-                'estado': rest.estado
+                'estado': rest.estado,
+                'eslogan': rest.eslogan
             })
         return jsonify({'resultado': output})
 
@@ -53,7 +54,8 @@ class RestaurantePorId(Resource):
                     'horario': rest.horario,
                     'logo': rest.logo,
                     'creado': rest.creado,
-                    'estado': rest.estado
+                    'estado': rest.estado,
+                    'eslogan': rest.eslogan
                 })
             return jsonify({'resultado': output})
         except errors.ValidationError:
@@ -69,6 +71,7 @@ class CrearRestaurante(Resource):
         _horario = request.json['horario']
         _direccion = request.json['direccion']
         _clave = request.json['clave']
+        _eslogan = request.json['eslogan']
         if _nombre is None or _nombre is "":
             raise InvalidUsage('Se debe ingresar un nombre', status_code=400)
         if _telefono is None or _telefono is "":
@@ -83,7 +86,8 @@ class CrearRestaurante(Resource):
                                   telefono=_telefono,
                                   email=_email,
                                   horario=_horario,
-                                  logo="")
+                                  logo="",
+                                  esloga=_eslogan)
         user = Usuario(nombre="admin " + _nombre,
                        email=_email,
                        telefono=_telefono,
@@ -124,6 +128,7 @@ class ActualizarRestaurante(Resource):
         _horario = request.json['horario']
         _logo = request.json['logo']
         _estado = request.json['estado']
+        _eslogan = request.json['eslogan']
         if _nombre is None or _nombre is "":
             raise InvalidUsage('Se debe ingresar un nombre', status_code=400)
         if _telefono is None or _telefono is "":
@@ -147,6 +152,7 @@ class ActualizarRestaurante(Resource):
             restaurante.update(horario=_horario)
             restaurante.update(logo=_logo)
             restaurante.update(estado=_estado)
+            restaurante.update(eslogan=_eslogan)
         except errors.NotUniqueError:
             return jsonify({'error': "Producto duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})

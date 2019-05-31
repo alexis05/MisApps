@@ -5,10 +5,11 @@ import API from "../../API";
 
 class TiendaDetalle extends React.Component {
   state = {
+    loadingTienda: true,
     loading: true,
     error: null,
-    data: undefined
-    //apiDomain: Configuraciones._currentValue.apiRoot
+    data: undefined,
+    restaurante: undefined
   };
 
   componentDidMount() {
@@ -16,20 +17,27 @@ class TiendaDetalle extends React.Component {
   }
 
   fechDataTiendas = async () => {
-    this.setState({ loading: true, error: null });
+    this.setState({ loading: true, loadingTienda: true, error: null });
 
     try {
       await API.get(`Productos/${this.props.match.params.id}`).then(res => {
         this.setState({ loading: false, data: res.data });
       });
+      await API.get(`Restaurante/${this.props.match.params.id}`).then(
+        response => {
+          this.setState({
+            loadingTienda: false,
+            restaurante: response.data.resultado[0]
+          });
+        }
+      );
     } catch (error) {
       this.setState({ loading: false, error: error });
     }
   };
 
   render() {
-    console.log(this.props.match.params.id);
-    if (this.state.loading === true) {
+    if (this.state.loading === true || this.state.loadingTienda === true) {
       return "loading...";
     }
     return (
@@ -55,13 +63,13 @@ class TiendaDetalle extends React.Component {
             </ul>
           </div>
           <div className="card-body">
-            <h5 className="card-title">Nombre de la tienda.</h5>
-            <p className="card-text">slogan</p>
+            <h5 className="card-title">{this.state.restaurante.nombre}</h5>
+            <p className="card-text">{this.state.restaurante.eslogan}</p>
           </div>
           <div className="container">
             <div className="row">
               {this.state.data.resultado.map(producto => (
-                <div className="col-sm">
+                <div className="col-sm" key={producto.id}>
                   <div className="card">
                     <img className="card-img-top" src={img} alt="Card" />
                     <div className="card-body">
