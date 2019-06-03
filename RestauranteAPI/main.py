@@ -9,7 +9,7 @@ from flask_pymongo import PyMongo
 from Controllers.ProductoController import RestYCantidadDeProductos, ProductoPorId, ProductosGet, CrearProducto, ActualizarProducto, MarcarDisponibilidadDelProducto, BorrarProducto
 from Controllers.RestauranteController import RestauranteGet, RestaurantePorId, CrearRestaurante, ActualizarRestaurante
 from Controllers.UsuarioController import UsuariosGet, UsuarioPorId, CrearUsuario, ActualizarUsuario
-from Controllers.EncargadoController import EncargadoseGet, EncargadoPorId, CrearEncargado, ActualizarEncargado
+from Controllers.EncargadoController import EncargadosGet, EncargadoPorId, CrearEncargado, ActualizarEncargado
 from Utilidades.Config import app
 from flask_cors import CORS
 
@@ -58,7 +58,7 @@ api.add_resource(UsuarioPorId, '/Usuario/<string:id>')
 api.add_resource(CrearUsuario, '/Usuario/Nuevo')
 api.add_resource(ActualizarUsuario, '/Usuario/Actualizar')
 
-api.add_resource(EncargadoseGet, '/Encargados/<string:id>')
+api.add_resource(EncargadosGet, '/Encargados/<string:id>')
 api.add_resource(EncargadoPorId, '/Encargado/<string:id>')
 api.add_resource(CrearEncargado, '/Encargado/Nuevo')
 api.add_resource(ActualizarEncargado, '/Encargado/Actualizar')

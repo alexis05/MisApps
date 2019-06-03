@@ -2,6 +2,10 @@ import React from "react";
 import API from "../../../API";
 
 class PerfilTienda extends React.Component {
+  constructor(props) {
+    super(props);
+    this.miTienda = this.getTiendaIdFromLS("tiendaLocal");
+  }
   state = {
     loading: true,
     error: null,
@@ -9,6 +13,18 @@ class PerfilTienda extends React.Component {
     value: undefined,
     tienda_act: false
   };
+
+  getTiendaIdFromLS(key) {
+    if (localStorage.hasOwnProperty(key)) {
+      let value = localStorage.getItem(key);
+      try {
+        value = JSON.parse(value);
+        return value;
+      } catch (e) {
+        return e;
+      }
+    }
+  }
 
   handleChange = e => {
     this.setState({
@@ -46,7 +62,7 @@ class PerfilTienda extends React.Component {
 
   fechDataRestaurante = async () => {
     try {
-      await API.get(`Restaurante/5cd79b9e4458b2b904c0e9b0`).then(res => {
+      await API.get(`Restaurante/${this.miTienda.tienda}`).then(res => {
         this.setState({
           loading: false,
           data: res.data,

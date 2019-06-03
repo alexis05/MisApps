@@ -69,9 +69,11 @@ class CrearProducto(Resource):
         _precio = request.json['precio']
         _detalle = request.json['detalle']
         _registrado_por = request.json['registrado_por']
-        _fotos = request.json['fotos']
         _disponible = request.json['disponible']
         _restaurante = request.json['restaurante']
+        _fotos = ""
+        if request.json['fotos']:
+            _fotos = request.json['fotos']
         if _nombre is None or _nombre is "":
             raise InvalidUsage("Se debe ingresar un nombre", status_code=400)
         if _precio is None or _precio is "":

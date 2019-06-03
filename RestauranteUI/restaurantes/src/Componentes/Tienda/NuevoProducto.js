@@ -1,18 +1,75 @@
 import React from "react";
 import API from "../../API";
-
+import Select from "react-select";
 class NuevoProducto extends React.Component {
+  constructor(props) {
+    super(props);
+    //this.miTienda = this.getTiendaIdFromLS("tiendaLocal");
+  }
+
   state = {
     loading: true,
     error: null,
-    data: undefined
+    data: undefined,
+    encargadosList: undefined
+  };
+
+  getTiendaIdFromLS(key) {
+    if (localStorage.hasOwnProperty(key)) {
+      let value = localStorage.getItem(key);
+      try {
+        value = JSON.parse(value);
+        return value;
+      } catch (e) {
+        return e;
+      }
+    }
+  }
+
+  rellenarDropDeEncargados() {
+    const encargados_tienda = this.state.data.resultado;
+    var lista = [];
+    encargados_tienda.forEach(function(element) {
+      lista.push({
+        label: element.usuario[0].nombre,
+        value: element.id
+      });
+    });
+    this.setState({ encargadosList: lista });
+  }
+
+  componentDidMount() {
+    this.fechDataEncargados();
+  }
+
+  fechDataEncargados = async () => {
+    this.setState({ loading: true, error: null });
+    try {
+      await API.get(`Encargados/${this.props.match.params.id}`).then(res => {
+        this.setState({ loading: false, data: res.data });
+        this.rellenarDropDeEncargados();
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error });
+    }
   };
 
   handleChange = e => {
     this.setState({
       value: {
         ...this.state.value,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
+        restaurante: this.props.match.params.id
+      }
+    });
+  };
+
+  handleChangeDropdown = e => {
+    this.setState({
+      value: {
+        ...this.state.value,
+        registrado_por: e.value,
+        restaurante: this.props.match.params.id
       }
     });
   };
@@ -21,7 +78,8 @@ class NuevoProducto extends React.Component {
     this.setState({
       value: {
         ...this.state.value,
-        [e.target.name]: e.target.checked
+        [e.target.name]: e.target.checked,
+        restaurante: this.props.match.params.id
       }
     });
   };
@@ -44,7 +102,7 @@ class NuevoProducto extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <h1>Nuevo Producto</h1>
 
         <form onSubmit={this.handleSubmit}>
@@ -100,22 +158,22 @@ class NuevoProducto extends React.Component {
           </div>
 
           <div className="form-group">
-            <label>encargado</label>
-            <input
-              className="form-control"
-              type="text"
-              onChange={this.handleChange}
-              name="registrado_por"
+            <label>Encargado</label>
+            <Select
+              options={this.state.encargadosList}
+              isSearchable
+              placeholder="Seleccione un encargado"
+              onChange={this.handleChangeDropdown}
             />
           </div>
 
           <div className="form-group">
-            <label>restaurante</label>
             <input
               className="form-control"
-              type="text"
+              type="hidden"
               onChange={this.handleChange}
               name="restaurante"
+              value={this.props.match.params.id}
             />
           </div>
 

@@ -5,10 +5,11 @@ from flask_pymongo import PyMongo
 from mongoengine import errors
 from Utilidades.Config import app, connect
 from bson.objectid import ObjectId
-from Documents.Models import Encargado
+from Documents.Models import Encargado, Usuario
 from Utilidades.Excepciones import InvalidUsage
 
 mongo = PyMongo(app)
+
 
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
@@ -17,23 +18,38 @@ def handle_invalid_usage(error):
     return response
 
 
-class EncargadoseGet(Resource):
+class EncargadosGet(Resource):
     def get(self, id):
         output = []
+
         for e in Encargado.objects(restaurante=id):
-            output.append({
-                "id": str(e.id),
-                'restaurante': str(e.restaurante.id),
-                'usuario': str(e.usuario.id),
-                'role': e.role,
-                'estado': e.estado
-            })
+            for user in Usuario.objects(id=e.usuario.id):
+                outputUsuario = []
+                outputUsuario.append({
+                    "id": str(user.id),
+                    'nombre': user.nombre,
+                    'email': user.email,
+                    'telefono': user.telefono,
+                    'direccion': user.direccion,
+                    'creado': user.creado,
+                    'foto': user.foto,
+                    'estado': user.estado
+                })
+                output.append({
+                    "id": str(e.id),
+                    'restaurante': str(e.restaurante.id),
+                    'usuario': outputUsuario,
+                    'role': e.role,
+                    'estado': e.estado
+                })
         return jsonify({'resultado': output})
+
 
 class EncargadoPorId(Resource):
     def get(self, id):
         if id is None or id is "":
-            raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del encargado.", status_code=400)
         output = []
         try:
             for e in Encargado.objects(id=id):
@@ -48,13 +64,15 @@ class EncargadoPorId(Resource):
         except errors.ValidationError:
             return jsonify({'error': "No existe, " + id})
 
+
 class CrearEncargado(Resource):
     def post(self):
         _restaurante = request.json['restaurante']
         _usuario = request.json['usuario']
         _role = request.json['role']
         if _restaurante is None or _restaurante is "":
-            raise InvalidUsage("Se debe ingresar un restaurante", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un restaurante", status_code=400)
         if _usuario is None or _usuario is "":
             raise InvalidUsage("Se debe ingresar un usuario", status_code=400)
         if _role is None or _role is "":
@@ -67,8 +85,9 @@ class CrearEncargado(Resource):
         try:
             encargado.save()
         except errors.NotUniqueError:
-            return jsonify({'error': "Encargado duplicado, "+ _usuario })
+            return jsonify({'error': "Encargado duplicado, " + _usuario})
         return jsonify({'resultado': "Ok"})
+
 
 class ActualizarEncargado(Resource):
     def put(self):
@@ -78,11 +97,12 @@ class ActualizarEncargado(Resource):
         if _role is None or _role is "":
             raise InvalidUsage("Se debe ingresar un role", status_code=400)
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un id del encargado.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del encargado.", status_code=400)
         e = Encargado.objects(id=_id)
         try:
             e.update(role=_role)
             e.update(estado=_estado)
         except errors.NotUniqueError:
-            return jsonify({'error': "Encargado duplicado, "+ _id })
+            return jsonify({'error': "Encargado duplicado, " + _id})
         return jsonify({'resultado': "Ok"})

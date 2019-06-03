@@ -15,7 +15,11 @@ function App() {
       <Layout>
         <Switch>
           <Route exact path="/tienda/:id" component={TiendaDetalle} />
-          <Route exact path="/producto/nuevo" component={NuevoProducto} />
+          <Route
+            exact
+            path="/tienda/:id/producto/nuevo"
+            component={NuevoProducto}
+          />
           <Route exact path="/" component={Tiendas} />
           <Route exact path="/registro" component={Registro} />
           <Route exact path="/mitienda" component={PerfilTienda} />
