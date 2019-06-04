@@ -42,7 +42,7 @@ class TiendaDetalle extends React.Component {
       return "loading...";
     }
     return (
-      <div className="container mt-2">
+      <div className="container col-sm-12 mt-2">
         <LocalStorage tienda={this.props.match.params.id} />
         <div className="card text-center pb-2">
           <div className="card-header">
@@ -76,26 +76,28 @@ class TiendaDetalle extends React.Component {
             <h5 className="card-title">{this.state.restaurante.nombre}</h5>
             <p className="card-text">{this.state.restaurante.eslogan}</p>
           </div>
-          <div className="container lg-12 card-deck">
-            {this.state.data.resultado.map(producto => (
-              <div className="card-deck pb-2" key={producto.id}>
-                <div className="card">
-                  <img className="card-img-top" src={img} alt="Card" />
-                  <div className="card-body">
-                    <h5 className="card-title">{producto.nombre}</h5>
-                    <p className="card-text">{producto.detalle}</p>
-                    <Link to="/" className="btn btn-primary">
-                      Pedir
-                    </Link>
-                  </div>
-                  <div className="card-footer">
-                    <small className="text-muted">
-                      Last updated 3 mins ago
-                    </small>
+          <div className="container">
+            <div className="row">
+              {this.state.data.resultado.map(producto => (
+                <div className="card-deck pb-2 col-sm-4" key={producto.id}>
+                  <div className="card">
+                    <img className="card-img-top" src={img} alt="Card" />
+                    <div className="card-body">
+                      <h5 className="card-title">{producto.nombre}</h5>
+                      <p className="card-text">{producto.detalle}</p>
+                      <Link to="/" className="btn btn-primary">
+                        Pedir
+                      </Link>
+                    </div>
+                    <div className="card-footer">
+                      <small className="text-muted">
+                        Last updated 3 mins ago
+                      </small>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
