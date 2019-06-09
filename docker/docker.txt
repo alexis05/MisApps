@@ -1,0 +1,14 @@
+docker stop db
+docker rm db
+docker run -d --name db -p 27017:27017  --net docknet --mount src=dbdata,dst=/data/db -h bd.ab.com --ip 192.168.20.101 mongo
+
+
+
+docker run -d -p 27017:27017 -v ~/data:/data/db mongo
+
+docker run -d --name db -p 27017:27017  --net docknet --mount src=dbdata,dst=/data/db -h bd.ab.com --ip 192.168.20.101 mongo
+
+
+redes
+docker network ls
+docker network create --subnet=192.168.20.0/24 docknet

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import img from "../../imagenes/img.svg";
 import API from "../../API";
 import LocalStorage from "../../LocalStorage";
+import "./TiendaDetalle.css";
 
 class TiendaDetalle extends React.Component {
   state = {
@@ -12,6 +13,8 @@ class TiendaDetalle extends React.Component {
     data: undefined,
     restaurante: undefined
   };
+
+  mostrarFecha() {}
 
   componentDidMount() {
     this.fechDataTiendas();
@@ -86,13 +89,11 @@ class TiendaDetalle extends React.Component {
                       <h5 className="card-title">{producto.nombre}</h5>
                       <p className="card-text">{producto.detalle}</p>
                       <Link to="/" className="btn btn-primary">
-                        Pedir
+                        Pedir <i className="icon-edit" />
                       </Link>
                     </div>
                     <div className="card-footer">
-                      <small className="text-muted">
-                        Last updated 3 mins ago
-                      </small>
+                      <small className="text-muted">{producto.creado}</small>
                     </div>
                   </div>
                 </div>

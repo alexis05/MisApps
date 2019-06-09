@@ -14,6 +14,7 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Switch>
+          <Route exact path="/nueva/tienda" component={Registro} />
           <Route exact path="/tienda/:id" component={TiendaDetalle} />
           <Route
             exact
@@ -21,7 +22,6 @@ function App() {
             component={NuevoProducto}
           />
           <Route exact path="/" component={Tiendas} />
-          <Route exact path="/registro" component={Registro} />
           <Route exact path="/mitienda" component={PerfilTienda} />
           <Route component={NotFound} />
         </Switch>

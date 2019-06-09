@@ -87,7 +87,7 @@ class CrearRestaurante(Resource):
                                   email=_email,
                                   horario=_horario,
                                   logo="",
-                                  esloga=_eslogan)
+                                  eslogan=_eslogan)
         user = Usuario(nombre="admin " + _nombre,
                        email=_email,
                        telefono=_telefono,

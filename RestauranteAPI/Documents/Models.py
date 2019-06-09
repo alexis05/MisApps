@@ -61,6 +61,7 @@ class Producto(Document):
     precio = FloatField(required=True)
     detalle = StringField(required=False)
     creado = DateTimeField(default=datetime.datetime.now())
+    ultima_actualizacion = DateTimeField(default=datetime.datetime.now())
     fotos = StringField()
     registrado_por = ReferenceField(Encargado)
     estado = StringField(choices=ESTADO, default='1')

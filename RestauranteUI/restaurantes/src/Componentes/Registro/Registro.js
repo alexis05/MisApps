@@ -83,6 +83,18 @@ class Registro extends React.Component {
               </div>
 
               <div className="form-group">
+                <label htmlFor="eslogan">Eslogan</label>
+                <input
+                  id="eslogan"
+                  className="form-control"
+                  name="eslogan"
+                  type="text"
+                  placeholder="Eslogan"
+                  onChange={this.handleChange}
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="horario">Horario</label>
                 <textarea
                   className="form-control"
