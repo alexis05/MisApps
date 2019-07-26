@@ -12,3 +12,12 @@ docker run -d --name db -p 27017:27017  --net docknet --mount src=dbdata,dst=/da
 redes
 docker network ls
 docker network create --subnet=192.168.20.0/24 docknet
+
+*****LN
+docker stop api
+docker rm api
+docker image rm ln:ln
+docker build -t "ln:ln" .
+docker run -dti --name api --net docknet -p 5050:5050 -h api.com --ip 192.168.20.102 --add-host=bd.com:192.168.20.101 ln:ln
+
+

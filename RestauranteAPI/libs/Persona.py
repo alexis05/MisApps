@@ -43,7 +43,7 @@ class Persona:
         return self.__email
 
     @email.setter
-    def email(self,email):
+    def email(self, email):
         if email:
             self.__email = email
         else:

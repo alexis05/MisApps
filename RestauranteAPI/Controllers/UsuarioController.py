@@ -12,11 +12,13 @@ from Utilidades.Excepciones import InvalidUsage
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
 
+
 @app.errorhandler(InvalidUsage)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
+
 
 class UsuariosGet(Resource):
     def get(self):
@@ -34,10 +36,12 @@ class UsuariosGet(Resource):
             })
         return jsonify({'resultado': output})
 
+
 class UsuarioPorId(Resource):
     def get(self, id):
         if id is None or id is "":
-            raise InvalidUsage("Se debe ingresar un id del usuario.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del usuario.", status_code=400)
         output = []
         try:
 
@@ -56,6 +60,7 @@ class UsuarioPorId(Resource):
         except errors.ValidationError:
             return jsonify({'resultado': "No se existe." + id})
 
+
 class CrearUsuario(Resource):
     def post(self):
         _nombre = request.json['nombre']
@@ -68,11 +73,13 @@ class CrearUsuario(Resource):
         if _nombre is None or _nombre is "":
             raise InvalidUsage("Se debe ingresar un nombre.", status_code=400)
         if _telefono is None or _telefono is "":
-            raise InvalidUsage("Se debe ingresar un numero de telefono.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un numero de telefono.", status_code=400)
         if _email is None or _email is "":
             raise InvalidUsage("Se debe ingresar un email.", status_code=400)
         if _direccion is None or _direccion is "":
-            raise InvalidUsage("Se debe ingresar una direccion.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar una direccion.", status_code=400)
         if _clave is None or _clave is "":
             raise InvalidUsage("Se debe ingresar una clave.", status_code=400)
 
@@ -85,8 +92,9 @@ class CrearUsuario(Resource):
         try:
             user.save()
         except errors.NotUniqueError:
-            return jsonify({'error': "Usuario duplicado, "+ _nombre })
+            return jsonify({'error': "Usuario duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})
+
 
 class ActualizarUsuario(Resource):
     def put(self):
@@ -102,17 +110,21 @@ class ActualizarUsuario(Resource):
         if _nombre is None or _nombre is "":
             raise InvalidUsage("Se debe ingresar un nombre.", status_code=400)
         if _telefono is None or _telefono is "":
-            raise InvalidUsage("Se debe ingresar un numero de telefono.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un numero de telefono.", status_code=400)
         if _email is None or _email is "":
             raise InvalidUsage("Se debe ingresar un email.", status_code=400)
         if _direccion is None or _direccion is "":
-            raise InvalidUsage("Se debe ingresar una direccion.", status_code=400)
-        if len(_clave) < 8 and len(_clave) >0:
-            raise InvalidUsage("La clave debe tener minimo 8 caracteres.", status_code=400)
-        #if _clave is None or _clave is "":
+            raise InvalidUsage(
+                "Se debe ingresar una direccion.", status_code=400)
+        if len(_clave) < 8 and len(_clave) > 0:
+            raise InvalidUsage(
+                "La clave debe tener minimo 8 caracteres.", status_code=400)
+        # if _clave is None or _clave is "":
         #    raise ValueError("Se debe ingresar un detalle del producto.")
         if _id is None or _id is "":
-            raise InvalidUsage("Se debe ingresar un id del usuario.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un id del usuario.", status_code=400)
 
         user = Usuario.objects(id=_id)
         try:
@@ -124,5 +136,5 @@ class ActualizarUsuario(Resource):
                 user.update(clave=str(bcrypt.generate_password_hash(_clave))),
             user.update(foto=_foto)
         except errors.NotUniqueError:
-            return jsonify({'error': "Usuario duplicado, "+ _nombre })
+            return jsonify({'error': "Usuario duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})

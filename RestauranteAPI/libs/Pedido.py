@@ -1,4 +1,5 @@
-from libs.Persona import Persona
+from .Persona import Persona
+
 
 class Pedido(Persona):
 
