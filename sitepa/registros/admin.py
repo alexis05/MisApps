@@ -75,10 +75,10 @@ class JuntaComunalAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = 'Administración'
-admin.site.site_title = 'Coffeehouse admin'
-admin.site.site_url = 'http://coffeehouse.com/'
-admin.site.index_title = 'Coffeehouse administration'
-admin.empty_value_display = '**Empty**'
+admin.site.site_title = 'Registros PA'
+admin.site.site_url = 'http://localhost:8080.com/'
+admin.site.index_title = 'Registros Admin'
+admin.empty_value_display = '**Vacio**'
 
 # admin.site.register(JuntaComunal)
 admin.site.register(Persona, PersonaAdmin)
