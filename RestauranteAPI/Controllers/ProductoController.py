@@ -19,6 +19,41 @@ def handle_invalid_usage(error):
     return response
 
 
+class ProductosEnGeneral(Resource):
+    def get(self):
+        output = []
+        outputRest = []
+        for prod in Producto.objects():
+            print(prod)
+            for rest in Restaurante.objects(id=prod.restaurante.id):
+                print(rest)
+                outputRest.append({
+                    "id": str(rest.id),
+                    'nombre': rest.nombre,
+                    'telefono': rest.telefono,
+                    'email': rest.email,
+                    'horario': rest.horario,
+                    'logo': rest.logo,
+                    'creado': rest.creado,
+                    'estado': rest.estado,
+                    'eslogan': rest.eslogan
+                })
+            output.append({
+                "id": str(prod.id),
+                'nombre': prod.nombre,
+                'precio': prod.precio,
+                'detalle': prod.detalle,
+                'creado': prod.creado,
+                'fotos': prod.fotos,
+                'registrado_por': str(prod.registrado_por.id),
+                'estado': prod.estado,
+                'disponible': prod.disponible,
+                'restaurante': outputRest
+                # 'comentario': prod.
+            })
+        return jsonify({'resultado': output})
+
+
 class ProductosGet(Resource):
     def get(self, id):
         output = []

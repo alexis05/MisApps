@@ -6,7 +6,7 @@ from bson import ObjectId
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_pymongo import PyMongo
-from Controllers.ProductoController import RestYCantidadDeProductos, ProductoPorId, ProductosGet, CrearProducto, ActualizarProducto, MarcarDisponibilidadDelProducto, BorrarProducto
+from Controllers.ProductoController import ProductosEnGeneral, RestYCantidadDeProductos, ProductoPorId, ProductosGet, CrearProducto, ActualizarProducto, MarcarDisponibilidadDelProducto, BorrarProducto
 from Controllers.RestauranteController import RestauranteGet, RestaurantePorId, CrearRestaurante, ActualizarRestaurante
 from Controllers.UsuarioController import UsuariosGet, UsuarioPorId, CrearUsuario, ActualizarUsuario
 from Controllers.EncargadoController import EncargadosGet, EncargadoPorId, CrearEncargado, ActualizarEncargado
@@ -39,6 +39,7 @@ class Personas(Resource):
 
 api.add_resource(Personas, '/')
 
+api.add_resource(ProductosEnGeneral, '/Productos')
 api.add_resource(ProductosGet, '/Productos/<string:id>')
 api.add_resource(ProductoPorId, '/Producto/<string:id>')
 api.add_resource(CrearProducto, '/Producto/Nuevo')

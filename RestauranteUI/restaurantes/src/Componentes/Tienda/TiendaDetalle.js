@@ -11,13 +11,14 @@ class TiendaDetalle extends React.Component {
     loading: true,
     error: null,
     data: undefined,
-    restaurante: undefined
+    restaurante: undefined,
+    BO: undefined
   };
-
   mostrarFecha() {}
 
   componentDidMount() {
     this.fechDataTiendas();
+    this.setState({ BO: { ver: false, crer: false, editar: false } });
   }
 
   fechDataTiendas = async () => {
@@ -44,6 +45,9 @@ class TiendaDetalle extends React.Component {
     if (this.state.loading === true || this.state.loadingTienda === true) {
       return "loading...";
     }
+    const isCreateMode = this.state.BO.crer === true;
+    //const isEditMode = this.state.BO.editar === true;
+    //const isViewMode = this.state.BO.ver === true;
     return (
       <div className="container col-sm-12 mt-2">
         <LocalStorage tienda={this.props.match.params.id} />
@@ -65,14 +69,19 @@ class TiendaDetalle extends React.Component {
                   Promociones
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to={`/tienda/${this.props.match.params.id}/producto/nuevo`}
-                >
-                  + Producto
-                </Link>
-              </li>
+
+              {isCreateMode ? (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={`/tienda/${this.props.match.params.id}/producto/nuevo`}
+                  >
+                    + Producto
+                  </Link>
+                </li>
+              ) : (
+                ""
+              )}
             </ul>
           </div>
           <div className="card-body">
@@ -90,6 +99,9 @@ class TiendaDetalle extends React.Component {
                       <p className="card-text">{producto.detalle}</p>
                       <Link to="/" className="btn btn-primary">
                         Pedir <i className="icon-edit" />
+                      </Link>
+                      <Link to="/" className="btn btn-link">
+                        Ver <i className="icon-edit" />
                       </Link>
                     </div>
                     <div className="card-footer">
