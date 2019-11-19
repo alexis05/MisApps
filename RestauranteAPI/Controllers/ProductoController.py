@@ -22,11 +22,9 @@ def handle_invalid_usage(error):
 class ProductosEnGeneral(Resource):
     def get(self):
         output = []
-        outputRest = []
         for prod in Producto.objects():
-            print(prod)
+            outputRest = []
             for rest in Restaurante.objects(id=prod.restaurante.id):
-                print(rest)
                 outputRest.append({
                     "id": str(rest.id),
                     'nombre': rest.nombre,
@@ -45,7 +43,7 @@ class ProductosEnGeneral(Resource):
                 'detalle': prod.detalle,
                 'creado': prod.creado,
                 'fotos': prod.fotos,
-                'registrado_por': str(prod.registrado_por.id),
+                # 'registrado_por': str(prod.registrado_por.id),
                 'estado': prod.estado,
                 'disponible': prod.disponible,
                 'restaurante': outputRest
