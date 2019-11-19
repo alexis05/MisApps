@@ -1,17 +1,34 @@
 import React from "react";
 import ListaTienda from "./ListaTiendas";
 import API from "../../API";
+import ProductosDeTiendas from "./ProductosDeTiendas";
 
 class Tiendas extends React.Component {
   state = {
     loading: true,
     error: null,
     data: undefined
-    //apiDomain: Configuraciones._currentValue.apiRoot
   };
   componentDidMount() {
-    this.fechDataTiendas();
+    let tipoDeVista = true;
+    if (tipoDeVista) {
+      this.obtenerProductosDeTiendas();
+    } else {
+      this.fechDataTiendas();
+    }
   }
+
+  obtenerProductosDeTiendas = async () => {
+    this.setState({ loading: true, error: null });
+
+    try {
+      await API.get(`Productos`).then(res => {
+        this.setState({ loading: false, data: res.data });
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error });
+    }
+  };
 
   fechDataTiendas = async () => {
     this.setState({ loading: true, error: null });
@@ -29,6 +46,8 @@ class Tiendas extends React.Component {
     if (this.state.loading === true) {
       return "loading...";
     }
+    let tipoDeVista = true;
+    if (tipoDeVista) return <ProductosDeTiendas tiendas={this.state.data} />;
 
     return <ListaTienda tiendas={this.state.data} />;
   }

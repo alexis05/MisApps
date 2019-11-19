@@ -52,7 +52,6 @@ class Registro extends React.Component {
   };
 
   render() {
-    console.log(this.state.apiDomain);
     return (
       <div>
         <div className="d-flex justify-content-center align-items-center container ">
