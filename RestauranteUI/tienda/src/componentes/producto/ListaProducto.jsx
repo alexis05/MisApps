@@ -7,12 +7,15 @@ const ListaProducto = ({ productos }) => (
     <div className="container">
       <div className="row">
         {productos.map(producto => (
-          <Producto
-            nombre={producto.nombre}
-            precio={producto.precio}
-            detalle={producto.detalle}
-            creado={producto.creado}
-          />
+          <div className="card-deck pb-2 col-sm-4" key={producto.id}>
+            <Producto
+              nombre={producto.nombre}
+              precio={producto.precio}
+              detalle={producto.detalle}
+              creado={producto.creado}
+              id={productos.id}
+            />
+          </div>
         ))}
       </div>
     </div>

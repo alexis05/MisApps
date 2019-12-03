@@ -1,20 +1,20 @@
 import { createStore } from "redux";
+import { TRAER_PRODUCTOS } from "./types/tiendaTypes";
 
 const initialState = {
   tienda: [],
-  productos: [
-    {
-      id: 1,
-      nombre: "Bocina JBL",
-      precio: 100,
-      detalle: "Bocina resistente al agua.",
-      creado: "lunes 2 de diciembre"
-    }
-  ],
+  productos: [],
   carrito: []
 };
 
 const reducerTienda = (state = initialState, action) => {
+  if (action.type === TRAER_PRODUCTOS) {
+    console.log(action);
+    return {
+      ...state,
+      productos: action.payload
+    };
+  }
   return state;
 };
 
