@@ -1,4 +1,4 @@
-import { TRAER_PRODUCTOS } from "../types/usuariosTypes";
+import { TRAER_PRODUCTOS } from "../Types/tiendaTypes";
 
 const INITIAL_STATE = {
   productos: []

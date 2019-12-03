@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import img from "../../imagenes/img.svg";
 
 function ProductosDeTiendas(props) {
-  const [count, setCount] = useState(0);
+  //const [count, setCount] = useState(0);
   const tiendas = props.tiendas.resultado;
 
   useEffect(() => {

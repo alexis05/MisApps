@@ -27,13 +27,9 @@ todos = {}
 class Personas(Resource):
     def get(self):
         persona1 = Pedido()
-        print(persona1.clave)
         persona1.agregar("arroz blanco")
         persona1.agregar("Frijoles")
-        print(persona1.productos_a_comprar)
-        print(persona1.pertenece_a())
         persona1.asignar("alexis")
-        print(persona1.pertenece_a())
         return {'hello': 'world'}
 
 
