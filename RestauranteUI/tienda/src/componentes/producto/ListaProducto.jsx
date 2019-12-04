@@ -23,7 +23,7 @@ const ListaProducto = ({ productos }) => (
 );
 
 const mapStateToProps = state => ({
-  productos: state.productos
+  productos: state.productoReducer.productoReducer.productos
 });
 
 const mapDispatchToProps = dispatch => ({});

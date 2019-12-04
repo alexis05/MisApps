@@ -1,21 +1,9 @@
-import { createStore } from "redux";
-import { TRAER_PRODUCTOS } from "./types/tiendaTypes";
+import { createStore, applyMiddleware, combineReducers } from "redux";
+import productoReducer from "./reducers";
+import thunk from "redux-thunk";
 
-const initialState = {
-  tienda: [],
-  productos: [],
-  carrito: []
-};
+const allReducers = combineReducers({
+  productoReducer: productoReducer
+});
 
-const reducerTienda = (state = initialState, action) => {
-  if (action.type === TRAER_PRODUCTOS) {
-    console.log(action);
-    return {
-      ...state,
-      productos: action.payload
-    };
-  }
-  return state;
-};
-
-export default createStore(reducerTienda);
+export default createStore(allReducers, applyMiddleware(thunk));

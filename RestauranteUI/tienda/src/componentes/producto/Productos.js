@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import API from "../../API";
-import { TRAER_PRODUCTOS } from "../../types/tiendaTypes";
 import ListaProducto from "./ListaProducto";
+import { traerProductos } from "../../actions/obtenerProductos";
 
 const mapStateToProps = state => ({
   productos: state.productos
 });
-
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = {
+  traerProductos
+};
 
 class Productos extends Component {
   state = {
@@ -23,15 +23,11 @@ class Productos extends Component {
   obtenerProductosDeTiendas = async () => {
     this.setState({ loading: true, error: null });
     try {
-      await API.get(`Productos`).then(res => {
-        this.setState({ loading: false });
-        this.props.dispatch({
-          type: TRAER_PRODUCTOS,
-          payload: res.data.resultado
-        });
-      });
+      this.props.traerProductos();
+      this.setState({ loading: false });
     } catch (error) {
-      this.setState({ loading: false, error: error });
+      this.setState({ loading: false, error: error.message });
+      console.log("Error: ", error.message);
     }
   };
 
@@ -43,4 +39,4 @@ class Productos extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Productos);
+export default connect(mapStateToProps, mapDispatchToProps)(Productos);
