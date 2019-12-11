@@ -4,7 +4,7 @@ import "./styleBO.css";
 const MenuBO = props => (
   <div>
     <div className="nav-side-menu">
-      <div className="brand">Brand Logo</div>
+      <div className="brand">Mi tienda</div>
       <i
         className="fa fa-bars fa-2x toggle-btn"
         data-toggle="collapse"
