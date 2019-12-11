@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./producto.css";
 
 const mostrarFecha = time => {
   switch (typeof time) {

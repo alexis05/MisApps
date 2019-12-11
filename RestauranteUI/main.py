@@ -4,7 +4,12 @@ app = Flask(__name__, static_folder="tienda/build/static",
 
 
 @app.route("/")
-def hello():
+def Index():
+    return render_template('index.html')
+
+
+@app.route("/Admin")
+def BOHome():
     return render_template('index.html')
 
 
