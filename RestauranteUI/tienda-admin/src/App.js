@@ -1,13 +1,12 @@
 import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import HomeBO from "./componentes/admin/HomeBO";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Admin</h1>
-      </header>
-    </div>
-  );
-}
-
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/Admin" component={HomeBO} />
+    </Switch>
+  </BrowserRouter>
+);
 export default App;
