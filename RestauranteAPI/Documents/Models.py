@@ -1,4 +1,3 @@
-import datetime
 from mongoengine import *
 
 # TODO: ver si se puede adaptar a turismo
@@ -31,7 +30,7 @@ class Restaurante(Document):
     email = StringField(required=True, unique=True)
     horario = StringField(required=True)
     logo = StringField()
-    creado = DateTimeField(default=datetime.datetime.now())
+    creado = DateTimeField()
     estado = StringField(choices=ESTADO, default='1')
     eslogan = StringField()
     #comentarios = ListField(ReferenceField(Comentarios))
@@ -43,7 +42,7 @@ class Usuario(Document):
     email = StringField(required=True, unique=True)
     telefono = StringField(required=False, max_length=50)
     direccion = StringField(required=False)
-    creado = DateTimeField(default=datetime.datetime.now())
+    creado = DateTimeField()
     clave = StringField(required=True, min_length=8)
     foto = StringField()
     estado = StringField(choices=ESTADO, default='1')
@@ -60,8 +59,8 @@ class Producto(Document):
     nombre = StringField(required=True, max_length=300, unique=True)
     precio = FloatField(required=True)
     detalle = StringField(required=False)
-    creado = DateTimeField(default=datetime.datetime.now())
-    ultima_actualizacion = DateTimeField(default=datetime.datetime.now())
+    creado = DateTimeField()
+    ultima_actualizacion = DateTimeField()
     fotos = StringField()
     registrado_por = ReferenceField(Encargado)
     estado = StringField(choices=ESTADO, default='1')
@@ -78,7 +77,7 @@ class Carrito(Document):
 
 class Pedido(Document):
     carrito = ReferenceField(Carrito)
-    fecha = DateTimeField(default=datetime.datetime.now())
+    fecha = DateTimeField()
     monto_pagado = DecimalField(required=True)
     lugar_de_entrega = StringField(required=True)
     observaciones = StringField()

@@ -1,5 +1,6 @@
 from flask import request
 from flask import jsonify
+from datetime import datetime
 from flask_restful import Resource
 from flask_pymongo import PyMongo
 from mongoengine import errors
@@ -86,12 +87,14 @@ class CrearRestaurante(Resource):
                                   telefono=_telefono,
                                   email=_email,
                                   horario=_horario,
+                                  creado=datetime.now(),
                                   logo="",
                                   eslogan=_eslogan)
         user = Usuario(nombre="admin " + _nombre,
                        email=_email,
                        telefono=_telefono,
                        direccion=_direccion,
+                       creado=datetime.now(),
                        clave=str(bcrypt.generate_password_hash(_clave)),
                        foto="")
 

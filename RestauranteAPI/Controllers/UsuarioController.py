@@ -1,5 +1,6 @@
 from flask import request
 from flask import jsonify
+from datetime import datetime
 from flask_restful import Resource
 from flask_pymongo import PyMongo
 from mongoengine import errors
@@ -86,6 +87,7 @@ class CrearUsuario(Resource):
         user = Usuario(nombre=_nombre,
                        email=_email,
                        telefono=_telefono,
+                       creado=datetime.now(),
                        direccion=_direccion,
                        clave=str(bcrypt.generate_password_hash(_clave)),
                        foto=_foto)

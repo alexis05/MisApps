@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./producto.css";
 
 const mostrarFecha = time => {
+  time = time.replace(" GMT", "");
   switch (typeof time) {
     case "number":
       break;
@@ -32,26 +33,30 @@ const mostrarFecha = time => {
     [5806080000, "Ultimo siglo", "Siguiente siglo"], // 60*60*24*7*4*12*100*2
     [58060800000, "siglos", 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
   ];
-  var seconds = (+new Date() - time) / 1000,
-    token = "ago",
+  var now = new Date();
+  var nowInMilliseconds = now.getTime();
+  var seconds = (+nowInMilliseconds - time) / 1000,
+    token = "Hace",
     list_choice = 1;
-
   if (seconds === 0) {
-    return "Just now";
+    return "Justo ahora";
   }
   if (seconds < 0) {
     seconds = Math.abs(seconds);
-    token = "from now";
+    token = "desde ahora";
     list_choice = 2;
   }
   var i = 0,
     format;
-  while ((format = time_formats[i++]))
+  while ((format = time_formats[i++])) {
     if (seconds < format[0]) {
-      if (typeof format[2] == "string") return format[list_choice];
-      else
-        return Math.floor(seconds / format[2]) + " " + format[1] + " " + token;
+      if (typeof format[2] == "string") {
+        return format[list_choice];
+      } else {
+        return token + " " + Math.floor(seconds / format[2]) + " " + format[1];
+      }
     }
+  }
   return time;
 };
 

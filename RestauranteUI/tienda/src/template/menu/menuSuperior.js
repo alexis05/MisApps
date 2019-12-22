@@ -58,7 +58,7 @@ const MenuSuperior = props => (
             </div>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/mitienda">
+            <Link className="nav-link" to="/Home/MiTienda">
               Mi Tienda
             </Link>
           </li>

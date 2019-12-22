@@ -1,4 +1,5 @@
-import datetime
+#import datetime
+from datetime import datetime
 from flask import request
 from flask import jsonify
 from flask_restful import Resource
@@ -128,10 +129,11 @@ class CrearProducto(Resource):
                             precio=_precio,
                             detalle=_detalle,
                             fotos=_fotos,
+                            creado=datetime.now(),
                             registrado_por=_registrado_por,
                             disponible=_disponible,
                             restaurante=_restaurante,
-                            ultima_actualizacion=datetime.datetime.now())
+                            ultima_actualizacion=datetime.now())
         try:
             producto.save()
         except errors.NotUniqueError as exc:
@@ -152,7 +154,7 @@ class MarcarDisponibilidadDelProducto(Resource):
         try:
             producto_a_marcar.update(disponible=_esta_disponible)
             producto_a_marcar.update(
-                ultima_actualizacion=datetime.datetime.now()
+                ultima_actualizacion=datetime.now()
             )
         except errors.NotUniqueError as exc:
             return jsonify({'error': "Producto duplicado, " + _producto})
@@ -195,7 +197,7 @@ class ActualizarProducto(Resource):
             producto.update(fotos=_fotos)
             producto.update(estado=_estado)
             producto.update(disponible=_disponible)
-            producto.update(ultima_actualizacion=datetime.datetime.now())
+            producto.update(ultima_actualizacion=datetime.now())
         except errors.NotUniqueError as exc:
             return jsonify({'error': "Producto duplicado, " + _nombre})
         return jsonify({'resultado': "Ok"})
