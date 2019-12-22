@@ -63,21 +63,23 @@ const mostrarFecha = time => {
 const Producto = props => (
   <div className="card">
     <img
-      className="card-img-top"
+      className="card-img-top img-fluid"
       src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
       alt="Card"
+      width="300"
+      height="150"
     />
     <div className="card-body">
       <h5 className="card-title">{props.nombre}</h5>
       <p className="card-text">{props.detalle}</p>
       <div className="container">
         <div className="row justify-content-md-center">
-          <div className="col col-lg-4">
+          <div className="col-xs-6 col-sm-6 col-md-6 col">
             <Link to="/" className="btn btn-primary">
               Pedir <i className="icon-edit" />
             </Link>
           </div>
-          <div className="col col-lg-4">
+          <div className="col-xs-6 col-sm-6 col-md-6 col">
             <Link to="/" className="btn btn-link">
               Ver <i className="icon-edit" />
             </Link>

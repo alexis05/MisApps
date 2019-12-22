@@ -4,3 +4,7 @@
 .min-altura-caja-producto {
   min-height: 250px;
 }
+
+.card-body {
+  padding: 0.25rem !important;
+}
