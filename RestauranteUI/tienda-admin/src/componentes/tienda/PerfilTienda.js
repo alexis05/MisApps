@@ -4,7 +4,6 @@ import API from "../../API";
 class PerfilTienda extends React.Component {
   constructor(props) {
     super(props);
-    this.miTienda = this.getTiendaIdFromLS("tiendaLocal");
   }
   state = {
     loading: true,
@@ -62,9 +61,7 @@ class PerfilTienda extends React.Component {
 
   fechDataRestaurante = async () => {
     try {
-      this.miTienda.tienda = "5dfe8aa54458b2afeabb3910";
-      console.log(this.miTienda.tienda);
-      await API.get(`Restaurante/${this.miTienda.tienda}`).then(res => {
+      await API.get(`Restaurante/${this.props.match.params.id}`).then(res => {
         this.setState({
           loading: false,
           data: res.data,

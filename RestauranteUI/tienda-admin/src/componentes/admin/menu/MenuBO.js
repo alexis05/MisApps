@@ -22,7 +22,7 @@ const MenuBO = props => (
           </Link>
         </li>
         <li>
-          <Link to="/Admin/Tienda">
+          <Link to="/Admin/MiTienda/5dfe8aa54458b2afeabb3910">
             <span>Mi Tienda</span>
           </Link>
         </li>
