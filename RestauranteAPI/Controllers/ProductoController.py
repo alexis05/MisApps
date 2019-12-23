@@ -21,9 +21,9 @@ def handle_invalid_usage(error):
 
 
 class ProductosEnGeneral(Resource):
-    def get(self):
+    def get(self, limit, skip):
         output = []
-        for prod in Producto.objects():
+        for prod in Producto.objects().skip(skip).limit(limit):
             outputRest = []
             for rest in Restaurante.objects(id=prod.restaurante.id):
                 outputRest.append({

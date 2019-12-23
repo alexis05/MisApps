@@ -3,15 +3,21 @@ import { TRAER_PRODUCTOS } from "../types/tiendaTypes";
 const initialState = {
   tienda: [],
   productos: [],
-  carrito: []
+  carrito: [],
+  existenProductos: false
 };
 
 const productoReducer = (state = initialState, action) => {
   switch (action.type) {
     case TRAER_PRODUCTOS:
+      if (action.payload.length === 0) {
+        state.existenProductos = false;
+      } else {
+        state.existenProductos = true;
+      }
       return {
         ...state,
-        productos: action.payload
+        productos: [...state.productos, ...action.payload]
       };
     default:
       return state;

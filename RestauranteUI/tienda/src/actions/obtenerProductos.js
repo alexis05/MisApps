@@ -1,9 +1,9 @@
 import API from "../API";
 import { TRAER_PRODUCTOS } from "../types/tiendaTypes";
 
-export const traerProductos = () => async dispatch => {
+export const traerProductos = (limit, skip) => async dispatch => {
   try {
-    const respuesta = await API.get(`Productos`);
+    const respuesta = await API.get(`Productos/${limit}/${skip}`);
     dispatch({
       type: TRAER_PRODUCTOS,
       payload: respuesta.data.resultado
