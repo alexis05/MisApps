@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 import ListaProducto from "./ListaProducto";
 import { traerProductos } from "../../actions/obtenerProductos";
 import BottomScrollListener from "react-bottom-scroll-listener";
+import SpinnerGlobal from "../../styleGlobal/SpinnerGlobal";
 
 const mapStateToProps = state => ({
   productos: state.productoReducer.productoReducer.productos,
-  existeMasProductos: state.productoReducer.productoReducer.existenProductos
+  existeMasProductos: state.productoReducer.productoReducer.existenProductos,
+  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal
 });
 const mapDispatchToProps = {
   traerProductos
@@ -22,7 +24,7 @@ class Productos extends Component {
   };
 
   handleOnDocumentBottom = () => {
-    if (this.state.loading) return;
+    if (this.props.loadingGlobal) return;
     if (this.props.existeMasProductos) {
       let newSkipValue = this.props.productos.length;
       let newLimitValue = 0;
@@ -38,6 +40,7 @@ class Productos extends Component {
     this.obtenerProductosDeTiendas(this.state.limitValue, this.state.skipValue);
   };
   componentDidMount() {
+    this.setState({ loading: true, error: null });
     this.obtenerProductosDeTiendas(this.state.limitValue, this.state.skipValue);
   }
 
@@ -53,11 +56,9 @@ class Productos extends Component {
   };
 
   render() {
-    if (this.state.loading === true) {
-      return "loading...";
-    }
     return (
       <div>
+        <SpinnerGlobal mostrar={this.props.loadingGlobal} />
         <ListaProducto />
         <BottomScrollListener onBottom={this.handleOnDocumentBottom} />
       </div>

@@ -1,10 +1,11 @@
-import { TRAER_PRODUCTOS } from "../types/tiendaTypes";
+import { TRAER_PRODUCTOS, REQUEST_ENVIADO } from "../types/tiendaTypes";
 
 const initialState = {
   tienda: [],
   productos: [],
   carrito: [],
-  existenProductos: false
+  existenProductos: false,
+  loadingGlobal: false
 };
 
 const productoReducer = (state = initialState, action) => {
@@ -17,8 +18,13 @@ const productoReducer = (state = initialState, action) => {
       }
       return {
         ...state,
+        loadingGlobal: false,
         productos: [...state.productos, ...action.payload]
       };
+
+    case REQUEST_ENVIADO:
+      return { ...state, loadingGlobal: true };
+
     default:
       return state;
   }
