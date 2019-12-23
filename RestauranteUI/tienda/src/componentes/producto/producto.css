@@ -8,3 +8,15 @@
 .card-body {
   padding: 0.25rem !important;
 }
+.card-title {
+  text-align: center;
+  justify-content: center;
+}
+.card-footer {
+  padding: 10px 10px;
+}
+.precio-producto {
+  font-size: 21px;
+  color: black;
+  font-weight: bold;
+}

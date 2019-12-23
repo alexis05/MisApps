@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./producto.css";
 
+const mostrarPrecioConDosDecimales = precio => {
+  return (Math.round(precio * 100) / 100).toFixed(2);
+};
+
 const mostrarFecha = time => {
   time = time.replace(" GMT", "");
   switch (typeof time) {
@@ -71,24 +75,30 @@ const Producto = props => (
     />
     <div className="card-body">
       <h5 className="card-title">{props.nombre}</h5>
-      <p className="card-text">{props.detalle}</p>
-      <div className="container">
-        <div className="row justify-content-md-center">
-          <div className="col-xs-6 col-sm-6 col-md-6 col">
-            <Link to="/" className="btn btn-primary">
-              Pedir <i className="icon-edit" />
-            </Link>
-          </div>
-          <div className="col-xs-6 col-sm-6 col-md-6 col">
-            <Link to="/" className="btn btn-link">
-              Ver <i className="icon-edit" />
-            </Link>
+      <p className="card-text pl-1 pr-1">{props.detalle}</p>
+      <div className="row">
+        <div className="col-12">
+          <div className="precio-producto">
+            ${mostrarPrecioConDosDecimales(props.precio)}
           </div>
         </div>
       </div>
     </div>
-    <div className="card-footer">
-      <small className="text-muted">{mostrarFecha(props.creado)}</small>
+    <div className="card-footer text-center">
+      <div className="col-12">
+        <div className="row d-flex justify-content-center text-center">
+          <div className="col">
+            <Link to="/" className="btn btn-primary">
+              Pedir <i className="icon-edit" />
+            </Link>
+          </div>
+          <div className="col">
+            <small className="text-muted justify-content-center">
+              Publicado: {mostrarFecha(props.creado)}
+            </small>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 );
