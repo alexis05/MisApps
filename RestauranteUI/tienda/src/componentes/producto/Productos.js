@@ -18,8 +18,7 @@ class Productos extends Component {
     error: null,
     limitValue: 50,
     skipValue: 0,
-    nuevosProductosAPaginar: 50,
-    cantidadDeProductos: 0
+    nuevosProductosAPaginar: 50
   };
 
   handleOnDocumentBottom = () => {
