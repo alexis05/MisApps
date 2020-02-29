@@ -24,12 +24,12 @@ const MenuSuperior = props => (
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
             <Link className="nav-link" to="/">
-              ABC <span className="sr-only">(current)</span>
+              Ofertas <span className="sr-only">(current)</span>
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/">
-              Link
+              Favoritos
             </Link>
           </li>
           <li className="nav-item dropdown">
@@ -59,7 +59,7 @@ const MenuSuperior = props => (
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/Home/">
-              Algo
+              Realimentación
             </Link>
           </li>
         </ul>

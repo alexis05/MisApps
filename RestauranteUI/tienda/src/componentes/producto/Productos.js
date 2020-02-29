@@ -18,13 +18,17 @@ class Productos extends Component {
   state = {
     loading: true,
     error: null,
-    limitValue: 50,
+    limitValue: 5,
     skipValue: 0,
-    nuevosProductosAPaginar: 50
+    nuevosProductosAPaginar: 5,
+    consultarProductos: true
   };
 
   handleOnDocumentBottom = () => {
+    if (!this.state.consultarProductos) return;
     if (this.props.loadingGlobal) return;
+    this.setState({ consultarProductos: false }); // se debe asignar en false si no viene ninguna respuesta
+    // incluso, se debe asignar un tiempo para que nuevamente se habilite la opcion
     if (this.props.existeMasProductos) {
       let newSkipValue = this.props.productos.length;
       let newLimitValue = 0;
@@ -39,6 +43,7 @@ class Productos extends Component {
     }
     this.obtenerProductosDeTiendas(this.state.limitValue, this.state.skipValue);
   };
+
   componentDidMount() {
     this.setState({ loading: true, error: null });
     this.obtenerProductosDeTiendas(this.state.limitValue, this.state.skipValue);

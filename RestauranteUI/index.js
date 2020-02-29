@@ -21,7 +21,7 @@ app.get("/Admin*", (req, res) => {
   res.sendFile(path.join(__dirname + "/tienda-admin/build/index.html"));
 });
 
-const server = app.listen(3030, function() {
+const server = app.listen(8080, function() {
   console.log(`Listening http://localhost:${server.address().port}`);
   console.log(path.join(__dirname));
 });
