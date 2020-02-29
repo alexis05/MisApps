@@ -3,15 +3,23 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Tienda from "./componentes/Tienda";
-import HomeBO from "./componentes/admin/HomeBO";
 import CrearRestaurante from "./componentes/restaurante/CrearRestaurante";
+import ProductoDetalle from "./componentes/productoDetalle/ProductoDetalle";
+import MenuSuperior from "./template/menu/menuSuperior";
+
 const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <Switch>
-        <Route exact path="/Home" component={Tienda} />
-        <Route exact path="/Home/Admin" component={HomeBO} />
-        <Route exact path="/Nueva/Tienda" component={CrearRestaurante} />
+        <MenuSuperior>
+          <Route exact path="/Home" component={Tienda} />
+          <Route exact path="/Nueva/Tienda" component={CrearRestaurante} />
+          <Route
+            exact
+            path="/Producto/:productoId"
+            component={ProductoDetalle}
+          />
+        </MenuSuperior>
       </Switch>
     </BrowserRouter>
   </Provider>

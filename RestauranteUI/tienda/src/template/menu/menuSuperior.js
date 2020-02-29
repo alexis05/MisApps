@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const MenuSuperior = props => (
   <div>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
+      <Link className="navbar-brand" to="/Home">
         Home
       </Link>
       <button

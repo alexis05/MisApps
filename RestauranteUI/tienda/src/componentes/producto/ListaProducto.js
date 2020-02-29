@@ -6,17 +6,17 @@ const ListaProducto = ({ productos }) => (
   <div className="col-12 pt-2">
     <div className="container">
       <div className="row">
-        {productos.map(producto => (
+        {productos.map((producto, index) => (
           <div
             className="card-deck pb-2 col-xs col-sm col-md-3 col-lg-3"
-            key={producto.id}
+            key={index}
           >
             <Producto
               nombre={producto.nombre}
               precio={producto.precio}
               detalle={producto.detalle}
               creado={producto.creado}
-              id={productos.id}
+              id={producto.id}
             />
           </div>
         ))}

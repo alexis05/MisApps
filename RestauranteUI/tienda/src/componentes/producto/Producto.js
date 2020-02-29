@@ -88,8 +88,9 @@ const Producto = props => (
       <div className="col-12">
         <div className="row d-flex justify-content-center text-center">
           <div className="col">
-            <Link to="/" className="btn btn-primary">
-              Pedir <i className="icon-edit" />
+            <Link to={`/Producto/${props.id}`} className="btn btn-primary">
+              Pedir
+              <i className="icon-edit" />
             </Link>
           </div>
           <div className="col">
