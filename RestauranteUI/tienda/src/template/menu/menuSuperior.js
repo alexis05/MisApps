@@ -73,7 +73,7 @@ const MenuSuperior = props => (
         </form>
         <div className="pull-right navbar-text">
           <img src="http://placehold.it/30x30" alt="foto del usuario" />
-          Chuck Norris
+          Alexis Batista
         </div>
       </div>
     </nav>
