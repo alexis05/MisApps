@@ -4,7 +4,7 @@ import store from "./store";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Tienda from "./componentes/Tienda";
 import CrearRestaurante from "./componentes/restaurante/CrearRestaurante";
-import ProductoDetalle from "./componentes/productoDetalle/ProductoDetalle";
+import DetalleProducto from "./componentes/productoDetalle/DetalleProducto";
 import MenuSuperior from "./template/menu/menuSuperior";
 
 const App = () => (
@@ -17,7 +17,7 @@ const App = () => (
           <Route
             exact
             path="/Producto/:productoId"
-            component={ProductoDetalle}
+            component={DetalleProducto}
           />
         </MenuSuperior>
       </Switch>

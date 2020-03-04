@@ -1,11 +1,17 @@
-import { TRAER_PRODUCTOS, REQUEST_ENVIADO } from "../types/tiendaTypes";
+import {
+  TRAER_PRODUCTOS,
+  REQUEST_ENVIADO,
+  TRAER_DETALLE_PRODUCTO
+} from "../types/tiendaTypes";
 
 const initialState = {
   tienda: [],
   productos: [],
   carrito: [],
   existenProductos: false,
-  loadingGlobal: false
+  loadingGlobal: false,
+  estaFueraDeHome: false,
+  detalleProducto: []
 };
 
 const productoReducer = (state = initialState, action) => {
@@ -16,15 +22,27 @@ const productoReducer = (state = initialState, action) => {
       } else {
         state.existenProductos = true;
       }
+      if (state.estaFueraDeHome) {
+        state.productos = [];
+      }
       return {
         ...state,
         loadingGlobal: false,
+        detalleProducto: [],
+        estaFueraDeHome: false,
         productos: [...state.productos, ...action.payload]
       };
 
     case REQUEST_ENVIADO:
       return { ...state, loadingGlobal: true };
 
+    case TRAER_DETALLE_PRODUCTO:
+      return {
+        ...state,
+        loadingGlobal: false,
+        estaFueraDeHome: true,
+        detalleProducto: [...state.detalleProducto, ...action.payload]
+      };
     default:
       return state;
   }

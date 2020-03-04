@@ -81,6 +81,19 @@ class ProductoPorId(Resource):
         output = []
         try:
             for prod in Producto.objects(id=id):
+                outputRest = []
+                for rest in Restaurante.objects(id=prod.restaurante.id):
+                    outputRest.append({
+                        "id": str(rest.id),
+                        'nombre': rest.nombre,
+                        'telefono': rest.telefono,
+                        'email': rest.email,
+                        'horario': rest.horario,
+                        'logo': rest.logo,
+                        'creado': rest.creado,
+                        'estado': rest.estado,
+                        'eslogan': rest.eslogan
+                    })
                 output.append({
                     "id": str(prod.id),
                     'nombre': prod.nombre,
@@ -91,8 +104,9 @@ class ProductoPorId(Resource):
                     'registrado_por': str(prod.registrado_por.id),
                     'estado': prod.estado,
                     'disponible': prod.disponible,
-                    'restaurante': prod.restaurante
+                    'restaurante': outputRest
                 })
+
             return jsonify({'resultado': output})
         except errors.ValidationError:
             return jsonify({'resultado': "No se existe." + id})
