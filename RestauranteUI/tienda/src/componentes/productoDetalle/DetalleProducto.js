@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { traerDetalleProducto } from "../../actions/obtenerDetalleProducto";
 import ProductoDetallado from "./ProductoDetallado";
-const mapStateToProps = state => ({
-  detalleProducto: state.productoReducer.productoReducer.detalleProducto,
-  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal
-});
+
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
   traerDetalleProducto

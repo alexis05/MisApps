@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 const ProductoDetallado = ({ detalleProducto }) => {
-  console.log(detalleProducto);
   return (
     <div>
       {detalleProducto.map((producto, index) => (
@@ -27,8 +26,9 @@ const ProductoDetallado = ({ detalleProducto }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  detalleProducto: state.productoReducer.productoReducer.detalleProducto
+const mapStateToProps = reducer => ({
+  detalleProducto:
+    reducer.productoReducer.productoDetalleReducer.detalleProducto
 });
 
 const mapDispatchToProps = dispatch => ({});

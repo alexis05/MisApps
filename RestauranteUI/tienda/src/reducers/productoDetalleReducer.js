@@ -1,31 +1,27 @@
 import {
-  TRAER_PRODUCTOS,
+  REQUEST_ERROR,
   REQUEST_ENVIADO,
-  REQUEST_ERROR
+  TRAER_DETALLE_PRODUCTO
 } from "../types/tiendaTypes";
 
 const initialState = {
-  productos: [],
-  existenProductos: false,
+  error: "",
   loadingGlobal: false,
-  error: ""
+  detalleProducto: []
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case TRAER_PRODUCTOS:
-      if (!action.payload.length) {
-        state.existenProductos = true;
-      }
+    case REQUEST_ENVIADO:
+      return { ...state, loadingGlobal: true };
+
+    case TRAER_DETALLE_PRODUCTO:
       return {
         ...state,
         loadingGlobal: false,
-        estaFueraDeHome: false,
-        productos: action.payload
+        error: "",
+        detalleProducto: action.payload
       };
-
-    case REQUEST_ENVIADO:
-      return { ...state, loadingGlobal: true };
 
     case REQUEST_ERROR:
       return { ...state, error: action.payload, loadingGlobal: false };

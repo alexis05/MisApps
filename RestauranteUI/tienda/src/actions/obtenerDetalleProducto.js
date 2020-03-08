@@ -10,15 +10,19 @@ export const traerDetalleProducto = productoId => async dispatch => {
     dispatch({
       type: REQUEST_ENVIADO
     });
+
     const respuesta = await API.get(`Producto/${productoId}`);
+
     dispatch({
       type: TRAER_DETALLE_PRODUCTO,
       payload: respuesta.data.resultado
     });
   } catch (error) {
     dispatch({
-      type: REQUEST_ERROR
+      type: REQUEST_ERROR,
+      payload: error.message
     });
+
     console.log("Error: ", error.message);
   }
 };

@@ -18,9 +18,9 @@ class Productos extends Component {
   state = {
     loading: true,
     error: null,
-    limitValue: 5,
+    limitValue: 50,
     skipValue: 0,
-    nuevosProductosAPaginar: 5,
+    nuevosProductosAPaginar: 50,
     consultarProductos: true
   };
 
