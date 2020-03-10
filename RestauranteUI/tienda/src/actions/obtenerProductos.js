@@ -10,15 +10,19 @@ export const traerProductos = (limit, skip) => async dispatch => {
     dispatch({
       type: REQUEST_ENVIADO
     });
+
     const respuesta = await API.get(`Productos/${limit}/${skip}`);
+
     dispatch({
       type: TRAER_PRODUCTOS,
       payload: respuesta.data.resultado
     });
   } catch (error) {
     dispatch({
-      type: REQUEST_ERROR
+      type: REQUEST_ERROR,
+      payload: error.message
     });
+
     console.log("Error: ", error.message);
   }
 };

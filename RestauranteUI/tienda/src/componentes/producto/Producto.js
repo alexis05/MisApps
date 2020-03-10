@@ -90,9 +90,15 @@ const Producto = props => (
           <div className="col">
             <Link to={`/Producto/${props.id}`} className="btn btn-primary">
               Pedir
-              <i className="icon-edit" />
             </Link>
           </div>
+          <div className="col">
+            <Link to={`/Producto/${props.id}`} className="nav-link">
+              Ver
+            </Link>
+          </div>
+        </div>
+        <div className="row">
           <div className="col">
             <small className="text-muted justify-content-center">
               Publicado: {mostrarFecha(props.creado)}
