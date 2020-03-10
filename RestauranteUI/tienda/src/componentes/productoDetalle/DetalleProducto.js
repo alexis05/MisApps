@@ -2,35 +2,34 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { traerDetalleProducto } from "../../actions/obtenerDetalleProducto";
 import ProductoDetallado from "./ProductoDetallado";
+import SpinnerGlobal from "../../styleGlobal/SpinnerGlobal";
 
-const mapStateToProps = () => ({});
+const mapStateToProps = reducer => ({
+  loadingGlobal: reducer.productoReducer.productoDetalleReducer.loadingGlobal
+});
 
 const mapDispatchToProps = {
   traerDetalleProducto
 };
 
 class DetalleProducto extends Component {
-  state = {
-    loading: true,
-    error: null
-  };
-
   componentDidMount() {
-    this.setState({ loading: true, error: null });
     this.obtenerDetalleProducto(this.props.match.params.productoId);
   }
 
   obtenerDetalleProducto = async productoId => {
-    this.setState({ loading: true, error: null });
     try {
       this.props.traerDetalleProducto(productoId);
-      this.setState({ loading: false, error: null });
     } catch (error) {
-      this.setState({ loading: false, error: error.message });
       console.log("Error: ", error.message);
     }
   };
+
   render() {
+    console.log(this.props.loadingGlobal);
+    if (this.props.loadingGlobal) {
+      return <SpinnerGlobal mostrar={this.props.loadingGlobal} />;
+    }
     return (
       <div>
         <ProductoDetallado></ProductoDetallado>
