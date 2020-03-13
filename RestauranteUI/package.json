@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:production": "node index",
-    "start:dev": "npm run start:production && nodemon index",
+    "start:dev": "npm run build:production && nodemon index",
     "build:tienda": "cd tienda && npm run build",
     "build:tienda-admin": "cd tienda-admin && npm run build",
     "build:production": "npm run build:tienda && npm run build:tienda-admin"

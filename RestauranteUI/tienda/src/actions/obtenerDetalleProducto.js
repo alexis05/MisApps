@@ -11,7 +11,9 @@ export const traerDetalleProducto = productoId => async dispatch => {
       type: REQUEST_ENVIADO_DETALLE_PRODUCTO
     });
 
-    const respuesta = await API.get(`Producto/${productoId}`);
+    const respuesta = await API.get(
+      `Api/Producto/Detallado?productoId=${productoId}`
+    );
 
     dispatch({
       type: TRAER_DETALLE_PRODUCTO,

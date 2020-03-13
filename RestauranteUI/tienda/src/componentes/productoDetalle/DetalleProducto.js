@@ -26,7 +26,6 @@ class DetalleProducto extends Component {
   };
 
   render() {
-    console.log(this.props.loadingGlobal);
     if (this.props.loadingGlobal) {
       return <SpinnerGlobal mostrar={this.props.loadingGlobal} />;
     }

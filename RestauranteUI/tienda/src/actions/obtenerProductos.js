@@ -11,7 +11,9 @@ export const traerProductos = (limit, skip) => async dispatch => {
       type: REQUEST_ENVIADO
     });
 
-    const respuesta = await API.get(`Productos/${limit}/${skip}`);
+    const respuesta = await API.get(
+      `Api/Productos?limit=${limit}&skip=${skip}`
+    );
 
     dispatch({
       type: TRAER_PRODUCTOS,
