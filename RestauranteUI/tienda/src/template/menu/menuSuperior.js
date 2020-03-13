@@ -67,8 +67,9 @@ const MenuSuperior = props => (
           <input
             className="form-control mr-sm-2"
             type="search"
-            placeholder="Search"
-            aria-label="Search"
+            placeholder="Buscar"
+            aria-label="Buscar"
+            id="buscar-producto-menu-sup"
           />
         </form>
         <div className="pull-right navbar-text">
