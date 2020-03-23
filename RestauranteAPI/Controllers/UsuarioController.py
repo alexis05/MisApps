@@ -7,11 +7,10 @@ from mongoengine import errors
 from Utilidades.Config import app, connect
 from bson.objectid import ObjectId
 from Documents.Models import Usuario
-from flask_bcrypt import Bcrypt
 from Utilidades.Excepciones import InvalidUsage
+import hashlib
 
 mongo = PyMongo(app)
-bcrypt = Bcrypt(app)
 
 
 @app.errorhandler(InvalidUsage)
@@ -33,7 +32,8 @@ class UsuariosGet(Resource):
                 'direccion': user.direccion,
                 'creado': user.creado,
                 'foto': user.foto,
-                'estado': user.estado
+                'estado': user.estado,
+                'role': user.role
             })
         return jsonify({'resultado': output})
 
@@ -55,8 +55,45 @@ class UsuarioPorId(Resource):
                     'direccion': user.direccion,
                     'creado': user.creado,
                     'foto': user.foto,
-                    'estado': user.estado
+                    'estado': user.estado,
+                    'role': user.role,
+                    'clave': user.clave
                 })
+            return jsonify({'resultado': output})
+        except errors.ValidationError:
+            return jsonify({'resultado': "No se existe." + id})
+
+
+class AuthUsuario(Resource):
+    def post(self):
+        _usuario = request.json['usuario']
+        _clave = request.json['clave']
+
+        if _usuario is None or _usuario is "":
+            raise InvalidUsage(
+                "Debe enviar los datos requeridos.", status_code=400)
+
+        if _clave is None or _clave is "":
+            raise InvalidUsage(
+                "Debe enviar los datos requeridos.", status_code=400)
+
+        _pass_hash = hashlib.sha224(_clave.encode()).hexdigest()
+        output = []
+        try:
+            for user in Usuario.objects(email=_usuario):
+                if (_usuario == user.email):
+                    if (user.clave == _pass_hash):
+                        output.append({
+                            "isAuth": True
+                        })
+                    else:
+                        output.append({
+                            "isAuth": False
+                        })
+                else:
+                    output.append({
+                        "isAuth": False
+                    })
             return jsonify({'resultado': output})
         except errors.ValidationError:
             return jsonify({'resultado': "No se existe." + id})
@@ -71,8 +108,10 @@ class CrearUsuario(Resource):
         _foto = request.json['foto']
         _clave = request.json['clave']
         _foto = request.json['foto']
+        _tipo_usuario = request.json['tipo_usuario']
         if _nombre is None or _nombre is "":
-            raise InvalidUsage("Se debe ingresar un nombre.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un nombre.", status_code=400)
         if _telefono is None or _telefono is "":
             raise InvalidUsage(
                 "Se debe ingresar un numero de telefono.", status_code=400)
@@ -82,15 +121,23 @@ class CrearUsuario(Resource):
             raise InvalidUsage(
                 "Se debe ingresar una direccion.", status_code=400)
         if _clave is None or _clave is "":
-            raise InvalidUsage("Se debe ingresar una clave.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar una clave.", status_code=400)
 
+        if _tipo_usuario is None or _tipo_usuario is "":
+            role = "e5"
+        else:
+            role = _tipo_usuario
+
+        _pass_hash = hashlib.sha224(_clave.encode()).hexdigest()
         user = Usuario(nombre=_nombre,
                        email=_email,
                        telefono=_telefono,
                        creado=datetime.now(),
                        direccion=_direccion,
-                       clave=str(bcrypt.generate_password_hash(_clave)),
-                       foto=_foto)
+                       clave=_pass_hash,
+                       foto=_foto,
+                       role=role)
         try:
             user.save()
         except errors.NotUniqueError:
@@ -110,7 +157,8 @@ class ActualizarUsuario(Resource):
         _id = request.json['id']
 
         if _nombre is None or _nombre is "":
-            raise InvalidUsage("Se debe ingresar un nombre.", status_code=400)
+            raise InvalidUsage(
+                "Se debe ingresar un nombre.", status_code=400)
         if _telefono is None or _telefono is "":
             raise InvalidUsage(
                 "Se debe ingresar un numero de telefono.", status_code=400)
@@ -128,14 +176,15 @@ class ActualizarUsuario(Resource):
             raise InvalidUsage(
                 "Se debe ingresar un id del usuario.", status_code=400)
 
+        _pass_hash = hashlib.sha224(_clave.encode()).hexdigest()
         user = Usuario.objects(id=_id)
         try:
             user.update(nombre=_nombre)
             user.update(telefono=_telefono)
             user.update(email=_email)
             user.update(direccion=_direccion)
-            if len(_clave) > 8:
-                user.update(clave=str(bcrypt.generate_password_hash(_clave))),
+            if len(_clave) > 7:
+                user.update(clave=_pass_hash)
             user.update(foto=_foto)
         except errors.NotUniqueError:
             return jsonify({'error': "Usuario duplicado, " + _nombre})

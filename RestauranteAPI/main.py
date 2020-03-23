@@ -8,7 +8,7 @@ from flask_restful import Resource, Api
 from flask_pymongo import PyMongo
 from Controllers.ProductoController import ProductosEnGeneral, RestYCantidadDeProductos, ProductoPorId, ProductosGet, CrearProducto, ActualizarProducto, MarcarDisponibilidadDelProducto, BorrarProducto
 from Controllers.RestauranteController import RestauranteGet, RestaurantePorId, CrearRestaurante, ActualizarRestaurante
-from Controllers.UsuarioController import UsuariosGet, UsuarioPorId, CrearUsuario, ActualizarUsuario
+from Controllers.UsuarioController import UsuariosGet, UsuarioPorId, CrearUsuario, ActualizarUsuario, AuthUsuario
 from Controllers.EncargadoController import EncargadosGet, EncargadoPorId, CrearEncargado, ActualizarEncargado
 from Utilidades.Config import app
 from flask_cors import CORS
@@ -54,6 +54,7 @@ api.add_resource(UsuariosGet, '/Usuarios')
 api.add_resource(UsuarioPorId, '/Usuario/<string:id>')
 api.add_resource(CrearUsuario, '/Usuario/Nuevo')
 api.add_resource(ActualizarUsuario, '/Usuario/Actualizar')
+api.add_resource(AuthUsuario, '/Usuario/Auth')
 
 api.add_resource(EncargadosGet, '/Encargados/<string:id>')
 api.add_resource(EncargadoPorId, '/Encargado/<string:id>')

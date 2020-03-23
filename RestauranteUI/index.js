@@ -3,6 +3,7 @@ const path = require("path");
 const app = express();
 const productoController = require("./Controllers/Producto/Producto.js");
 const productoDetallado = require("./Controllers/Producto/ProductoDetalle.js");
+const authUsuarios = require("./Controllers/Usuario/Usuario.js");
 
 // rutas de los files de react compilado
 app.use(express.static(path.join(__dirname, "tienda/build")));
@@ -12,6 +13,7 @@ app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 // Productos
 productoController(app);
 productoDetallado(app);
+authUsuarios(app);
 
 // Verificar si esta funcionando
 app.get("/Console/up", function(req, res, next) {

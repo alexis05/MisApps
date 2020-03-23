@@ -96,11 +96,11 @@ class CrearRestaurante(Resource):
                        direccion=_direccion,
                        creado=datetime.now(),
                        clave=str(bcrypt.generate_password_hash(_clave)),
-                       foto="")
+                       foto="",
+                       role="b2")
 
         encargado = Encargado(restaurante=restaurante,
                               usuario=user,
-                              role="1",
                               estado='1')
         try:
             restaurante.save()

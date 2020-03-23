@@ -14,10 +14,11 @@ CALIFICACION = (
     (4, 'Malo'),
     (5, 'Pesimo'))
 
-ROLES = (('1', 'SuperAdmin'),
-         ('2', 'Admin'),
-         ('3', 'Asistente'),
-         ('4', 'Soporte'))
+ROLES = (('a1', 'SuperAdmin'),
+         ('b2', 'Admin'),
+         ('c3', 'Asistente'),
+         ('d4', 'Soporte'),
+         ('e5', 'comprador'))
 
 
 class Comentarios(Document):
@@ -46,12 +47,12 @@ class Usuario(Document):
     clave = StringField(required=True, min_length=8)
     foto = StringField()
     estado = StringField(choices=ESTADO, default='1')
+    role = StringField(choices=ROLES)
 
 
 class Encargado(Document):
     restaurante = ReferenceField(Restaurante)
     usuario = ReferenceField(Usuario, unique=True)
-    role = StringField(choices=ROLES)
     estado = StringField(choices=ESTADO, default='1')
 
 
