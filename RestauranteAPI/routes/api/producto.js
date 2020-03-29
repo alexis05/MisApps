@@ -5,12 +5,15 @@ const ProductoServicio = require("../../servicios/producto/producto");
 const productoServicio = new ProductoServicio();
 
 router.get("/", async function(req, res, next) {
-
   let limit = req.query.limit;
   let skip = req.query.skip;
   const { tags } = req.query;
   try {
-    const productos = await productoServicio.getProductos({ tags, skip, limit });
+    const productos = await productoServicio.getProductos({
+      tags,
+      skip,
+      limit
+    });
     res.status(200).json({
       data: productos,
       mensage: "OK"
@@ -33,7 +36,7 @@ router.get("/:productoId", async function(req, res, next) {
   }
 });
 
-router.put("/:productoId", async function(req, res, next){
+router.put("/:productoId", async function(req, res, next) {
   const { productoId } = req.params;
   const { body: producto } = req;
   try {
@@ -48,12 +51,14 @@ router.put("/:productoId", async function(req, res, next){
   } catch (err) {
     next(err);
   }
-})
+});
 
-router.put("/:productoId", async function(req, res, next){
+router.delete("/:productoId", async function(req, res, next) {
   const { productoId } = req.params;
   try {
-    const productoEliminado = await productoServicio.deleteProducto({ productoId });
+    const productoEliminado = await productoServicio.deleteProducto({
+      productoId
+    });
 
     res.status(200).json({
       data: productoEliminado,
@@ -62,6 +67,6 @@ router.put("/:productoId", async function(req, res, next){
   } catch (err) {
     next(err);
   }
-})
+});
 
 module.exports = router;
