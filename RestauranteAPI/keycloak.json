@@ -1,0 +1,8 @@
+{
+  "realm": "restaurante",
+  "auth-server-url": "http://192.168.0.15:8080/auth/",
+  "ssl-required": "external",
+  "resource": "restaurant-client",
+  "public-client": true,
+  "confidential-port": 0
+}
