@@ -1,5 +1,5 @@
 require("dotenv").config();
-const NODE_ENV = "dev";
+const NODE_ENV = "production";
 
 const config = {
   dev: NODE_ENV !== "production",

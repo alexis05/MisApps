@@ -8,9 +8,18 @@ const productosApiRouter = require("./routes/api/producto");
 const restauranteApiRouter = require("./routes/api/restaurante");
 const { config } = require("./config");
 
+const keycloakConfig = {
+  realm: "restaurante",
+  "auth-server-url": "http://192.168.0.15:8080/auth/",
+  "ssl-required": "external",
+  resource: "client",
+  "public-client": true,
+  "bearer-only": true,
+  "confidential-port": 0
+};
 app.use(bodyParser.json());
 var memoryStore = new session.MemoryStore();
-var keycloak = new Keycloak({ store: memoryStore });
+var keycloak = new Keycloak({ store: memoryStore }, keycloakConfig);
 //session
 
 app.use(
