@@ -4,8 +4,8 @@ var bodyParser = require("body-parser");
 const app = express();
 const Keycloak = require("keycloak-connect");
 const session = require("express-session");
-const productosApiRouter = require("./routes/api/producto");
-const restauranteApiRouter = require("./routes/api/restaurante");
+const productosApi = require("./routes/api/producto");
+const restauranteApi = require("./routes/api/restaurante");
 const { config } = require("./config");
 
 const keycloakConfig = {
@@ -31,18 +31,10 @@ app.use(
   })
 );
 
-console.log(config.dev);
-setProtect = role => {
-  if (!config.dev) {
-    return keycloak.protect(role);
-  }
-  return keycloak.middleware();
-};
-
 app.use(keycloak.middleware());
 
-app.use("/restaurante", setProtect(), restauranteApiRouter);
-app.use("/producto", productosApiRouter);
+restauranteApi(app, keycloak);
+productosApi(app, keycloak);
 app.get("/console/up", function(request, response, next) {
   response.send("Hola!!");
 });
