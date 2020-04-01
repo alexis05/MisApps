@@ -1,8 +1,8 @@
 const express = require("express");
 const path = require("path");
+var bodyParser = require("body-parser");
 const app = express();
-const productoController = require("./Controllers/Producto/Producto.js");
-const productoDetallado = require("./Controllers/Producto/ProductoDetalle.js");
+const productoApi = require("./Controllers/Producto/Producto.js");
 
 // rutas de los files de react compilado
 app.use(express.static(path.join(__dirname, "tienda/build")));
@@ -10,8 +10,7 @@ app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 
 // Lista de controladores para usar la API
 // Productos
-productoController(app);
-productoDetallado(app);
+productoApi(app);
 
 // Verificar si esta funcionando
 app.get("/Console/up", function(req, res, next) {

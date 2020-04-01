@@ -11,13 +11,10 @@ export const traerDetalleProducto = productoId => async dispatch => {
       type: REQUEST_ENVIADO_DETALLE_PRODUCTO
     });
 
-    const respuesta = await API.get(
-      `Api/Producto/Detallado?productoId=${productoId}`
-    );
-
+    const respuesta = await API.get(`productoapi/producto/${productoId}`);
     dispatch({
       type: TRAER_DETALLE_PRODUCTO,
-      payload: respuesta.data.resultado
+      payload: respuesta.data.data
     });
   } catch (error) {
     dispatch({

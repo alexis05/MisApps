@@ -88,12 +88,15 @@ const Producto = props => (
       <div className="col-12">
         <div className="row d-flex justify-content-center text-center">
           <div className="col">
-            <Link to={`/Home/Producto/${props.id}`} className="btn btn-primary">
+            <Link
+              to={`/Home/Producto/${props._id}`}
+              className="btn btn-primary"
+            >
               Pedir
             </Link>
           </div>
           <div className="col">
-            <Link to={`/Home/Producto/${props.id}`} className="nav-link">
+            <Link to={`/Home/Producto/${props._id}`} className="nav-link">
               Ver
             </Link>
           </div>
