@@ -16,7 +16,7 @@ const ListaProducto = ({ productos }) => (
               precio={producto.precio}
               detalle={producto.detalle}
               creado={producto.creado}
-              id={producto.id}
+              _id={producto._id}
             />
           </div>
         ))}

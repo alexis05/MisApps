@@ -12,12 +12,12 @@ export const traerProductos = (limit, skip) => async dispatch => {
     });
 
     const respuesta = await API.get(
-      `Api/Productos?limit=${limit}&skip=${skip}`
+      `/productoapi/producto?limit=${limit}&skip=${skip}`
     );
 
     dispatch({
       type: TRAER_PRODUCTOS,
-      payload: respuesta.data.resultado
+      payload: respuesta.data.data
     });
   } catch (error) {
     dispatch({
