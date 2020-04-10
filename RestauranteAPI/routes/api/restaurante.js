@@ -6,7 +6,7 @@ const validation = require("../../utils/middlewares/validationHandlers");
 const {
   restauranteIdSchema,
   crearRestauranteSchema,
-  actRestauranteSchema
+  actRestauranteSchema,
 } = require("../../utils/schema/restaurante");
 
 function restaurantesAPI(app, keycloak) {
@@ -14,32 +14,32 @@ function restaurantesAPI(app, keycloak) {
   app.use("/api/restaurante", router);
   const restServicio = new RestauranteServicio();
 
-  setProtect = role => {
+  setProtect = (role) => {
     if (!config.dev) {
       return keycloak.protect(role);
     }
     return keycloak.middleware();
   };
 
-  router.get("/", setProtect(), async function(req, res, next) {
+  router.get("/", setProtect(), async function (req, res, next) {
     const { tags } = req.query;
     try {
       const restaurantes = await restServicio.getRestaurantes({ tags });
       res.status(200).json({
         data: restaurantes,
-        mensaje: "OK"
+        mensaje: "OK",
       });
     } catch (err) {
       next(err);
     }
   });
-  router.get("/:restId", setProtect(), async function(req, res, next) {
-    const { restId } = req.params;
+  router.get("/:restauranteId", setProtect(), async function (req, res, next) {
+    const { restauranteId } = req.params;
     try {
-      const restaurante = await restServicio.getRestaurante({ restId });
+      const restaurante = await restServicio.getRestaurante({ restauranteId });
       res.status(200).json({
         data: restaurante,
-        mensage: "OK"
+        mensage: "OK",
       });
     } catch (err) {
       next(err);
@@ -50,17 +50,17 @@ function restaurantesAPI(app, keycloak) {
     "/",
     setProtect(),
     validation(crearRestauranteSchema),
-    async function(req, res, next) {
+    async function (req, res, next) {
       const { body: restaurante } = req;
 
       try {
         const restCreado = await restServicio.createRestaurante({
-          restaurante
+          restaurante,
         });
 
         res.status(201).json({
           data: restCreado,
-          message: "OK"
+          mensaje: "OK",
         });
       } catch (err) {
         next(err);
@@ -73,17 +73,17 @@ function restaurantesAPI(app, keycloak) {
     setProtect(),
     validation({ restId: restauranteIdSchema }, "params"),
     validation(actRestauranteSchema),
-    async function(req, res, next) {
+    async function (req, res, next) {
       const { restId } = req.params;
       const { body: restaurante } = req;
       try {
         const restActualizado = await restServicio.updateRestaurante({
           restId,
-          restaurante
+          restaurante,
         });
         res.status(200).json({
           data: restActualizado,
-          message: "OK"
+          mensaje: "OK",
         });
       } catch (err) {
         next(err);
@@ -91,14 +91,14 @@ function restaurantesAPI(app, keycloak) {
     }
   );
 
-  router.delete("/:restId", setProtect(), async function(req, res, next) {
+  router.delete("/:restId", setProtect(), async function (req, res, next) {
     const { restId } = req.params;
     try {
       const restEliminado = await restServicio.deleteRestaurante({ restId });
 
       res.status(200).json({
         data: restEliminado,
-        message: "OK"
+        mensaje: "OK",
       });
     } catch (err) {
       next(err);

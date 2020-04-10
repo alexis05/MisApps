@@ -3,7 +3,7 @@ const path = require("path");
 var bodyParser = require("body-parser");
 const app = express();
 const productoApi = require("./Controllers/Producto/Producto.js");
-
+const restauranteApi = require("./Controllers/Restaurante/Restaurante");
 // rutas de los files de react compilado
 app.use(express.static(path.join(__dirname, "tienda/build")));
 app.use(express.static(path.join(__dirname, "tienda-admin/build")));
@@ -11,9 +11,11 @@ app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 // Lista de controladores para usar la API
 // Productos
 productoApi(app);
+// restaurante
+restauranteApi(app);
 
 // Verificar si esta funcionando
-app.get("/Console/up", function(req, res, next) {
+app.get("/Console/up", function (req, res, next) {
   res.send("Hola!");
 });
 
@@ -32,7 +34,7 @@ app.get("/Admin*", (req, res) => {
   res.sendFile(path.join(__dirname + "/tienda-admin/build/index.html"));
 });
 
-const server = app.listen(8080, function() {
+const server = app.listen(8080, function () {
   console.log(`Listening http://localhost:${server.address().port}`);
   console.log(path.join(__dirname));
 });

@@ -5,7 +5,7 @@ class CrearRestaurante extends React.Component {
   state = {
     loading: true,
     error: null,
-    data: undefined
+    data: undefined,
   };
 
   componentWillMount() {
@@ -25,25 +25,25 @@ class CrearRestaurante extends React.Component {
     */
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
       value: {
         ...this.state.value,
-        [e.target.name]: e.target.value
-      }
+        [e.target.name]: e.target.value,
+      },
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.crearTienda(this.state.value);
   };
 
-  crearTienda = async tienda => {
+  crearTienda = async (tienda) => {
     this.setState({ loading: true, error: null });
 
     try {
-      await API.post(`Restaurante/Nuevo`, tienda).then(res => {
+      await API.post(`api/restaurante`, tienda).then((res) => {
         this.setState({ loading: false, data: res.data });
       });
     } catch (error) {

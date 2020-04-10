@@ -6,7 +6,7 @@ const validation = require("../../utils/middlewares/validationHandlers");
 const {
   productoIdSchema,
   crearProductoSchema,
-  actProductoSchema
+  actProductoSchema,
 } = require("../../utils/schema/producto");
 
 function productosAPI(app, keycloak) {
@@ -14,14 +14,14 @@ function productosAPI(app, keycloak) {
   app.use("/api/producto", router);
   const productoServicio = new ProductoServicio();
 
-  setProtect = role => {
+  setProtect = (role) => {
     if (!config.dev) {
       return keycloak.protect(role);
     }
     return keycloak.middleware();
   };
 
-  router.get("/", setProtect(), async function(req, res, next) {
+  router.get("/", setProtect(), async function (req, res, next) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     const { tags } = req.query;
@@ -29,24 +29,24 @@ function productosAPI(app, keycloak) {
       const productos = await productoServicio.getProductos({
         tags,
         skip,
-        limit
+        limit,
       });
       res.status(200).json({
         data: productos,
-        mensage: "OK"
+        mensaje: "OK",
       });
     } catch (err) {
       next(err);
     }
   });
 
-  router.get("/:productoId", setProtect(), async function(req, res, next) {
+  router.get("/:productoId", setProtect(), async function (req, res, next) {
     const { productoId } = req.params;
     try {
       const productos = await productoServicio.getProducto({ productoId });
       res.status(200).json({
         data: productos,
-        mensage: "OK"
+        mensaje: "OK",
       });
     } catch (err) {
       next(err);
@@ -57,17 +57,17 @@ function productosAPI(app, keycloak) {
     "/",
     setProtect(),
     validation(crearProductoSchema),
-    async function(req, res, next) {
+    async function (req, res, next) {
       const { body: producto } = req;
 
       try {
         const productoCreado = await productoServicio.createProducto({
-          producto
+          producto,
         });
 
         res.status(201).json({
           data: productoCreado,
-          message: "OK"
+          mensaje: "OK",
         });
       } catch (err) {
         next(err);
@@ -80,18 +80,17 @@ function productosAPI(app, keycloak) {
     setProtect(),
     validation({ productoId: productoIdSchema }, "params"),
     validation(actProductoSchema),
-    setProtect(),
-    async function(req, res, next) {
+    async function (req, res, next) {
       const { productoId } = req.params;
       const { body: producto } = req;
       try {
         const productoActualizado = await productoServicio.updateProducto({
           productoId,
-          producto
+          producto,
         });
         res.status(200).json({
           data: productoActualizado,
-          message: "OK"
+          mensaje: "OK",
         });
       } catch (err) {
         next(err);
@@ -99,16 +98,16 @@ function productosAPI(app, keycloak) {
     }
   );
 
-  router.delete("/:productoId", setProtect(), async function(req, res, next) {
+  router.delete("/:productoId", setProtect(), async function (req, res, next) {
     const { productoId } = req.params;
     try {
       const productoEliminado = await productoServicio.deleteProducto({
-        productoId
+        productoId,
       });
 
       res.status(200).json({
         data: productoEliminado,
-        message: "OK"
+        mensaje: "OK",
       });
     } catch (err) {
       next(err);

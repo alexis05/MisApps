@@ -6,7 +6,7 @@ const Keycloak = require("keycloak-connect");
 const session = require("express-session");
 const productosApi = require("./routes/api/producto");
 const restauranteApi = require("./routes/api/restaurante");
-const { config } = require("./config");
+const usuariosApi = require("./routes/api/usuario");
 
 const keycloakConfig = {
   realm: "restaurante",
@@ -15,7 +15,7 @@ const keycloakConfig = {
   resource: "client",
   "public-client": true,
   "bearer-only": true,
-  "confidential-port": 0
+  "confidential-port": 0,
 };
 app.use(bodyParser.json());
 var memoryStore = new session.MemoryStore();
@@ -27,7 +27,7 @@ app.use(
     secret: "3214f82e0cf03f418a55d24f110bcfe8bcb068477a6f821c7ffd2c55c4f2ee20",
     resave: false,
     saveUninitialized: true,
-    store: memoryStore
+    store: memoryStore,
   })
 );
 
@@ -35,13 +35,15 @@ app.use(keycloak.middleware());
 
 restauranteApi(app, keycloak);
 productosApi(app, keycloak);
-app.get("/console/up", function(request, response, next) {
+usuariosApi(app, keycloak);
+
+app.get("/console/up", function (request, response, next) {
   response.send("Hola!!");
 });
 
 app.use(keycloak.middleware({ logout: "/" }));
 
-const server = app.listen(5050, function() {
+const server = app.listen(5050, function () {
   console.log(`Listening http://localhost:${server.address().port}`);
   console.log(path.join(__dirname));
 });
