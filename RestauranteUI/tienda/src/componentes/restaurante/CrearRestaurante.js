@@ -25,6 +25,10 @@ class CrearRestaurante extends React.Component {
     */
   }
 
+  cleanInputs = () => {
+    console.log("limpiar los inputs");
+  };
+
   handleChange = (e) => {
     this.setState({
       value: {
@@ -43,8 +47,9 @@ class CrearRestaurante extends React.Component {
     this.setState({ loading: true, error: null });
 
     try {
-      await API.post(`api/restaurante`, tienda).then((res) => {
+      await API.post(`restauranteapi/restaurante`, tienda).then((res) => {
         this.setState({ loading: false, data: res.data });
+        this.cleanInputs();
       });
     } catch (error) {
       this.setState({ loading: false, error: error });

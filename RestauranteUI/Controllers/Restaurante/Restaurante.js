@@ -24,6 +24,7 @@ function restauranteAPI(app) {
         res.end(restaurantes);
       })
       .catch(function (err) {
+        next(err);
         console.log("Ha ocurrido un error: ", err);
       });
   });
@@ -43,27 +44,35 @@ function restauranteAPI(app) {
       })
       .catch(function (err) {
         console.log("Ha ocurrido un error: ", err);
+        next(err);
       });
   });
 
   router.post(`/restaurante`, function (req, res, next) {
     const { body: restaurante } = req;
-
+    if (!restaurante)
+      return res.status(400).json({
+        mensaje: "json es requerido",
+      });
     var options = {
       method: "POST",
-      uri: "http://api.posttestserver.com/post",
+      uri: `${URL_API}/api/restaurante`,
       body: {
-        some: "payload",
+        ...restaurante,
       },
       json: true, // Automatically stringifies the body to JSON
     };
 
     rp(options)
       .then(function (parsedBody) {
-        // POST succeeded...
+        console.log("en el then..");
+        console.log({ parsedBody });
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).json(parsedBody);
       })
       .catch(function (err) {
-        // POST failed...
+        console.log("Ha occurido un error: ", err);
+        next(err);
       });
   });
 }

@@ -18,10 +18,10 @@ class RestauranteServicio {
     return restaurante || [];
   }
 
-  async createRestaurante({ restaurante }) {
+  async createRestaurante({ restauranteData }) {
     const restauranteCrear = await this.mongoDB.create(
       this.collection,
-      restaurante
+      restauranteData
     );
     return restauranteCrear;
   }

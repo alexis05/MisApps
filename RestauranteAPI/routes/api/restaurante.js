@@ -1,5 +1,6 @@
 const express = require("express");
 const RestauranteServicio = require("../../servicios/restaurante/restaurante");
+const UsuarioServicio = require("../../servicios/usuario/usuario");
 const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
 
@@ -49,19 +50,63 @@ function restaurantesAPI(app, keycloak) {
   router.post(
     "/",
     setProtect(),
-    validation(crearRestauranteSchema),
+    /*validation(crearRestauranteSchema),*/
     async function (req, res, next) {
       const { body: restaurante } = req;
+      usuarioServicio = new UsuarioServicio();
+      const nombre = restaurante.nombre;
+      const telefono = restaurante.telefono;
+      const apellido = "Admin";
+      const email = restaurante.email;
+      const direccion = restaurante.direccion;
+      const creado = new Date();
+      const clave = restaurante.clave;
+      const foto = "";
+      const activo = true;
+      const role = "";
+      const horario = restaurante.horario;
+      const eslogan = restaurante.eslogan;
+
+      const usuario = {
+        nombre,
+        telefono,
+        apellido,
+        email,
+        direccion,
+        creado,
+        clave,
+        foto,
+        activo,
+        role,
+      };
 
       try {
-        const restCreado = await restServicio.createRestaurante({
-          restaurante,
+        const usuarioAdminCreado = await usuarioServicio.createUsusario({
+          usuario,
         });
+        if (usuarioAdminCreado) {
+          const restauranteData = {
+            nombre,
+            telefono,
+            email,
+            horario,
+            logo: foto,
+            creado,
+            activo,
+            eslogan,
+            owner: usuarioAdminCreado,
+          };
+          const restCreado = await restServicio.createRestaurante({
+            restauranteData,
+          });
 
-        res.status(201).json({
-          data: restCreado,
-          mensaje: "OK",
-        });
+          if (restCreado && usuarioAdminCreado) {
+            res.status(201).json({
+              data: restCreado,
+              mensaje: "OK",
+            });
+          }
+        }
       } catch (err) {
         next(err);
       }

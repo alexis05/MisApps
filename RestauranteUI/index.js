@@ -4,6 +4,8 @@ var bodyParser = require("body-parser");
 const app = express();
 const productoApi = require("./Controllers/Producto/Producto.js");
 const restauranteApi = require("./Controllers/Restaurante/Restaurante");
+
+app.use(bodyParser.json());
 // rutas de los files de react compilado
 app.use(express.static(path.join(__dirname, "tienda/build")));
 app.use(express.static(path.join(__dirname, "tienda-admin/build")));
