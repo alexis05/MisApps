@@ -34,11 +34,11 @@ const ProductoDetallado = ({ detalleProducto }) => {
   );
 };
 
-const mapStateToProps = reducer => ({
+const mapStateToProps = (reducer) => ({
   detalleProducto:
-    reducer.productoReducer.productoDetalleReducer.detalleProducto
+    reducer.productoReducer.productoDetalleReducer.detalleProducto,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductoDetallado);

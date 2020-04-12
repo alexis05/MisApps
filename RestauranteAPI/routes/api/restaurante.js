@@ -116,11 +116,12 @@ function restaurantesAPI(app, keycloak) {
   router.put(
     "/:restId",
     setProtect(),
-    validation({ restId: restauranteIdSchema }, "params"),
-    validation(actRestauranteSchema),
+    /*validation({ restId: restauranteIdSchema }, "params"),
+    validation(actRestauranteSchema),*/
     async function (req, res, next) {
       const { restId } = req.params;
       const { body: restaurante } = req;
+      delete restaurante._id;
       try {
         const restActualizado = await restServicio.updateRestaurante({
           restId,

@@ -10,7 +10,7 @@ class PerfilTienda extends React.Component {
     error: null,
     data: undefined,
     value: undefined,
-    tienda_act: false
+    tienda_act: false,
   };
 
   getTiendaIdFromLS(key) {
@@ -25,29 +25,30 @@ class PerfilTienda extends React.Component {
     }
   }
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
       value: {
         ...this.state.value,
         [e.target.name]: e.target.value,
-        id: this.state.data.resultado[0].id
-      }
+        //id: this.state.data.data.id,
+      },
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.actualizarTienda(this.state.value);
   };
 
-  actualizarTienda = async tienda => {
+  actualizarTienda = async (tienda) => {
     this.setState({ loading: true, error: null });
 
     try {
-      await API.put(`Restaurante/Actualizar`, tienda).then(res => {
+      const id = this.props.match.params.id;
+      await API.put(`restauranteapi/restaurante/${id}`, tienda).then((res) => {
         this.setState({
           loading: false,
-          tienda_act: true
+          tienda_act: true,
         });
       });
     } catch (error) {
@@ -61,11 +62,13 @@ class PerfilTienda extends React.Component {
 
   fechDataRestaurante = async () => {
     try {
-      await API.get(`Restaurante/${this.props.match.params.id}`).then(res => {
+      await API.get(
+        `restauranteapi/restaurante/${this.props.match.params.id}`
+      ).then((res) => {
         this.setState({
           loading: false,
           data: res.data,
-          value: res.data.resultado[0]
+          value: res.data.data,
         });
       });
     } catch (error) {
@@ -83,7 +86,7 @@ class PerfilTienda extends React.Component {
           <div className="col-sm-10 col-md-8 col-lg-6 mx-auto d-table">
             <div className="d-table-cell align-middle">
               <div className="text-center mt-4">
-                <h1 className="h2">{this.state.data.resultado[0].nombre}</h1>
+                <h1 className="h2">{this.state.data.data.nombre}</h1>
                 <p className="lead">Puede editar los siguientes valores</p>
               </div>
 
@@ -96,7 +99,7 @@ class PerfilTienda extends React.Component {
                         type="hidden"
                         onChange={this.handleChange}
                         name="id"
-                        value={this.state.data.resultado[0].id}
+                        value={this.state.data.data.id}
                       />
                       <div className="form-group">
                         <label>Nombre</label>
@@ -106,7 +109,7 @@ class PerfilTienda extends React.Component {
                           name="nombre"
                           placeholder="Ingresa un nombre"
                           onChange={this.handleChange}
-                          defaultValue={this.state.data.resultado[0].nombre}
+                          defaultValue={this.state.data.data.nombre}
                         />
                       </div>
                       <div className="form-group">
@@ -117,7 +120,7 @@ class PerfilTienda extends React.Component {
                           name="email"
                           placeholder="Ingresa un correo"
                           onChange={this.handleChange}
-                          defaultValue={this.state.data.resultado[0].email}
+                          defaultValue={this.state.data.data.email}
                         />
                       </div>
                       <div className="form-group">
@@ -128,9 +131,7 @@ class PerfilTienda extends React.Component {
                           name="eslogan"
                           placeholder="Ingresa un eslogan"
                           onChange={this.handleChange}
-                          defaultValue={
-                            this.state.data.resultado[0].eslogan || ""
-                          }
+                          defaultValue={this.state.data.data.eslogan || ""}
                         />
                       </div>
                       <div className="form-group">
@@ -150,9 +151,7 @@ class PerfilTienda extends React.Component {
                           name="horario"
                           placeholder="Ingresa un horario"
                           onChange={this.handleChange}
-                          defaultValue={
-                            this.state.data.resultado[0].horario || ""
-                          }
+                          defaultValue={this.state.data.data.horario || ""}
                         />
                       </div>
                       <div className="form-group">
@@ -163,9 +162,7 @@ class PerfilTienda extends React.Component {
                           name="telefono"
                           placeholder="Ingresa un numero de telefono"
                           onChange={this.handleChange}
-                          defaultValue={
-                            this.state.data.resultado[0].telefono || ""
-                          }
+                          defaultValue={this.state.data.data.telefono || ""}
                         />
                       </div>
                       <div className="text-center mt-3">

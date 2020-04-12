@@ -31,7 +31,10 @@ function restauranteAPI(app) {
 
   router.get(`/restaurante/:restauranteId`, function (req, res, next) {
     const { restauranteId } = req.params;
-    if (!restauranteId) return res.send({ erro: "Requiere el restaurante id" });
+    if (!restauranteId)
+      return res.status(400).json({
+        mensaje: "el id es requerido",
+      });
     var options = {
       method: "GET",
       uri: `${URL_API}/api/restaurante/${restauranteId}`,
@@ -65,10 +68,39 @@ function restauranteAPI(app) {
 
     rp(options)
       .then(function (parsedBody) {
-        console.log("en el then..");
-        console.log({ parsedBody });
         res.setHeader("Content-Type", "application/json");
         res.status(201).json(parsedBody);
+      })
+      .catch(function (err) {
+        console.log("Ha occurido un error: ", err);
+        next(err);
+      });
+  });
+
+  router.put(`/restaurante/:restauranteId`, function (req, res, next) {
+    const { restauranteId } = req.params;
+    const { body: restaurante } = req;
+    if (!restauranteId)
+      return res.status(400).json({
+        mensaje: "el id es requerido",
+      });
+    if (!restaurante)
+      return res.status(400).json({
+        mensaje: "json es requerido",
+      });
+    var options = {
+      method: "PUT",
+      uri: `${URL_API}/api/restaurante/${restauranteId}`,
+      body: {
+        ...restaurante,
+      },
+      json: true,
+    };
+
+    rp(options)
+      .then(function (parsedBody) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(200).json(parsedBody);
       })
       .catch(function (err) {
         console.log("Ha occurido un error: ", err);
