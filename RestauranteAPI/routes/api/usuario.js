@@ -54,6 +54,24 @@ function usuariosAPI(app, keycloak) {
     }
   });
 
+  router.get("/byuuid/:uuid", async function (req, res, next) {
+    const { uuid } = req.params;
+    try {
+      usuarioServicio
+        .getByUUID({ uuid })
+        .then((data) => {
+          delete data.clave;
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post(
     "/",
     /*validation(crearUsuarioSchema),*/

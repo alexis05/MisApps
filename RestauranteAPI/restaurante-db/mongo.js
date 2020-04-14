@@ -54,6 +54,12 @@ class MongoLib {
     });
   }
 
+  getByUUID(collection, uuid) {
+    return this.connect().then((db) => {
+      return db.collection(collection).findOne({ uuid: uuid });
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {

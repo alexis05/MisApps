@@ -21,6 +21,11 @@ class ServicioAPI {
     return item || [];
   }
 
+  async getByUUID({ uuid }) {
+    const item = await this.mongoDB.getByUUID(this.collection, uuid);
+    return item || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;
