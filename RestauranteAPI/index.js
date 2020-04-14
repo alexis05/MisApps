@@ -7,6 +7,7 @@ const session = require("express-session");
 const productosApi = require("./routes/api/producto");
 const restauranteApi = require("./routes/api/restaurante");
 const usuariosApi = require("./routes/api/usuario");
+const authApi = require("./routes/api/auth");
 
 const keycloakConfig = {
   realm: "restaurante",
@@ -36,6 +37,7 @@ app.use(keycloak.middleware());
 restauranteApi(app, keycloak);
 productosApi(app, keycloak);
 usuariosApi(app, keycloak);
+authApi(app);
 
 app.get("/console/up", function (request, response, next) {
   response.send("Hola!!");

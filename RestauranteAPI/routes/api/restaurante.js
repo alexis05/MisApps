@@ -3,6 +3,8 @@ const ServicioAPI = require("../../restaurante-db");
 const restauranteCollection = "restaurante";
 const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
+const Bcrypt = require("bcryptjs");
+var uuid = require("uuid");
 
 const {
   restauranteIdSchema,
@@ -69,7 +71,7 @@ function restaurantesAPI(app, keycloak) {
       const email = restaurante.email;
       const direccion = restaurante.direccion;
       const creado = new Date();
-      const clave = restaurante.clave;
+      const clave = Bcrypt.hashSync(restaurante.clave, 10);
       const foto = "";
       const activo = true;
       const role = "";
@@ -77,6 +79,7 @@ function restaurantesAPI(app, keycloak) {
       const eslogan = restaurante.eslogan;
 
       const usuario = {
+        uuid: uuid.v4(),
         nombre,
         telefono,
         apellido,

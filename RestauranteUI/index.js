@@ -4,8 +4,11 @@ var bodyParser = require("body-parser");
 const app = express();
 const productoApi = require("./Controllers/Producto/Producto.js");
 const restauranteApi = require("./Controllers/Restaurante/Restaurante");
+const publicController = require("./Controllers/index");
+const cookieParser = require("cookie-parser");
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 // rutas de los files de react compilado
 app.use(express.static(path.join(__dirname, "tienda/build")));
 app.use(express.static(path.join(__dirname, "tienda-admin/build")));
@@ -15,6 +18,7 @@ app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 productoApi(app);
 // restaurante
 restauranteApi(app);
+publicController(app);
 
 // Verificar si esta funcionando
 app.get("/Console/up", function (req, res, next) {

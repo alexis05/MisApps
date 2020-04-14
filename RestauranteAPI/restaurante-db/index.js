@@ -16,6 +16,11 @@ class ServicioAPI {
     return item || [];
   }
 
+  async getByEmail({ email }) {
+    const item = await this.mongoDB.getByEmail(this.collection, email);
+    return item || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;

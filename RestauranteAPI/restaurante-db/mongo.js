@@ -1,5 +1,5 @@
 const { MongoClient, ObjectId } = require("mongodb");
-const { config } = require("../config");
+const { config } = require("./config");
 
 const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
@@ -45,6 +45,12 @@ class MongoLib {
   get(collection, id) {
     return this.connect().then((db) => {
       return db.collection(collection).findOne({ _id: ObjectId(id) });
+    });
+  }
+
+  getByEmail(collection, email) {
+    return this.connect().then((db) => {
+      return db.collection(collection).findOne({ email: email });
     });
   }
 

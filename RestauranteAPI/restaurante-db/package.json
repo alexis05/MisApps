@@ -13,6 +13,7 @@
   "author": "alexis05batista@gmail.com",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^6.1.0",
     "mongodb": "^3.1.10"
   },
   "bugs": {

@@ -2,7 +2,9 @@ const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
 const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
-const usuarioCollection = "producto";
+const usuarioCollection = "usuario";
+const Bcrypt = require("bcryptjs");
+var uuid = require("uuid");
 
 const {
   usuarioIdSchema,
@@ -62,9 +64,27 @@ function usuariosAPI(app, keycloak) {
   router.post(
     "/",
     setProtect(),
-    validation(crearUsuarioSchema),
+    /*validation(crearUsuarioSchema),*/
     async function (req, res, next) {
-      const { body: item } = req;
+      const { body: usuario } = req;
+      if (!usuario)
+        return res.status(400).json({
+          mensaje: "Se require el json",
+        });
+
+      const item = {
+        uuid: uuid.v4(),
+        nombre: usuario.nombre,
+        telefono: usuario.telefono,
+        apellido: usuario.apellido,
+        email: usuario.email,
+        direccion: usuario.direccion,
+        creado: new Date(),
+        clave: Bcrypt.hashSync(usuario.clave, 10),
+        foto: usuario.foto,
+        activo: true,
+        role: usuario.role,
+      };
       try {
         usuarioServicio
           .create({ item })
