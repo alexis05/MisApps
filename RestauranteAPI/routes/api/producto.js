@@ -1,7 +1,8 @@
 const express = require("express");
-const ProductoServicio = require("../../servicios/producto/producto");
+const ServicioAPI = require("../../restaurante-db");
 const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
+const productoCollection = "producto";
 
 const {
   productoIdSchema,
@@ -12,7 +13,7 @@ const {
 function productosAPI(app, keycloak) {
   const router = express.Router();
   app.use("/api/producto", router);
-  const productoServicio = new ProductoServicio();
+  const productoServicio = ServicioAPI(productoCollection);
 
   setProtect = (role) => {
     if (!config.dev) {
@@ -26,28 +27,36 @@ function productosAPI(app, keycloak) {
     let skip = req.query.skip;
     const { tags } = req.query;
     try {
-      const productos = await productoServicio.getProductos({
-        tags,
-        skip,
-        limit,
-      });
-      res.status(200).json({
-        data: productos,
-        mensaje: "OK",
-      });
+      productoServicio
+        .getAll({
+          tags,
+          skip,
+          limit,
+        })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
     } catch (err) {
       next(err);
     }
   });
 
-  router.get("/:productoId", setProtect(), async function (req, res, next) {
-    const { productoId } = req.params;
+  router.get("/:itemId", setProtect(), async function (req, res, next) {
+    const { itemId } = req.params;
     try {
-      const productos = await productoServicio.getProducto({ productoId });
-      res.status(200).json({
-        data: productos,
-        mensaje: "OK",
-      });
+      productoServicio
+        .getItem({ itemId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
     } catch (err) {
       next(err);
     }
@@ -58,17 +67,18 @@ function productosAPI(app, keycloak) {
     setProtect(),
     validation(crearProductoSchema),
     async function (req, res, next) {
-      const { body: producto } = req;
+      const { body: item } = req;
 
       try {
-        const productoCreado = await productoServicio.createProducto({
-          producto,
-        });
-
-        res.status(201).json({
-          data: productoCreado,
-          mensaje: "OK",
-        });
+        productoServicio
+          .create({ item })
+          .then((data) => {
+            res.status(201).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
       } catch (err) {
         next(err);
       }
@@ -76,39 +86,41 @@ function productosAPI(app, keycloak) {
   );
 
   router.put(
-    "/:productoId",
+    "/:itemId",
     setProtect(),
-    validation({ productoId: productoIdSchema }, "params"),
+    validation({ itemId: productoIdSchema }, "params"),
     validation(actProductoSchema),
     async function (req, res, next) {
-      const { productoId } = req.params;
-      const { body: producto } = req;
+      const { itemId } = req.params;
+      const { body: item } = req;
       try {
-        const productoActualizado = await productoServicio.updateProducto({
-          productoId,
-          producto,
-        });
-        res.status(200).json({
-          data: productoActualizado,
-          mensaje: "OK",
-        });
+        productoServicio
+          .update({ itemId, item })
+          .then((data) => {
+            res.status(200).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
       } catch (err) {
         next(err);
       }
     }
   );
 
-  router.delete("/:productoId", setProtect(), async function (req, res, next) {
-    const { productoId } = req.params;
+  router.delete("/:itemId", setProtect(), async function (req, res, next) {
+    const { itemId } = req.params;
     try {
-      const productoEliminado = await productoServicio.deleteProducto({
-        productoId,
-      });
-
-      res.status(200).json({
-        data: productoEliminado,
-        mensaje: "OK",
-      });
+      productoServicio
+        .delete({ itemId })
+        .then((data) => {
+          res.status(200).json({
+            data: productoEliminado,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
     } catch (err) {
       next(err);
     }

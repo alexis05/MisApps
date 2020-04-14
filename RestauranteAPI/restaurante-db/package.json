@@ -1,0 +1,22 @@
+{
+  "name": "restaurante-db",
+  "version": "1.0.0",
+  "description": "This module uses mongodb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexis05/MisApps.git"
+  },
+  "author": "alexis05batista@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^3.1.10"
+  },
+  "bugs": {
+    "url": "https://github.com/alexis05/MisApps/issues"
+  },
+  "homepage": "https://github.com/alexis05/MisApps#readme"
+}

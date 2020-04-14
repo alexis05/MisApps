@@ -1,7 +1,8 @@
 const express = require("express");
-const UsuarioServicio = require("../../servicios/usuario/usuario");
+const ServicioAPI = require("../../restaurante-db");
 const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
+const usuarioCollection = "producto";
 
 const {
   usuarioIdSchema,
@@ -11,7 +12,7 @@ const {
 function usuariosAPI(app, keycloak) {
   const router = express.Router();
   app.use("/api/usuario", router);
-  const usuarioServicio = new UsuarioServicio();
+  const usuarioServicio = ServicioAPI(usuarioCollection);
 
   setProtect = (role) => {
     if (!config.dev) {
@@ -26,25 +27,33 @@ function usuariosAPI(app, keycloak) {
     const { tags } = req.query;
 
     try {
-      const usuarios = await usuarioServicio.getUsuarios({ tags, skip, limit });
-      res.status(200).json({
-        data: usuarios,
-        mensaje: "OK",
-      });
+      usuarioServicio
+        .getAll({ tags, skip, limit })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
     } catch (err) {
       next(err);
     }
   });
 
-  router.get("/:usuarioId", setProtect(), async function (req, res, next) {
-    const { usuarioId } = req.params;
+  router.get("/:itemId", setProtect(), async function (req, res, next) {
+    const { itemId } = req.params;
 
     try {
-      const usuario = await usuarioServicio.getUsuario({ usuarioId });
-      res.status(200).json({
-        data: usuario,
-        mensaje: "OK",
-      });
+      usuarioServicio
+        .getItem({ itemId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
     } catch (err) {
       next(err);
     }
@@ -55,14 +64,17 @@ function usuariosAPI(app, keycloak) {
     setProtect(),
     validation(crearUsuarioSchema),
     async function (req, res, next) {
-      const { body: usuario } = req;
+      const { body: item } = req;
       try {
-        const usuarioCreado = await usuarioServicio.createUsusario({ usuario });
-
-        res.status(200).json({
-          data: usuarioCreado,
-          mensaje: "OK",
-        });
+        usuarioServicio
+          .create({ item })
+          .then((data) => {
+            res.status(201).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
       } catch (err) {
         next(err);
       }
@@ -70,22 +82,23 @@ function usuariosAPI(app, keycloak) {
   );
 
   router.put(
-    "/:usuarioId",
+    "/:itemId",
     setProtect(),
-    validation({ usuarioId: usuarioIdSchema }, "params"),
+    validation({ itemId: usuarioIdSchema }, "params"),
     async function (req, res, next) {
-      const { usuarioId } = req.params;
-      const { body: usuario } = req;
+      const { itemId } = req.params;
+      const { body: item } = req;
 
       try {
-        const usaurioActualizado = await usuarioServicio.updateUsuario({
-          usuarioId,
-          usuario,
-        });
-        res.status(200).json({
-          data: usaurioActualizado,
-          mensaje: "OK",
-        });
+        usuarioServicio
+          .update({ itemId, item })
+          .then((data) => {
+            res.status(200).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
       } catch (err) {
         next(err);
       }
