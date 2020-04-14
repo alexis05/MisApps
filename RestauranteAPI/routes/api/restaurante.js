@@ -5,6 +5,7 @@ const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
 const Bcrypt = require("bcryptjs");
 var uuid = require("uuid");
+var guard = require("express-jwt-permissions")();
 
 const {
   restauranteIdSchema,

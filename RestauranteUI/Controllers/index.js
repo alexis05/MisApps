@@ -24,9 +24,15 @@ function PublicController(app) {
 
     rp(options)
       .then(function (parsedBody) {
+        var permissions = parsedBody.data.role;
+
+        const json = {
+          uuid: parsedBody.data.uuid,
+          permissions,
+        };
         delete parsedBody.mensaje;
         auth.sign(
-          { parsedBody, exp: Math.floor(Date.now() / 1000) + 60 * 720 },
+          { ...json, exp: Math.floor(Date.now() / 1000) + 60 * 720 },
           function (err, token) {
             res.status(200).json({
               mensaje: "OK",
