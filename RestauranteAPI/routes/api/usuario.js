@@ -16,14 +16,7 @@ function usuariosAPI(app, keycloak) {
   app.use("/api/usuario", router);
   const usuarioServicio = ServicioAPI(usuarioCollection);
 
-  setProtect = (role) => {
-    if (!config.dev) {
-      return keycloak.protect(role);
-    }
-    return keycloak.middleware();
-  };
-
-  router.get("/", setProtect(), async function (req, res, next) {
+  router.get("/", async function (req, res, next) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     const { tags } = req.query;
@@ -43,7 +36,7 @@ function usuariosAPI(app, keycloak) {
     }
   });
 
-  router.get("/:itemId", setProtect(), async function (req, res, next) {
+  router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
 
     try {
@@ -63,7 +56,6 @@ function usuariosAPI(app, keycloak) {
 
   router.post(
     "/",
-    setProtect(),
     /*validation(crearUsuarioSchema),*/
     async function (req, res, next) {
       const { body: usuario } = req;
@@ -103,7 +95,6 @@ function usuariosAPI(app, keycloak) {
 
   router.put(
     "/:itemId",
-    setProtect(),
     validation({ itemId: usuarioIdSchema }, "params"),
     async function (req, res, next) {
       const { itemId } = req.params;

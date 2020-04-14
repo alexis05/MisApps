@@ -17,14 +17,7 @@ function restaurantesAPI(app, keycloak) {
   app.use("/api/restaurante", router);
   const restServicio = ServicioAPI(restauranteCollection);
 
-  setProtect = (role) => {
-    if (!config.dev) {
-      return keycloak.protect(role);
-    }
-    return keycloak.middleware();
-  };
-
-  router.get("/", setProtect(), async function (req, res, next) {
+  router.get("/", async function (req, res, next) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     const { tags } = req.query;
@@ -42,7 +35,7 @@ function restaurantesAPI(app, keycloak) {
       next(err);
     }
   });
-  router.get("/:itemId", setProtect(), async function (req, res, next) {
+  router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
       restServicio
@@ -61,7 +54,6 @@ function restaurantesAPI(app, keycloak) {
 
   router.post(
     "/",
-    setProtect(),
     /*validation(crearRestauranteSchema),*/
     async function (req, res, next) {
       const { body: restaurante } = req;
@@ -132,7 +124,6 @@ function restaurantesAPI(app, keycloak) {
 
   router.put(
     "/:itemId",
-    setProtect(),
     /*validation({ restId: restauranteIdSchema }, "params"),
     validation(actRestauranteSchema),*/
     async function (req, res, next) {
@@ -155,7 +146,7 @@ function restaurantesAPI(app, keycloak) {
     }
   );
 
-  router.delete("/:itemId", setProtect(), async function (req, res, next) {
+  router.delete("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
       restServicio

@@ -15,14 +15,7 @@ function productosAPI(app, keycloak) {
   app.use("/api/producto", router);
   const productoServicio = ServicioAPI(productoCollection);
 
-  setProtect = (role) => {
-    if (!config.dev) {
-      return keycloak.protect(role);
-    }
-    return keycloak.middleware();
-  };
-
-  router.get("/", setProtect(), async function (req, res, next) {
+  router.get("/", async function (req, res, next) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     const { tags } = req.query;
@@ -45,7 +38,7 @@ function productosAPI(app, keycloak) {
     }
   });
 
-  router.get("/:itemId", setProtect(), async function (req, res, next) {
+  router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
       productoServicio
@@ -62,32 +55,30 @@ function productosAPI(app, keycloak) {
     }
   });
 
-  router.post(
-    "/",
-    setProtect(),
-    validation(crearProductoSchema),
-    async function (req, res, next) {
-      const { body: item } = req;
+  router.post("/", validation(crearProductoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: item } = req;
 
-      try {
-        productoServicio
-          .create({ item })
-          .then((data) => {
-            res.status(201).json({
-              data: data,
-              mensaje: "OK",
-            });
-          })
-          .catch((err) => next(err));
-      } catch (err) {
-        next(err);
-      }
+    try {
+      productoServicio
+        .create({ item })
+        .then((data) => {
+          res.status(201).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
     }
-  );
+  });
 
   router.put(
     "/:itemId",
-    setProtect(),
     validation({ itemId: productoIdSchema }, "params"),
     validation(actProductoSchema),
     async function (req, res, next) {
@@ -109,7 +100,7 @@ function productosAPI(app, keycloak) {
     }
   );
 
-  router.delete("/:itemId", setProtect(), async function (req, res, next) {
+  router.delete("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
       productoServicio
