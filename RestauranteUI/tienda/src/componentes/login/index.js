@@ -15,6 +15,9 @@ class Login extends Component {
     showWhitePanel: false,
     showRegisterPanel: false,
     showLoginPanel: false,
+    email: "",
+    clave: "",
+    mensajeLogin: null,
   };
 
   constructor(props) {
@@ -22,6 +25,8 @@ class Login extends Component {
     this.handlerChange = this.handlerChange.bind(this);
     this.handlerChangeReg = this.handlerChangeReg.bind(this);
     this.handlerChangeLog = this.handlerChangeLog.bind(this);
+    this.onHandlerClick = this.onHandlerClick.bind(this);
+    this.onChangeLogin = this.onChangeLogin.bind(this);
   }
 
   handlerChangeReg() {
@@ -33,6 +38,85 @@ class Login extends Component {
     });
     this.handlerChange();
   }
+
+  isValidEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+  loginFetch() {
+    console.log("fetch");
+  }
+  validateLogin() {
+    if (this.state.email && this.state.clave) {
+      let emailValid = false,
+        claveValid = false;
+      if (this.isValidEmail(this.state.email)) {
+        emailValid = true;
+      } else {
+        this.setState({
+          ...this.state,
+          mensajeLogin: "Debe ingresar un correo valido",
+        });
+      }
+      if (this.state.clave.length > 7) {
+        claveValid = true;
+      }
+
+      if (emailValid && claveValid) {
+        this.loginFetch();
+      }
+    } else if (!this.state.email.length && !this.state.clave.length) {
+      this.setState({
+        ...this.state,
+        mensajeLogin: "Debe ingresar un correo y clave.",
+      });
+      return;
+    } else if (!this.state.email.length) {
+      this.setState({
+        ...this.state,
+        mensajeLogin: "Debe ingresar un correo",
+      });
+      return;
+    } else if (!this.state.clave.length) {
+      this.setState({
+        ...this.state,
+        mensajeLogin: "Debe ingresar una clave",
+      });
+      return;
+    }
+  }
+
+  onChangeLogin(e) {
+    if (e.target.name === "email") {
+      if (e.target.value) {
+        const email = e.target.value;
+        let validEmail = true; // @TODO: se debe hacer una funcion para validar que es un email correcto
+        if (validEmail) {
+          this.setState({ ...this.state, email: email, mensajeLogin: "" });
+        } else {
+          this.setState({
+            ...this.state,
+            mensajeLogin: "Debe ingresar un correo valido",
+          });
+        }
+      }
+    } else if (e.target.name === "clave") {
+      if (e.target.value.length > 7) {
+        const clave = e.target.value;
+        this.setState({ ...this.state, clave: clave, mensajeLogin: "" });
+      } else {
+        this.setState({
+          ...this.state,
+          mensajeLogin: "Debe una clave con mas de 8 caracteres.",
+        });
+      }
+    }
+  }
+
+  onHandlerClick() {
+    this.validateLogin();
+  }
+
   handlerChangeLog() {
     this.setState({
       logLoginCheckbox: true,
@@ -144,9 +228,24 @@ class Login extends Component {
               }
             >
               <h2>INICIAR SESIÓN</h2>
-              <input type="text" placeholder="Correo"></input>
-              <input type="password" placeholder="Contraseña"></input>
-              <input type="button" value="Iniciar"></input>
+              <input
+                type="text"
+                name="email"
+                placeholder="Correo"
+                onChange={this.onChangeLogin}
+              ></input>
+              <input
+                type="password"
+                name="clave"
+                placeholder="Contraseña"
+                onChange={this.onChangeLogin}
+              ></input>
+              <span className="text-center">{this.state.mensajeLogin}</span>
+              <input
+                type="button"
+                value="Iniciar"
+                onClick={this.onHandlerClick}
+              ></input>
               <Link className="aLink" to="">
                 ¿Has olvidado la contraseña?
               </Link>

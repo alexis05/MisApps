@@ -25,6 +25,9 @@ function usuariosAPI(app, keycloak) {
       usuarioServicio
         .getAll({ tags, skip, limit })
         .then((data) => {
+          data.map((i) => {
+            delete i.clave;
+          });
           res.status(200).json({
             data: data,
             mensaje: "OK",
@@ -43,6 +46,7 @@ function usuariosAPI(app, keycloak) {
       usuarioServicio
         .getItem({ itemId })
         .then((data) => {
+          delete data.clave;
           res.status(200).json({
             data: data,
             mensaje: "OK",
