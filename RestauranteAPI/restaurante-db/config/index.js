@@ -6,7 +6,7 @@ const config = {
   dbPassword: process.env.DB_PASS || "",
   dbHost: process.env.HOST || "localhost",
   dbPort: process.env.DB_PORT || "27017",
-  dbName: process.env.DB_NAME || "rest_ab",
+  dbName: process.env.DB_NAME || "rest2020", // rest_ab
 };
 
 module.exports = { config };

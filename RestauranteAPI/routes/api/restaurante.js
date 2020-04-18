@@ -67,7 +67,7 @@ function restaurantesAPI(app, keycloak) {
       const clave = Bcrypt.hashSync(restaurante.clave, 10);
       const foto = "";
       const activo = true;
-      const role = "";
+      const role = ["admin"];
       const horario = restaurante.horario;
       const eslogan = restaurante.eslogan;
 
