@@ -40,7 +40,7 @@ function productoAPI(app) {
   router.get(
     `/producto/:productoId`,
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { productoId } = req.params;
       if (!productoId) return res.send({ erro: "Requiere el producto id" });

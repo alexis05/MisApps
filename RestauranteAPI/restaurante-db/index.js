@@ -26,6 +26,14 @@ class ServicioAPI {
     return item || [];
   }
 
+  async getMisRestaurantes({ usuarioId }) {
+    const all = await this.mongoDB.getMisRestaurantes(
+      this.collection,
+      usuarioId
+    );
+    return all || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;

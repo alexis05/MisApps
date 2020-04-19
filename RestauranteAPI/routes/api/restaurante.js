@@ -36,11 +36,29 @@ function restaurantesAPI(app, keycloak) {
       next(err);
     }
   });
+
   router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
       restServicio
         .getItem({ itemId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get("/mis/tiendas/:usuarioId", async function (req, res, next) {
+    const { usuarioId } = req.params;
+    try {
+      restServicio
+        .getMisRestaurantes({ usuarioId })
         .then((data) => {
           res.status(200).json({
             data: data,

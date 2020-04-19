@@ -1,46 +1,84 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./styleBO.css";
+import "../styleBO.css";
 
-const MenuBO = props => (
+const MenuBO = (props) => (
   <div>
-    <div id="cssmenu">
-      <ul>
-        <li>
-          <Link to="/Admin">
-            <span>Inicio</span>
+    <nav className="col-md-2 d-none d-md-block bg-light sidebar">
+      <div className="sidebar-sticky">
+        <ul className="nav flex-column">
+          <li className="nav-item">
+            <Link className="nav-link active" to="#">
+              <span data-feather="home"></span>
+              Dashboard <span className="sr-only">(current)</span>
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="file"></span>
+              Ordenes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="shopping-cart"></span>
+              Productos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="users"></span>
+              Clientes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="bar-chart-2"></span>
+              Reportes
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="layers"></span>
+              Mi Restaurante
+            </Link>
+          </li>
+        </ul>
+
+        <h6 className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Saved reports</span>
+          <Link className="d-flex align-items-center text-muted" to="#">
+            <span data-feather="plus-circle"></span>
           </Link>
-        </li>
-        <li>
-          <Link to="/Admin/Nuevo/Producto/5dfe8aa54458b2afeabb3910">
-            <span>Agregar Producto</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/Admin/Productos">
-            <span>Administrar Productos</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/Admin/MiTienda/5dfe8aa54458b2afeabb3910">
-            <span>Mi Tienda</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/Admin/Encargados">
-            <span>Encargados</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/Admin/Usuarios">
-            <span>Usuarios</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/Admin/log">Login/Logout</Link>
-        </li>
-      </ul>
-    </div>
+        </h6>
+        <ul className="nav flex-column mb-2">
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="file-text"></span>
+              Current month
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="file-text"></span>
+              Last quarter
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="file-text"></span>
+              Social engagement
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="#">
+              <span data-feather="file-text"></span>
+              Year-end sale
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
     {props.children}
   </div>
 );

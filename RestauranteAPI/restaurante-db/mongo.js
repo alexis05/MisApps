@@ -60,6 +60,15 @@ class MongoLib {
     });
   }
 
+  getMisRestaurantes(collection, usuarioId) {
+    return this.connect().then((db) => {
+      return db
+        .collection(collection)
+        .find({ owner: ObjectId(usuarioId) })
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {

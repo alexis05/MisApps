@@ -12,7 +12,7 @@ function restauranteAPI(app) {
   router.get(
     "/restaurante",
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       let limit = req.query.limit;
       let skip = req.query.skip;
@@ -37,7 +37,7 @@ function restauranteAPI(app) {
   router.get(
     `/restaurante/:restauranteId`,
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { restauranteId } = req.params;
       if (!restauranteId)
@@ -64,7 +64,7 @@ function restauranteAPI(app) {
   router.post(
     `/restaurante`,
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { body: restaurante } = req;
       if (!restaurante)
@@ -95,7 +95,7 @@ function restauranteAPI(app) {
   router.put(
     `/restaurante/:restauranteId`,
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { restauranteId } = req.params;
       const { body: restaurante } = req;
