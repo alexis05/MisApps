@@ -30,13 +30,11 @@ function PublicController(app) {
           uuid: parsedBody.data.uuid,
           permissions,
         };
-        delete parsedBody.mensaje;
         auth.sign(
           { ...json, exp: Math.floor(Date.now() / 1000) + 60 * 720 },
           function (err, token) {
             res.status(200).json({
               mensaje: "OK",
-              data: parsedBody.data,
               token: token,
             });
           }

@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./login.css";
 import LoginMobile from "./mobile";
+import Cookies from "universal-cookie";
+import API from "../../API";
+import { Redirect } from "react-router-dom";
 
 class Login extends Component {
   state = {
@@ -18,6 +21,7 @@ class Login extends Component {
     email: "",
     clave: "",
     mensajeLogin: null,
+    redirect: false,
   };
 
   constructor(props) {
@@ -40,12 +44,32 @@ class Login extends Component {
   }
 
   isValidEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   }
-  loginFetch() {
-    console.log("fetch");
-  }
+
+  loginFetch = async (email, clave) => {
+    this.setState({ loading: true, error: null });
+    let body = { email, clave };
+    try {
+      await API.post(`public/auth`, body).then((res) => {
+        const cookies = new Cookies();
+        if (res.data.mensaje === "NO_LOGIN") {
+          this.setState({
+            ...this.state,
+            mensajeLogin: "Debe ingresar un correo o clave valida.",
+          });
+        }
+        if (res.data.token) {
+          cookies.set("sidtk", res.data.token, { path: "/" });
+          this.setState({ loading: false, data: res.data, redirect: true });
+        }
+      });
+    } catch (error) {
+      this.setState({ loading: false, error: error });
+    }
+  };
+
   validateLogin() {
     if (this.state.email && this.state.clave) {
       let emailValid = false,
@@ -63,7 +87,7 @@ class Login extends Component {
       }
 
       if (emailValid && claveValid) {
-        this.loginFetch();
+        this.loginFetch(this.state.email, this.state.clave);
       }
     } else if (!this.state.email.length && !this.state.clave.length) {
       this.setState({
@@ -90,8 +114,7 @@ class Login extends Component {
     if (e.target.name === "email") {
       if (e.target.value) {
         const email = e.target.value;
-        let validEmail = true; // @TODO: se debe hacer una funcion para validar que es un email correcto
-        if (validEmail) {
+        if (this.isValidEmail(email)) {
           this.setState({ ...this.state, email: email, mensajeLogin: "" });
         } else {
           this.setState({
@@ -157,6 +180,9 @@ class Login extends Component {
     });
   }
   render() {
+    if (this.state.redirect) {
+      return <Redirect to="/Home" />;
+    }
     return (
       <div className="bodyDiv">
         <div className="d-block d-xs-none d-sm-none">

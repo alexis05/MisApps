@@ -30,6 +30,11 @@ app.get("/Home*", (req, res) => {
   res.sendFile(path.join(__dirname + "/tienda/build/index.html"));
 });
 
+// pagina del player
+app.get("/Login*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/tienda/build/index.html"));
+});
+
 // pagina para crear nueva tienda
 app.get("/Nueva/Tienda", (req, res) => {
   res.sendFile(path.join(__dirname + "/tienda/build/index.html"));

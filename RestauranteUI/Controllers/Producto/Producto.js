@@ -13,7 +13,7 @@ function productoAPI(app) {
   router.get(
     "/producto",
     auth(config.auth),
-    guard.check(["admin", "user"]),
+    guard.check(["admin"], ["user"]),
     function (req, res, next) {
       if (!req.query.limit) return res.send({ erro: "Requiere limite" });
       if (!req.query.skip)
