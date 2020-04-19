@@ -5,10 +5,11 @@ import LoginMobile from "./mobile";
 import Cookies from "universal-cookie";
 import API from "../../API";
 import { Redirect } from "react-router-dom";
+import Spinner from "../../styleGlobal/Spinner";
 
 class Login extends Component {
   state = {
-    loading: true,
+    loading: false,
     error: null,
     data: [],
     logRegCheckbox: false,
@@ -58,6 +59,7 @@ class Login extends Component {
           this.setState({
             ...this.state,
             mensajeLogin: "Debe ingresar un correo o clave valida.",
+            loading: false,
           });
         }
         if (res.data.token) {
@@ -267,6 +269,13 @@ class Login extends Component {
                 onChange={this.onChangeLogin}
               ></input>
               <span className="text-center">{this.state.mensajeLogin}</span>
+              {this.state.loading ? (
+                <div className="row d-flex text-center justify-content-center">
+                  <Spinner />
+                </div>
+              ) : (
+                <span></span>
+              )}
               <input
                 type="button"
                 value="Iniciar"

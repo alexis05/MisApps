@@ -4,6 +4,7 @@ var bodyParser = require("body-parser");
 const app = express();
 const productoApi = require("./Controllers/Producto/Producto.js");
 const restauranteApi = require("./Controllers/Restaurante/Restaurante");
+const usuarioApi = require("./Controllers/Usuario/Usuario");
 const publicController = require("./Controllers/index");
 const cookieParser = require("cookie-parser");
 
@@ -14,10 +15,9 @@ app.use(express.static(path.join(__dirname, "tienda/build")));
 app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 
 // Lista de controladores para usar la API
-// Productos
 productoApi(app);
-// restaurante
 restauranteApi(app);
+usuarioApi(app);
 publicController(app);
 
 // Verificar si esta funcionando

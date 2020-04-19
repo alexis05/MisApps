@@ -61,6 +61,33 @@ function restauranteAPI(app) {
     }
   );
 
+  router.get(
+    `/misrestaurante/:ownerId`,
+    auth(config.auth),
+    guard.check(["admin"]),
+    function (req, res, next) {
+      const { ownerId } = req.params;
+      if (!ownerId)
+        return res.status(400).json({
+          mensaje: "el owner es requerido",
+        });
+      var options = {
+        method: "GET",
+        uri: `${URL_API}/api/restaurante/mis/tiendas/${ownerId}`,
+      };
+
+      rp(options)
+        .then(function (restaurantes) {
+          res.setHeader("Content-Type", "application/json");
+          res.end(restaurantes);
+        })
+        .catch(function (err) {
+          console.log("Ha ocurrido un error: ", err);
+          next(err);
+        });
+    }
+  );
+
   router.post(
     `/restaurante`,
     auth(config.auth),

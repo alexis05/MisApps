@@ -2,15 +2,14 @@ import React from "react";
 import MenuBO from "./menu/MenuBO";
 import Dashboard from "./Dashboard";
 import { Link } from "react-router-dom";
+import MisTiendasDrop from "./MisTiendas";
 import "./styleBO.css";
 
 const HomeBO = () => {
   return (
     <React.Fragment>
       <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <Link class="navbar-brand col-sm-3 col-md-2 mr-0" to="#">
-          Company name
-        </Link>
+        <MisTiendasDrop />
         <input
           class="form-control form-control-dark w-100"
           type="text"
