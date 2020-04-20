@@ -2,12 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./producto.css";
 
-const mostrarPrecioConDosDecimales = precio => {
+const mostrarPrecioConDosDecimales = (precio) => {
   return (Math.round(precio * 100) / 100).toFixed(2);
 };
 
-const mostrarFecha = time => {
-  time = time.replace(" GMT", "");
+const mostrarFecha = (time) => {
+  //time = time.replace(" GMT", "");
   switch (typeof time) {
     case "number":
       break;
@@ -35,7 +35,7 @@ const mostrarFecha = time => {
     [58060800, "Ultimo año", "Siguiente año"], // 60*60*24*7*4*12*2
     [2903040000, "años", 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
     [5806080000, "Ultimo siglo", "Siguiente siglo"], // 60*60*24*7*4*12*100*2
-    [58060800000, "siglos", 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
+    [58060800000, "siglos", 2903040000], // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
   ];
   var now = new Date();
   var nowInMilliseconds = now.getTime();
@@ -64,7 +64,7 @@ const mostrarFecha = time => {
   return time;
 };
 
-const Producto = props => (
+const Producto = (props) => (
   <div className="card">
     <img
       className="card-img-top img-fluid"

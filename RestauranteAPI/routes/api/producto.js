@@ -72,27 +72,28 @@ function productosAPI(app, keycloak) {
     }
   });
 
-  router.post("/", validation(crearProductoSchema), async function (
-    req,
-    res,
-    next
-  ) {
-    const { body: item } = req;
+  router.post(
+    "/",
+    /*validation(crearProductoSchema),*/ async function (req, res, next) {
+      const { body: item } = req;
 
-    try {
-      productoServicio
-        .create({ item })
-        .then((data) => {
-          res.status(201).json({
-            data: data,
-            mensaje: "OK",
-          });
-        })
-        .catch((err) => next(err));
-    } catch (err) {
-      next(err);
+      item.activo = true;
+      item.registrado = new Date();
+      try {
+        productoServicio
+          .create({ item })
+          .then((data) => {
+            res.status(201).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
     }
-  });
+  );
 
   router.put(
     "/:itemId",

@@ -13,7 +13,6 @@ class MenuBO extends Component {
   }
 
   componentDidMount() {
-    console.log(window.location.pathname);
     const ruta = window.location.pathname;
     switch (ruta) {
       case "/Admin":

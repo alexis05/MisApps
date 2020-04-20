@@ -1,49 +1,37 @@
 import React from "react";
 import API from "../../API";
-import Select from "react-select";
+import Cookies from "universal-cookie";
+import { Redirect } from "react-router-dom";
+import Spinner from "../Spinner";
 
 class NuevoProducto extends React.Component {
   state = {
-    loading: true,
+    loading: false,
     error: null,
     data: undefined,
-    encargadosList: undefined,
+    usaurioId: undefined,
+    restaurante: undefined,
+    redirectProductoList: false,
   };
 
-  getTiendaIdFromLS(key) {
-    if (localStorage.hasOwnProperty(key)) {
-      let value = localStorage.getItem(key);
-      try {
-        value = JSON.parse(value);
-        return value;
-      } catch (e) {
-        return e;
-      }
-    }
-  }
-
-  rellenarDropDeEncargados() {
-    const encargados_tienda = this.state.data.resultado;
-    var lista = [];
-    encargados_tienda.forEach(function (element) {
-      lista.push({
-        label: element.usuario[0].nombre,
-        value: element.id,
-      });
-    });
-    this.setState({ encargadosList: lista });
-  }
-
   componentDidMount() {
-    this.fechDataEncargados();
+    const cookies = new Cookies();
+    const restauranteId = cookies.get("rt");
+    console.log(restauranteId);
+    this.setState({ restauranteId: restauranteId });
+    this.fechDataUsuarioLogueado();
   }
 
-  fechDataEncargados = async () => {
+  fechDataUsuarioLogueado = async () => {
     this.setState({ loading: true, error: null });
     try {
-      await API.get(`Encargados/${this.props.match.params.id}`).then((res) => {
-        this.setState({ loading: false, data: res.data });
-        this.rellenarDropDeEncargados();
+      await API.get(`usuarioapi/estatus`).then((res) => {
+        this.setState({
+          loading: false,
+          data: res.data.data,
+          usaurioId: res.data.data._id,
+          value: { ...this.state.value, registrado_por: res.data.data._id },
+        });
       });
     } catch (error) {
       this.setState({ loading: false, error: error });
@@ -55,19 +43,10 @@ class NuevoProducto extends React.Component {
       value: {
         ...this.state.value,
         [e.target.name]: e.target.value,
-        restaurante: this.props.match.params.id,
+        restaurante: this.state.restauranteId,
       },
     });
-  };
-
-  handleChangeDropdown = (e) => {
-    this.setState({
-      value: {
-        ...this.state.value,
-        registrado_por: e.value,
-        restaurante: this.props.match.params.id,
-      },
-    });
+    console.log(this.state.value);
   };
 
   handleCheckBox = (e) => {
@@ -75,21 +54,25 @@ class NuevoProducto extends React.Component {
       value: {
         ...this.state.value,
         [e.target.name]: e.target.checked,
-        restaurante: this.props.match.params.id,
+        restaurante: this.state.restauranteId,
       },
     });
   };
   handleSubmit = (e) => {
     e.preventDefault();
+    console.log(this.state.value);
     this.crearProducto(this.state.value);
   };
 
   crearProducto = async (producto) => {
     this.setState({ loading: true, error: null });
-
     try {
-      await API.post(`Producto/Nuevo`, producto).then((res) => {
-        this.setState({ loading: false, data: res.data });
+      await API.post(`productoapi/producto`, producto).then((res) => {
+        this.setState({
+          loading: false,
+          data: res.data,
+          redirectProductoList: true,
+        });
       });
     } catch (error) {
       this.setState({ loading: false, error: error });
@@ -97,11 +80,14 @@ class NuevoProducto extends React.Component {
   };
 
   render() {
+    if (this.state.redirectProductoList) {
+      return <Redirect to="/Admin/Productos" />;
+    }
     return (
       <div className="container">
-        <h1>Nuevo Producto</h1>
+        <h2>Crear Producto</h2>
 
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} autoComplete="off">
           <div className="form-group">
             <label>Nombre</label>
             <input
@@ -154,25 +140,21 @@ class NuevoProducto extends React.Component {
           </div>
 
           <div className="form-group">
-            <label>Encargado</label>
-            <Select
-              options={this.state.encargadosList}
-              isSearchable
-              placeholder="Seleccione un encargado"
-              onChange={this.handleChangeDropdown}
-            />
-          </div>
-
-          <div className="form-group">
             <input
               className="form-control"
               type="hidden"
               onChange={this.handleChange}
               name="restaurante"
-              value={this.props.match.params.id}
+              value={this.state.restaurante}
             />
           </div>
-
+          {this.state.loading ? (
+            <div className="row d-flex text-center justify-content-center">
+              <Spinner />
+            </div>
+          ) : (
+            <span></span>
+          )}
           <button className="btn btn-primary">Save</button>
         </form>
       </div>

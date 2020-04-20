@@ -84,6 +84,36 @@ function productoAPI(app) {
         });
     }
   );
+
+  router.post(`/producto`, auth(config.auth), guard.check(["admin"]), function (
+    req,
+    res,
+    next
+  ) {
+    const { body: producto } = req;
+    if (!producto)
+      return res.status(400).json({
+        mensaje: "json es requerido",
+      });
+    var options = {
+      method: "POST",
+      uri: `${URL_API}/api/producto`,
+      body: {
+        ...producto,
+      },
+      json: true, // Automatically stringifies the body to JSON
+    };
+
+    rp(options)
+      .then(function (parsedBody) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).json(parsedBody);
+      })
+      .catch(function (err) {
+        console.log("Ha occurido un error: ", err);
+        next(err);
+      });
+  });
 }
 
 module.exports = productoAPI;
