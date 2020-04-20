@@ -69,6 +69,15 @@ class MongoLib {
     });
   }
 
+  getProductosDeRestaurante(collection, restauranteId) {
+    return this.connect().then((db) => {
+      return db
+        .collection(collection)
+        .find({ restaurante: ObjectId(restauranteId) })
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {

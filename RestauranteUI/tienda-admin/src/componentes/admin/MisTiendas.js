@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import API from "../../API";
+import Cookies from "universal-cookie";
 
 class MisTiendas extends Component {
-  constructor(props) {
-    super(props);
-    //this.miTienda = this.getTiendaIdFromLS("tiendaLocal");
-  }
-
   state = {
     loading: true,
     error: null,
@@ -18,7 +14,9 @@ class MisTiendas extends Component {
   };
 
   handleChangeDropdown = (e) => {
-    console.log(e);
+    const cookies = new Cookies();
+    cookies.set("rt", e.value, { path: "/Admin" });
+    // @TODO: cuando se cambia a una nueva tienda se debe act todo el admin
   };
   componentDidMount() {
     this.fechDataUsuarioLogueado();
@@ -27,7 +25,7 @@ class MisTiendas extends Component {
   rellenarDropDeMisTiendas() {
     const mistiendas = this.state.misRestaurante;
     var lista = [];
-    mistiendas.map(function (element) {
+    mistiendas.forEach(function (element) {
       lista.push({
         label: element.nombre,
         value: element._id,
@@ -54,6 +52,10 @@ class MisTiendas extends Component {
         (res) => {
           this.setState({ loading: false, misRestaurante: res.data.data });
           this.rellenarDropDeMisTiendas();
+          if (res.data.data.length === 1) {
+            const cookies = new Cookies();
+            cookies.set("rt", res.data.data[0]._id, { path: "/Admin" });
+          }
         }
       );
     } catch (error) {

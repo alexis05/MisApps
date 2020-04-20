@@ -9,13 +9,12 @@ function productoAPI(app) {
   const router = express.Router();
   app.use("/productoapi", router);
 
-  // muestra la lista de productos y se puede agregar un limite y tambien aplicar skip
   router.get(
     "/producto",
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      if (!req.query.limit) return res.send({ erro: "Requiere limite" });
+      if (!req.query.limit) return res.send({ error: "Requiere limite" });
       if (!req.query.skip)
         return res.send({ error: "Requiere cantidad a ignorar" });
       let limit = req.query.limit;
@@ -43,7 +42,7 @@ function productoAPI(app) {
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { productoId } = req.params;
-      if (!productoId) return res.send({ erro: "Requiere el producto id" });
+      if (!productoId) return res.send({ error: "Requiere el producto id" });
 
       var options = {
         method: "GET",
@@ -54,6 +53,31 @@ function productoAPI(app) {
         .then(function (producto) {
           res.setHeader("Content-Type", "application/json");
           res.end(producto);
+        })
+        .catch(function (err) {
+          console.log("Ha ocurrido un error: ", err);
+        });
+    }
+  );
+
+  router.get(
+    `/producto/restaurante/:restauranteId`,
+    auth(config.auth),
+    guard.check(["admin"], ["user"]),
+    function (req, res, next) {
+      const { restauranteId } = req.params;
+      if (!restauranteId)
+        return res.send({ error: "Requiere el restaurante id" });
+
+      var options = {
+        method: "GET",
+        uri: `${URL_API}/api/producto/restaurante/${restauranteId}`,
+      };
+
+      rp(options)
+        .then(function (productos) {
+          res.setHeader("Content-Type", "application/json");
+          res.end(productos);
         })
         .catch(function (err) {
           console.log("Ha ocurrido un error: ", err);

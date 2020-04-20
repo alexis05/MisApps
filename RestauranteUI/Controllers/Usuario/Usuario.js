@@ -66,7 +66,6 @@ function usuarioAPI(app) {
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      console.log(req.cookies);
       const cookie = req.cookies;
       if (!cookie.sidtk) return res.status(401).send("unauthorized");
       const token = cookie.sidtk;

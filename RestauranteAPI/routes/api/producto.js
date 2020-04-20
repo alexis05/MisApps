@@ -55,6 +55,23 @@ function productosAPI(app, keycloak) {
     }
   });
 
+  router.get("/restaurante/:restauranteId", async function (req, res, next) {
+    const { restauranteId } = req.params;
+    try {
+      productoServicio
+        .getProductosDeRestaurante({ restauranteId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.post("/", validation(crearProductoSchema), async function (
     req,
     res,

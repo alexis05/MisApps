@@ -3,16 +3,11 @@ import API from "../../API";
 import Select from "react-select";
 
 class NuevoProducto extends React.Component {
-  constructor(props) {
-    super(props);
-    //this.miTienda = this.getTiendaIdFromLS("tiendaLocal");
-  }
-
   state = {
     loading: true,
     error: null,
     data: undefined,
-    encargadosList: undefined
+    encargadosList: undefined,
   };
 
   getTiendaIdFromLS(key) {
@@ -30,10 +25,10 @@ class NuevoProducto extends React.Component {
   rellenarDropDeEncargados() {
     const encargados_tienda = this.state.data.resultado;
     var lista = [];
-    encargados_tienda.forEach(function(element) {
+    encargados_tienda.forEach(function (element) {
       lista.push({
         label: element.usuario[0].nombre,
-        value: element.id
+        value: element.id,
       });
     });
     this.setState({ encargadosList: lista });
@@ -46,7 +41,7 @@ class NuevoProducto extends React.Component {
   fechDataEncargados = async () => {
     this.setState({ loading: true, error: null });
     try {
-      await API.get(`Encargados/${this.props.match.params.id}`).then(res => {
+      await API.get(`Encargados/${this.props.match.params.id}`).then((res) => {
         this.setState({ loading: false, data: res.data });
         this.rellenarDropDeEncargados();
       });
@@ -55,45 +50,45 @@ class NuevoProducto extends React.Component {
     }
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
       value: {
         ...this.state.value,
         [e.target.name]: e.target.value,
-        restaurante: this.props.match.params.id
-      }
+        restaurante: this.props.match.params.id,
+      },
     });
   };
 
-  handleChangeDropdown = e => {
+  handleChangeDropdown = (e) => {
     this.setState({
       value: {
         ...this.state.value,
         registrado_por: e.value,
-        restaurante: this.props.match.params.id
-      }
+        restaurante: this.props.match.params.id,
+      },
     });
   };
 
-  handleCheckBox = e => {
+  handleCheckBox = (e) => {
     this.setState({
       value: {
         ...this.state.value,
         [e.target.name]: e.target.checked,
-        restaurante: this.props.match.params.id
-      }
+        restaurante: this.props.match.params.id,
+      },
     });
   };
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     this.crearProducto(this.state.value);
   };
 
-  crearProducto = async producto => {
+  crearProducto = async (producto) => {
     this.setState({ loading: true, error: null });
 
     try {
-      await API.post(`Producto/Nuevo`, producto).then(res => {
+      await API.post(`Producto/Nuevo`, producto).then((res) => {
         this.setState({ loading: false, data: res.data });
       });
     } catch (error) {

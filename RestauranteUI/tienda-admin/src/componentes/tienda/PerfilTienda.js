@@ -1,10 +1,8 @@
 import React from "react";
 import API from "../../API";
+import Cookies from "universal-cookie";
 
 class PerfilTienda extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   state = {
     loading: true,
     error: null,
@@ -12,18 +10,6 @@ class PerfilTienda extends React.Component {
     value: undefined,
     tienda_act: false,
   };
-
-  getTiendaIdFromLS(key) {
-    if (localStorage.hasOwnProperty(key)) {
-      let value = localStorage.getItem(key);
-      try {
-        value = JSON.parse(value);
-        return value;
-      } catch (e) {
-        return e;
-      }
-    }
-  }
 
   handleChange = (e) => {
     this.setState({
@@ -44,7 +30,10 @@ class PerfilTienda extends React.Component {
     this.setState({ loading: true, error: null });
 
     try {
-      const id = this.props.match.params.id;
+      const cookies = new Cookies();
+      const id = cookies.get("rt");
+      console.log(id);
+      if (!id) return;
       await API.put(`restauranteapi/restaurante/${id}`, tienda).then((res) => {
         this.setState({
           loading: false,
@@ -62,9 +51,9 @@ class PerfilTienda extends React.Component {
 
   fechDataRestaurante = async () => {
     try {
-      await API.get(
-        `restauranteapi/restaurante/${this.props.match.params.id}`
-      ).then((res) => {
+      const cookies = new Cookies();
+      const id = cookies.get("rt");
+      await API.get(`restauranteapi/restaurante/${id}`).then((res) => {
         this.setState({
           loading: false,
           data: res.data,
