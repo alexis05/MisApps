@@ -15,7 +15,7 @@ const ListaProducto = ({ productos }) => (
               nombre={producto.nombre}
               precio={producto.precio}
               detalle={producto.detalle}
-              creado={producto.creado}
+              creado={producto.registrado}
               _id={producto._id}
             />
           </div>
@@ -25,10 +25,10 @@ const ListaProducto = ({ productos }) => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  productos: state.productoReducer.productoReducer.productos
+const mapStateToProps = (state) => ({
+  productos: state.productoReducer.productoReducer.productos,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListaProducto);

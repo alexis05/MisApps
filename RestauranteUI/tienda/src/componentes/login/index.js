@@ -199,11 +199,7 @@ class Login extends Component {
             }
           >
             <h2>¿Tienes una cuenta?</h2>
-            <p className="text-center">
-              <span role="img" aria-label="cool">
-                😎
-              </span>
-            </p>
+            <p className="text-center"></p>
             <label id="label-register" htmlFor="log-reg-show">
               Iniciar
             </label>
@@ -224,11 +220,7 @@ class Login extends Component {
             }
           >
             <h2>No tienes una cuenta?</h2>
-            <p className="text-center">
-              <span role="img" aria-label="thing">
-                🤔
-              </span>
-            </p>
+            <p className="text-center"></p>
             <label id="label-login" htmlFor="log-login-show">
               Registrate!
             </label>

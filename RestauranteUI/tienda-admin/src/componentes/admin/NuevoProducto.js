@@ -155,7 +155,7 @@ class NuevoProducto extends React.Component {
           ) : (
             <span></span>
           )}
-          <button className="btn btn-primary">Save</button>
+          <button className="btn btn-primary">Guardar</button>
         </form>
       </div>
     );
