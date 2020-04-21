@@ -5,8 +5,10 @@ const USER = encodeURIComponent(config.dbUser);
 const PASSWORD = encodeURIComponent(config.dbPassword);
 const DB_NAME = config.dbName;
 
-const MONGO_URI = `mongodb://${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
+//const MONGO_URI = `mongodb://${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
 
+const MONGO_URI =
+  "mongodb+srv://F1f52020:Fu7b0l2020@cluster0-rhoaz.gcp.mongodb.net/test?retryWrites=true&w=majority";
 //const MONGO_URI_WITH_USER_PASS = `mongodb://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
 // console.log(
 //   `mongodb://${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`
