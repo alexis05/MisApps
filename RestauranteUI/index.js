@@ -8,12 +8,16 @@ const usuarioApi = require("./Controllers/Usuario/Usuario");
 const publicController = require("./Controllers/index");
 const cookieParser = require("cookie-parser");
 
+const DIST_DIR = path.join(__dirname, "/dist/");
+const HTML_FILE = path.join(DIST_DIR, "index.html");
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 // rutas de los files de react compilado
-app.use(express.static(path.join(__dirname, "tienda/build")));
-app.use(express.static(path.join(__dirname, "tienda-admin/build")));
+//app.use(express.static(path.join(__dirname, "tienda/build")));
+//app.use(express.static(path.join(__dirname, "tienda-admin/build")));
 
+app.use(express.static(DIST_DIR));
 // Lista de controladores para usar la API
 productoApi(app);
 restauranteApi(app);
@@ -25,25 +29,22 @@ app.get("/Console/up", function (req, res, next) {
   res.send("Hola!");
 });
 
-// pagina del player
-app.get("/Home*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/tienda/build/index.html"));
+app.get("/Login/", function (req, res, next) {
+  res.sendFile(HTML_FILE);
 });
 
-// pagina del player
-app.get("/Login*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/tienda/build/index.html"));
+app.get("/Home*", function (req, res, next) {
+  res.sendFile(HTML_FILE);
 });
 
-// pagina para crear nueva tienda
-app.get("/Nueva/Tienda", (req, res) => {
-  res.sendFile(path.join(__dirname + "/tienda/build/index.html"));
+app.get("/Nueva/Tienda", function (req, res, next) {
+  res.sendFile(HTML_FILE);
 });
 
-// pagina para el admin
-app.get("/Admin*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/tienda-admin/build/index.html"));
-});
+// // pagina para el admin
+// app.get("/Admin*", (req, res) => {
+//   res.sendFile(path.join(__dirname + "/tienda-admin/build/index.html"));
+// });
 
 const server = app.listen(3001, function () {
   console.log(`Listening http://localhost:${server.address().port}`);
