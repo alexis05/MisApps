@@ -5,7 +5,7 @@ const auth = require("../auth");
 
 function PublicController(app) {
   const router = express.Router();
-  app.use("/public", router);
+  app.use("/Controller", router);
 
   router.post(`/auth`, function (req, res, next) {
     const { body: user } = req;
