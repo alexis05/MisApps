@@ -2,7 +2,7 @@ import React from "react";
 import "./menuSupeior.css";
 import { Link } from "react-router-dom";
 
-const MenuSuperior = props => (
+const MenuSuperior = (props) => (
   <div>
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <Link className="navbar-brand" to="/Home">
