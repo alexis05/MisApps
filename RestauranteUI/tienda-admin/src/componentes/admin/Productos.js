@@ -34,7 +34,7 @@ class Productos extends Component {
       return <Redirect to="/Admin/Producto/Nuevo" />;
     }
     return (
-      <main role="main" className="col-md-11 ml-sm-auto col-lg-12 pt-3 px-4">
+      <main role="main" className="col-12 pt-3 px-4">
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
           <h1 className="h2">Lista de productos</h1>
           <button
