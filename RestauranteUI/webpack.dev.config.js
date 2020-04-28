@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -61,5 +62,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "tienda/public/index.html"),
     }),
+    new BrowserSyncPlugin({
+      // browse to http://localhost:3000/ during development,
+      // ./public directory is being served
+      host: 'localhost',
+      port: 3001,
+      proxy: 'http://localhost:3001/'
+    })
   ],
 };

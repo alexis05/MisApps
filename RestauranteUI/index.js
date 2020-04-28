@@ -1,7 +1,9 @@
 const express = require("express");
 const path = require("path");
 var bodyParser = require("body-parser");
+var cors = require('cors') 
 const app = express();
+app.use(cors())
 const productoApi = require("./Controllers/Producto/Producto.js");
 const restauranteApi = require("./Controllers/Restaurante/Restaurante");
 const usuarioApi = require("./Controllers/Usuario/Usuario");
