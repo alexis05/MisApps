@@ -53,7 +53,7 @@ class Login extends Component {
     this.setState({ loading: true, error: null });
     let body = { email, clave };
     try {
-      await API.post(`public/auth`, body).then((res) => {
+      await API.post(`Controller/auth`, body).then((res) => {
         const cookies = new Cookies();
         if (res.data.mensaje === "NO_LOGIN") {
           this.setState({

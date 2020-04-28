@@ -24,7 +24,9 @@ class HomeBO extends Component {
             </li>
           </ul>
         </nav>
-        {this.props.children}
+        <div className="col-auto">
+          <div className="row">{this.props.children}</div>
+        </div>
       </React.Fragment>
     );
   }

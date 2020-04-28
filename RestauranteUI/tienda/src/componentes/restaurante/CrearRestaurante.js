@@ -3,7 +3,7 @@ import API from "../../API";
 
 class CrearRestaurante extends React.Component {
   state = {
-    loading: true,
+    loading: false,
     error: null,
     data: undefined,
   };
