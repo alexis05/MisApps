@@ -3,7 +3,10 @@ const ServicioAPI = require("../../restaurante-db");
 const carritoCollection = "carrito";
 const validation = require("../../utils/middlewares/validationHandlers");
 
-const { crearCarritoSchema } = require("../../utils/schema/carrito");
+const {
+  crearCarritoSchema,
+  detalleCarritoSchema,
+} = require("../../utils/schema/carrito");
 
 function carritoAPI(app) {
   const router = express.Router();
@@ -15,6 +18,46 @@ function carritoAPI(app) {
     try {
       carritoServicio
         .getItem({ itemId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get("/usuario/:usuarioId", async function (req, res, next) {
+    const { usuarioId } = req.params;
+    try {
+      carritoServicio
+        .getCarritoPorUsuarioId({ usuarioId })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post("/detalle", validation(detalleCarritoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: body } = req;
+    const productoServicio = ServicioAPI("producto");
+    try {
+      const productos = body.productos;
+      productoServicio
+        .getDetalleCarrito({ productos })
         .then((data) => {
           res.status(200).json({
             data: data,

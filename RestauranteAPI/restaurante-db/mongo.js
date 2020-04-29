@@ -93,6 +93,19 @@ class MongoLib {
     });
   }
 
+  getDetalleCarrito(collection, productos) {
+    let lista = [];
+    productos.forEach((producto) => {
+      lista.push(ObjectId(producto));
+    });
+    return this.connect().then((db) => {
+      return db
+        .collection(collection)
+        .find({ _id: { $in: [...lista] } })
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {

@@ -22,6 +22,11 @@ const crearCarritoSchema = Joi.object({
   ),
 });
 
+const detalleCarritoSchema = Joi.object({
+  productos: Joi.array().items(productoIdSchema),
+});
+
 module.exports = {
   crearCarritoSchema,
+  detalleCarritoSchema,
 };
