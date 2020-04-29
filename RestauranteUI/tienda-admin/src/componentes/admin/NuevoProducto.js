@@ -119,7 +119,7 @@ class NuevoProducto extends React.Component {
           </div>
 
           <div className="form-group">
-            <label htmlFor="disponible">Disponible para la venta</label>
+            <label htmlFor="disponible">Disponible</label>
             <input
               className="form-control"
               type="checkbox"
