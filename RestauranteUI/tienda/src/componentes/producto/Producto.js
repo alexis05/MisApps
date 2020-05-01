@@ -65,18 +65,23 @@ const mostrarFecha = (time) => {
 };
 
 const Producto = (props) => (
-  <div className="card">
+  <div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
     <img
       className="card-img-top img-fluid"
       src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
       alt="Card"
-      width="300"
-      height="150"
+     
     />
-    <div className="card-body">
-      <h5 className="card-title">{props.nombre}</h5>
-      <p className="card-text pl-1 pr-1">{props.detalle}</p>
-      <div className="row">
+    <div className="card-body px-3">
+      <div className="row pt-4 justify-content-start">
+          <div className="col-12 text-left">
+            <h5 className="card-title text-left">{props.nombre}</h5>
+          </div>
+          <div className="col-12">
+            <p className="card-text mb-0">{props.detalle}</p>
+          </div>
+      </div>
+      <div className="rowm d-none">
         <div className="col-12">
           <div className="precio-producto">
             ${mostrarPrecioConDosDecimales(props.precio)}
@@ -84,24 +89,32 @@ const Producto = (props) => (
         </div>
       </div>
     </div>
-    <div className="card-footer text-center">
+    <div className="card-footer text-center pl-1 pb-0">
       <div className="col-12">
-        <div className="row d-flex justify-content-center text-center">
+        <div className="row justify-content-end align-items-center">
+          <div className="col-10 text-left">
+             <span className="precio-producto">${mostrarPrecioConDosDecimales(props.precio)}</span>
+          </div>
+          <div className="col-2 px-0">
+            <button className="btn btn-add-product">+</button>
+          </div>
+        </div>
+        <div className="row  justify-content-center text-center d-none">
           <div className="col">
             <Link
               to={`/Home/Producto/${props._id}`}
               className="btn btn-primary"
             >
-              Pedir
+              Pedir otro 
             </Link>
           </div>
-          <div className="col">
+          <div className="col d-none">
             <Link to={`/Home/Producto/${props._id}`} className="nav-link">
               Ver
             </Link>
           </div>
         </div>
-        <div className="row">
+        <div className="row d-none">
           <div className="col">
             <small className="text-muted justify-content-center">
               Publicado: {mostrarFecha(props.creado)}
