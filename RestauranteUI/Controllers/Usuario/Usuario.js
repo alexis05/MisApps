@@ -1,5 +1,4 @@
 const express = require("express");
-const URL_API = "http://127.0.0.1:5050";
 var rp = require("request-promise");
 var auth = require("express-jwt");
 var guard = require("express-jwt-permissions")();
@@ -20,7 +19,7 @@ function usuarioAPI(app) {
 
     var options = {
       method: "GET",
-      uri: `${URL_API}/api/usuario?limit=${limit}&skip=${skip}`,
+      uri: `${config.urlLN}/api/usuario?limit=${limit}&skip=${skip}`,
     };
 
     rp(options)
@@ -46,7 +45,7 @@ function usuarioAPI(app) {
         });
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/usuarios/${usuarioId}`,
+        uri: `${config.urlLN}/api/usuarios/${usuarioId}`,
       };
 
       rp(options)
@@ -75,7 +74,7 @@ function usuarioAPI(app) {
 
           var options = {
             method: "GET",
-            uri: `${URL_API}/api/usuario/byuuid/${ownerId}`,
+            uri: `${config.urlLN}/api/usuario/byuuid/${ownerId}`,
           };
 
           rp(options)

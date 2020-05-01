@@ -4,104 +4,73 @@ var auth = require("express-jwt");
 var guard = require("express-jwt-permissions")();
 const config = require("../../config");
 
-function restauranteAPI(app) {
+function productoAPI(app) {
   const router = express.Router();
-  app.use("/restauranteapi", router);
+  app.use("/carritoapi", router);
 
   router.get(
-    "/restaurante",
+    `/:carritoId`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      let limit = req.query.limit;
-      let skip = req.query.skip;
+      const { carritoId } = req.params;
+      if (!carritoId) return res.send({ error: "Requiere el carrito id" });
 
       var options = {
         method: "GET",
-        uri: `${config.urlLN}/api/restaurante?limit=${limit}&skip=${skip}`,
+        uri: `${config.urlLN}/api/carrito/${carritoId}`,
       };
 
       rp(options)
-        .then(function (restaurantes) {
+        .then(function (producto) {
           res.setHeader("Content-Type", "application/json");
-          res.end(restaurantes);
+          res.end(producto);
         })
         .catch(function (err) {
-          next(err);
           console.log("Ha ocurrido un error: ", err);
         });
     }
   );
 
   router.get(
-    `/restaurante/:restauranteId`,
+    `/usuario/:usuarioId`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      const { restauranteId } = req.params;
-      if (!restauranteId)
-        return res.status(400).json({
-          mensaje: "el id es requerido",
-        });
+      const { usuarioId } = req.params;
+      if (!usuarioId) return res.send({ error: "Requiere el restaurante id" });
+
       var options = {
         method: "GET",
-        uri: `${config.urlLN}/api/restaurante/${restauranteId}`,
+        uri: `${config.urlLN}/api/carrito/usuario/${usuarioId}`,
       };
 
       rp(options)
-        .then(function (restaurante) {
+        .then(function (productos) {
           res.setHeader("Content-Type", "application/json");
-          res.end(restaurante);
+          res.end(productos);
         })
         .catch(function (err) {
           console.log("Ha ocurrido un error: ", err);
-          next(err);
-        });
-    }
-  );
-
-  router.get(
-    `/misrestaurante/:ownerId`,
-    auth(config.auth),
-    guard.check(["admin"]),
-    function (req, res, next) {
-      const { ownerId } = req.params;
-      if (!ownerId)
-        return res.status(400).json({
-          mensaje: "el owner es requerido",
-        });
-      var options = {
-        method: "GET",
-        uri: `${config.urlLN}/api/restaurante/mis/tiendas/${ownerId}`,
-      };
-
-      rp(options)
-        .then(function (restaurantes) {
-          res.setHeader("Content-Type", "application/json");
-          res.end(restaurantes);
-        })
-        .catch(function (err) {
-          console.log("Ha ocurrido un error: ", err);
-          next(err);
         });
     }
   );
 
   router.post(
-    `/restaurante`,
+    `/detalle`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      const { body: restaurante } = req;
-      if (!restaurante)
+      const { body: productos } = req;
+      if (!productos)
         return res.status(400).json({
           mensaje: "json es requerido",
         });
       var options = {
         method: "POST",
-        uri: `${config.urlLN}/api/restaurante`,
+        uri: `${config.urlLN}/api/carrito/detalle`,
         body: {
-          ...restaurante,
+          ...productos,
         },
         json: true, // Automatically stringifies the body to JSON
       };
@@ -118,34 +87,29 @@ function restauranteAPI(app) {
     }
   );
 
-  router.put(
-    `/restaurante/:restauranteId`,
+  router.post(
+    `/`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      const { restauranteId } = req.params;
-      const { body: restaurante } = req;
-      if (!restauranteId)
-        return res.status(400).json({
-          mensaje: "el id es requerido",
-        });
-      if (!restaurante)
+      const { body: carrito } = req;
+      if (!carrito)
         return res.status(400).json({
           mensaje: "json es requerido",
         });
       var options = {
-        method: "PUT",
-        uri: `${config.urlLN}/api/restaurante/${restauranteId}`,
+        method: "POST",
+        uri: `${config.urlLN}/api/carrito`,
         body: {
-          ...restaurante,
+          ...carrito,
         },
-        json: true,
+        json: true, // Automatically stringifies the body to JSON
       };
 
       rp(options)
         .then(function (parsedBody) {
           res.setHeader("Content-Type", "application/json");
-          res.status(200).json(parsedBody);
+          res.status(201).json(parsedBody);
         })
         .catch(function (err) {
           console.log("Ha occurido un error: ", err);
@@ -155,4 +119,4 @@ function restauranteAPI(app) {
   );
 }
 
-module.exports = restauranteAPI;
+module.exports = productoAPI;
