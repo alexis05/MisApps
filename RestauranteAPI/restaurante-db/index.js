@@ -42,6 +42,22 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getCarritoPorUsuarioId({ usuarioId }) {
+    const all = await this.mongoDB.getCarritoPorUsuarioId(
+      this.collection,
+      usuarioId
+    );
+    return all || [];
+  }
+
+  async getDetalleCarrito({ productos }) {
+    const all = await this.mongoDB.getDetalleCarrito(
+      this.collection,
+      productos
+    );
+    return all || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;
