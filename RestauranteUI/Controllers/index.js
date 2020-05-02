@@ -28,6 +28,7 @@ function PublicController(app) {
 
         const json = {
           uuid: parsedBody.data.uuid,
+          usuarioId: parsedBody.data._id,
           permissions,
         };
         auth.sign(
