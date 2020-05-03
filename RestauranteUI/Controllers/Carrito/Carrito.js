@@ -3,6 +3,7 @@ var rp = require("request-promise");
 var auth = require("express-jwt");
 var guard = require("express-jwt-permissions")();
 const config = require("../../config");
+const SecurityTools =require("../../util/Security");
 
 function productoAPI(app) {
   const router = express.Router();
@@ -62,6 +63,7 @@ function productoAPI(app) {
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
       const { body: productos } = req;
+      
       if (!productos)
         return res.status(400).json({
           mensaje: "json es requerido",
@@ -92,11 +94,17 @@ function productoAPI(app) {
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
+      const { headers } = req;
+      const token = headers["authorization"];
+      securityTools = new SecurityTools(token);     
+      const usuarioId = securityTools.decodeToken();
       const { body: carrito } = req;
       if (!carrito)
         return res.status(400).json({
           mensaje: "json es requerido",
         });
+      carrito.usuarioId = usuarioId;
+      delete carrito._id;
       var options = {
         method: "POST",
         uri: `${config.urlLN}/api/carrito`,
@@ -115,7 +123,7 @@ function productoAPI(app) {
           console.log("Ha occurido un error: ", err);
           next(err);
         });
-    }
+     }
   );
 }
 

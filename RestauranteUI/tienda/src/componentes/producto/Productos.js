@@ -8,7 +8,8 @@ import SpinnerGlobal from "../../styleGlobal/SpinnerGlobal";
 const mapStateToProps = state => ({
   productos: state.productoReducer.productoReducer.productos,
   existeMasProductos: state.productoReducer.productoReducer.existenProductos,
-  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal
+  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal,
+  carrito:state.carritoReducer.carritoReducer.carrito
 });
 const mapDispatchToProps = {
   traerProductos

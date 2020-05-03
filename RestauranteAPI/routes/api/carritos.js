@@ -84,6 +84,7 @@ function carritoAPI(app) {
       carritoServicio
         .getCarritoPorUsuarioId({ usuarioId })
         .then((carritoResponse) => {
+          
           if (carritoResponse.length === 0) {
             carritoServicio
               .create({ item })
@@ -129,18 +130,19 @@ function carritoAPI(app) {
                     }
                   });
                 });
-
-                do {
-                  listaDeProductosABorrar.map((p) => {
-                    productos.map((prod, index) => {
-                      if (prod.productoId === p) {
-                        productos.splice(index, 1);
-                        return;
-                      }
-                    });
-                  });
-                } while (listaDeProductosABorrar.length === 0);
-
+                
+                if(listaDeProductosABorrar.length > 0){
+                  do {
+                      listaDeProductosABorrar.map((p) => {
+                        productos.map((prod, index) => {
+                          if (prod.productoId === p) {
+                            productos.splice(index, 1);
+                            return;
+                          }
+                        });
+                      });
+                    } while (listaDeProductosABorrar.length === 0);
+                }
                 if (productos.length > 0) carrito.productos.push(...productos);
               }
             } else if (accion === "remover") {
@@ -180,8 +182,10 @@ function carritoAPI(app) {
                   carritoServicio
                     .getCarritoPorUsuarioId({ usuarioId })
                     .then((data) => {
+                      delete data.usuarioId;
+                      var carrito = data;
                       res.status(200).json({
-                        data: data,
+                        carrito,
                         mensaje: "OK",
                       });
                     })
