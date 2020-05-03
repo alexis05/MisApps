@@ -13,11 +13,11 @@ function carritoAPI(app) {
   app.use("/api/carrito", router);
   const carritoServicio = ServicioAPI(carritoCollection);
 
-  router.get("/:itemId", async function (req, res, next) {
-    const { itemId } = req.params;
+  router.get("/:carritoId", async function (req, res, next) {
+    const { carritoId } = req.params;
     try {
       carritoServicio
-        .getItem({ itemId })
+        .carritoDetallado({ carritoId })
         .then((data) => {
           res.status(200).json({
             data: data,
@@ -34,7 +34,7 @@ function carritoAPI(app) {
     const { usuarioId } = req.params;
     try {
       carritoServicio
-        .getCarritoPorUsuarioId({ usuarioId })
+        .carritoDetalladoPorUsuarioId({ usuarioId })
         .then((data) => {
           res.status(200).json({
             data: data,
@@ -58,6 +58,27 @@ function carritoAPI(app) {
       const productos = body.productos;
       productoServicio
         .getDetalleCarrito({ productos })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post("/agregar", validation(crearCarritoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: carrito } = req;
+    try {
+      carritoServicio
+        .createCarrito({ carrito })
         .then((data) => {
           res.status(200).json({
             data: data,

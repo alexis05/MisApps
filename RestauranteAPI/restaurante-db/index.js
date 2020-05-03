@@ -58,9 +58,53 @@ class ServicioAPI {
     return all || [];
   }
 
+  async carritoDetallado({ carritoId }) {
+    const all = await this.mongoDB.carritoDetallado(carritoId);
+    return all || [];
+  }
+
+  async carritoDetalladoPorUsuarioId({ usuarioId }) {
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(usuarioId);
+    return all || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;
+  }
+
+  async createCarrito({ carrito }) {
+    const usuarioCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+      "carrito",
+      carrito.usuarioId
+    );
+    if (!usuarioCarrito) {
+      await this.mongoDB.createCarrito(carrito);
+    } else {
+      const productosEnElCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+        "carrito",
+        carrito.usuarioId
+      );
+      if (productosEnElCarrito) {
+        carrito.productos.map((producto, index) => {
+          productosEnElCarrito.productos.map((productoEnCarrito) => {
+            if (producto.productoId === productoEnCarrito.productoId) {
+              carrito.productos[index].cantidad =
+                productoEnCarrito.cantidad + producto.cantidad;
+            }
+          });
+        });
+        const itemId = productosEnElCarrito._id;
+        const item = carrito;
+        await this.mongoDB.update("carrito", itemId, item);
+      }
+    }
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      carrito.usuarioId
+    );
+    delete all[0].convertedId;
+    all[0].totalDeProductos = all[0].productos.length; //@TODO: creo que esto deberia venir de la bd..
+    return all || [];
   }
 
   async update({ itemId, item }) {
