@@ -78,13 +78,13 @@ function carritoAPI(app) {
     const { body: item } = req;
     const { productos, usuarioId, accion } = item;
     delete item.accion;
-    console.log("id");
+
     try {
       let carrito;
       carritoServicio
         .getCarritoPorUsuarioId({ usuarioId })
         .then((carritoResponse) => {
-          console.log("response carrito ",carritoResponse);
+          
           if (carritoResponse.length === 0) {
             carritoServicio
               .create({ item })
@@ -103,7 +103,6 @@ function carritoAPI(app) {
               .catch((err) => next(err));
           } else {
             if (accion === "agregar") {
-              console.log("va a agregar");
               carrito = carritoResponse;
               let listaDeProductosABorrar = [];
               if (carrito.productos.length !== 0) {
@@ -131,10 +130,9 @@ function carritoAPI(app) {
                     }
                   });
                 });
-                console.log("va a agregar 2");
+                
                 if(listaDeProductosABorrar.length > 0){
                   do {
-                    console.log("va a borrar",listaDeProductosABorrar);
                       listaDeProductosABorrar.map((p) => {
                         productos.map((prod, index) => {
                           if (prod.productoId === p) {
@@ -145,7 +143,6 @@ function carritoAPI(app) {
                       });
                     } while (listaDeProductosABorrar.length === 0);
                 }
-                console.log("va a 3");
                 if (productos.length > 0) carrito.productos.push(...productos);
               }
             } else if (accion === "remover") {
@@ -176,7 +173,6 @@ function carritoAPI(app) {
                 mensaje: "Accion no esperada",
               });
             }
-            console.log("va al update");
             const itemId = carritoResponse._id;
             const item = carrito;
             carritoServicio
