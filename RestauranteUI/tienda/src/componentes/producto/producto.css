@@ -35,6 +35,7 @@
   text-align: left;
   font-size: 14px !important;
   justify-content: start;
+  color: black;
   /* min-height: 32px; */
 }
 .card-text {
@@ -83,7 +84,7 @@
 }
 
 .cart-box .btn-view-cart{
-  background-color:#0380f6;
+  background-color:#3750b5;
   color:white;
   font-size: 13px;
   color: white;
@@ -97,7 +98,7 @@
   border-color: transparent;
 }
 .cart-box .btn-view-cart:active{
-  background-color:#0380f6 !important;
+  background-color:#3750b5 !important;
 }
 .cart-box .btn-view-cart img{
   height: 20px;

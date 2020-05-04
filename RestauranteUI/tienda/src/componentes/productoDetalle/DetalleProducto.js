@@ -30,7 +30,7 @@ class DetalleProducto extends Component {
       return <SpinnerGlobal mostrar={this.props.loadingGlobal} />;
     }
     return (
-      <div>
+      <div className="h-100">
         <ProductoDetallado></ProductoDetallado>
       </div>
     );

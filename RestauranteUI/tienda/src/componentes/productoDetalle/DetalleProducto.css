@@ -86,3 +86,78 @@
 .overflow-hidden {
   overflow: hidden;
 }
+.container-detail-product{
+  height: calc(100vh - 56px);
+  position: relative;
+}
+
+.container-detail-product .title-product{
+  font-size: 20px;
+  font-weight: bold !important;
+  line-height: 38px;
+}
+
+.container-detail-product .label-detail{
+  font-size: 16px;
+  color: #ccc;
+}
+
+.container-detail-product .price-label{
+  font-weight: bold !important;
+  font-size: 17px;
+}
+
+.container-detail-product .btn-add-card{
+  border-radius: 8px;
+  background-color: #3750b5;
+  width: 100%;
+}
+.container-detail-product .btn-back{
+  /* border-radius: 50%; */
+  border-radius: 8px;
+  background-color: transparent;
+  border: 0px solid #ccc;
+  color: black;
+}
+.container-detail-product .btn-plus{
+  /* background-color: #4cb86a; */
+  background-color: white !important;
+  color:black;
+  border-color: #4cb86a;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.container-detail-product .btn-less{
+  background-color: white !important;
+  color:black;
+  border-color:red;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  /* border-radius: 50% !important; */
+}
+
+.container-detail-product .input-quantity{
+  background-color: white !important;
+  color: black;
+  text-align: center;
+  line-height: 38px;
+}
+.container-detail-product .label-info{
+  color: #4cb86a;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  
+}
+
+.container-row-add-to-cart{
+  position: absolute;
+  bottom: 0px;
+}
+
+.container-quantity-info{
+  border: 1px dashed #4cb86a;
+  border-radius: 10px;
+  background-color: #f8fbff;
+}
+

@@ -71,16 +71,19 @@ const mostrarFecha = (time) => {
 // const Producto = (props) => {
 class Producto extends Component {
 
-  onClickAddTocart = () =>{
+  onClickAddTocart = (e) =>{
+    e.preventDefault();
     let newProduct = {cantidad:1,restauranteId:this.props.restaurante,productoId:this.props._id};
     let body = this.props.carrito;
     body.accion ="agregar";
+    body.productos = [];
     body.productos.push(newProduct);
     this.props.addToCart(body);
   }
 
   render(){
-        return (<div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
+        return (
+        <div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
           <img
             className="card-img-top img-fluid"
             src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
@@ -114,7 +117,7 @@ class Producto extends Component {
                   <button className="btn btn-add-product" onClick={this.onClickAddTocart}> +</button>
                 </div>
               </div>
-            
+
               <div className="row d-none">
                 <div className="col">
                   <small className="text-muted justify-content-center">
