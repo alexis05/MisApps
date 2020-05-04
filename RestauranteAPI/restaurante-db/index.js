@@ -65,7 +65,9 @@ class ServicioAPI {
 
   async carritoDetalladoPorUsuarioId({ usuarioId }) {
     const all = await this.mongoDB.carritoDetalladoPorUsuarioId(usuarioId);
-    return all || [];
+    delete all[0].convertedId;
+    all[0].totalDeProductos = all[0].productos.length; //@TODO: creo que esto deberia venir de la bd..
+    return all[0] || [];
   }
 
   async create({ item }) {
@@ -85,15 +87,28 @@ class ServicioAPI {
         "carrito",
         carrito.usuarioId
       );
+      let productosIdsLista = [];
+      let productosQueDebeEstar = [];
+
       if (productosEnElCarrito) {
         carrito.productos.map((producto, index) => {
           productosEnElCarrito.productos.map((productoEnCarrito) => {
             if (producto.productoId === productoEnCarrito.productoId) {
               carrito.productos[index].cantidad =
                 productoEnCarrito.cantidad + producto.cantidad;
+            } else {
+              if (!productosIdsLista.includes(productoEnCarrito.productoId)) {
+                productosIdsLista.push(productoEnCarrito.productoId);
+                productosQueDebeEstar.push(productoEnCarrito);
+              }
             }
           });
         });
+
+        productosQueDebeEstar.map((prod) => {
+          carrito.productos.push(prod);
+        });
+
         const itemId = productosEnElCarrito._id;
         const item = carrito;
         await this.mongoDB.update("carrito", itemId, item);
@@ -104,7 +119,7 @@ class ServicioAPI {
     );
     delete all[0].convertedId;
     all[0].totalDeProductos = all[0].productos.length; //@TODO: creo que esto deberia venir de la bd..
-    return all || [];
+    return all[0] || [];
   }
 
   async update({ itemId, item }) {
