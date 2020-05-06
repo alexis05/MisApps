@@ -66,7 +66,15 @@ class ServicioAPI {
   async carritoDetalladoPorUsuarioId({ usuarioId }) {
     const all = await this.mongoDB.carritoDetalladoPorUsuarioId(usuarioId);
     delete all[0].convertedId;
-    all[0].totalDeProductos = all[0].productos.length; //@TODO: creo que esto deberia venir de la bd..
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
     return all[0] || [];
   }
 
@@ -117,8 +125,17 @@ class ServicioAPI {
     const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
       carrito.usuarioId
     );
+    console.log(all[0].detalleCarrito);
     delete all[0].convertedId;
-    all[0].totalDeProductos = all[0].productos.length; //@TODO: creo que esto deberia venir de la bd..
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
     return all[0] || [];
   }
 

@@ -6,10 +6,10 @@ const PASSWORD = encodeURIComponent(config.dbPassword);
 const DB_NAME = config.dbName;
 
 // local
-//const MONGO_URI = `mongodb://${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
+const MONGO_URI = `mongodb://${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
 
 // Sanbox
-const MONGO_URI =  "mongodb+srv://F1f52020:Fu7b0l2020@cluster0-rhoaz.gcp.mongodb.net/test?retryWrites=true&w=majority"; // prettier-ignore
+//const MONGO_URI =  "mongodb+srv://F1f52020:Fu7b0l2020@cluster0-rhoaz.gcp.mongodb.net/test?retryWrites=true&w=majority"; // prettier-ignore
 
 //const MONGO_URI_WITH_USER_PASS = `mongodb://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/?authSource=${DB_NAME}`; // prettier-ignore
 // console.log(
@@ -129,6 +129,77 @@ class MongoLib {
               localField: "convertedId",
               foreignField: "_id",
               as: "productosDetallado",
+            },
+          },
+          {
+            $addFields: {
+              detalleCarrito: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: {
+                    $map: {
+                      input: "$productosDetallado",
+                      as: "z",
+                      in: {
+                        $cond: [
+                          {
+                            $eq: ["$$z._id", { $toObjectId: "$$r.productoId" }],
+                          },
+                          {
+                            valor: {
+                              $toString: {
+                                $toDecimal: {
+                                  $multiply: [
+                                    { $toDecimal: "$$z.precio" },
+                                    "$$r.cantidad",
+                                  ],
+                                },
+                              },
+                            },
+                          },
+                          { valor: "0.00" },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              cantidadProductos: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: { $toInt: "$$r.cantidad" },
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              totalDeProductos: { $sum: "$cantidadProductos" },
+            },
+          },
+          {
+            $addFields: {
+              precioTotal: {
+                $sum: {
+                  $map: {
+                    input: "$detalleCarrito",
+                    as: "r",
+                    in: {
+                      $map: {
+                        input: "$$r",
+                        as: "d",
+                        in: { $toDecimal: { $sum: "$$d.valor" } },
+                      },
+                    },
+                  },
+                },
+              },
             },
           },
         ])
