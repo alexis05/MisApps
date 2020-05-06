@@ -15,6 +15,8 @@ function carritoAPI(app) {
 
   router.get("/:carritoId", async function (req, res, next) {
     const { carritoId } = req.params;
+    if (!carritoId)
+      return res.status(400).json({ error: "Requiere el carrito id" });
     try {
       carritoServicio
         .carritoDetallado({ carritoId })
@@ -30,8 +32,11 @@ function carritoAPI(app) {
     }
   });
 
-  router.get("/usuario/:usuarioId", async function (req, res, next) {
+  router.get("/porusuario/:usuarioId", async function (req, res, next) {
     const { usuarioId } = req.params;
+    if (!usuarioId)
+      return res.status(400).json({ error: "Requiere el usuario id" });
+
     try {
       carritoServicio
         .carritoDetalladoPorUsuarioId({ usuarioId })
@@ -77,6 +82,7 @@ function carritoAPI(app) {
   ) {
     const { body: carrito } = req;
     try {
+      delete carrito.accion;
       carritoServicio
         .createCarrito({ carrito })
         .then((data) => {
@@ -105,7 +111,6 @@ function carritoAPI(app) {
       carritoServicio
         .getCarritoPorUsuarioId({ usuarioId })
         .then((carritoResponse) => {
-          
           if (carritoResponse.length === 0) {
             carritoServicio
               .create({ item })
@@ -151,18 +156,18 @@ function carritoAPI(app) {
                     }
                   });
                 });
-                
-                if(listaDeProductosABorrar.length > 0){
+
+                if (listaDeProductosABorrar.length > 0) {
                   do {
-                      listaDeProductosABorrar.map((p) => {
-                        productos.map((prod, index) => {
-                          if (prod.productoId === p) {
-                            productos.splice(index, 1);
-                            return;
-                          }
-                        });
+                    listaDeProductosABorrar.map((p) => {
+                      productos.map((prod, index) => {
+                        if (prod.productoId === p) {
+                          productos.splice(index, 1);
+                          return;
+                        }
                       });
-                    } while (listaDeProductosABorrar.length === 0);
+                    });
+                  } while (listaDeProductosABorrar.length === 0);
                 }
                 if (productos.length > 0) carrito.productos.push(...productos);
               }

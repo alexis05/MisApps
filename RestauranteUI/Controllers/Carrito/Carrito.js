@@ -34,22 +34,23 @@ function productoAPI(app) {
   );
 
   router.get(
-    `/usuario/:usuarioId`,
+    `/por/usuario`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
     function (req, res, next) {
-      const { usuarioId } = req.params;
-      if (!usuarioId) return res.send({ error: "Requiere el restaurante id" });
-
+      const { headers } = req;
+      const token = headers["authorization"];
+      securityTools = new SecurityTools(token);
+      const usuarioId = securityTools.decodeToken();
       var options = {
         method: "GET",
-        uri: `${config.urlLN}/api/carrito/usuario/${usuarioId}`,
+        uri: `${config.urlLN}/api/carrito/porusuario/${usuarioId}`,
       };
 
       rp(options)
-        .then(function (productos) {
+        .then(function (carrito) {
           res.setHeader("Content-Type", "application/json");
-          res.end(productos);
+          res.end(carrito);
         })
         .catch(function (err) {
           console.log("Ha ocurrido un error: ", err);

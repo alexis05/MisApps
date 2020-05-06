@@ -68,7 +68,8 @@ const mostrarFecha = (time) => {
 
 // const Producto = (props) => {
 class Producto extends Component {
-  onClickAddTocart = () => {
+  onClickAddTocart = (e) => {
+    e.preventDefault();
     let newProduct = {
       cantidad: 1,
       restauranteId: this.props.restaurante,
