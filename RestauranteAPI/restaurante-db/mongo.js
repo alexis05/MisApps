@@ -106,10 +106,78 @@ class MongoLib {
     });
   }
 
+  carritoDetalladoPorUsuarioId(usuarioId) {
+    return this.connect().then((db) => {
+      return db
+        .collection("carrito")
+        .aggregate([
+          { $match: { usuarioId: usuarioId } },
+          {
+            $addFields: {
+              convertedId: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: { $toObjectId: "$$r.productoId" },
+                },
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: "producto",
+              localField: "convertedId",
+              foreignField: "_id",
+              as: "productosDetallado",
+            },
+          },
+        ])
+        .toArray();
+    });
+  }
+
+  carritoDetallado(carritoId) {
+    return this.connect().then((db) => {
+      return db
+        .collection("carrito")
+        .aggregate([
+          { $match: { _id: ObjectId(carritoId) } },
+          {
+            $addFields: {
+              convertedId: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: { $toObjectId: "$$r.productoId" },
+                },
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: "producto",
+              localField: "convertedId",
+              foreignField: "_id",
+              as: "productosDetallado",
+            },
+          },
+        ])
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {
         return db.collection(collection).insertOne(data);
+      })
+      .then((result) => result.insertedId);
+  }
+
+  createCarrito(carrito) {
+    return this.connect()
+      .then((db) => {
+        return db.collection("carrito").insertOne(carrito);
       })
       .then((result) => result.insertedId);
   }
