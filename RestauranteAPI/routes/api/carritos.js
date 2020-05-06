@@ -15,6 +15,8 @@ function carritoAPI(app) {
 
   router.get("/:carritoId", async function (req, res, next) {
     const { carritoId } = req.params;
+    if (!carritoId)
+      return res.status(400).json({ error: "Requiere el carrito id" });
     try {
       carritoServicio
         .carritoDetallado({ carritoId })
@@ -30,8 +32,11 @@ function carritoAPI(app) {
     }
   });
 
-  router.get("/usuario/:usuarioId", async function (req, res, next) {
+  router.get("/porusuario/:usuarioId", async function (req, res, next) {
     const { usuarioId } = req.params;
+    if (!usuarioId)
+      return res.status(400).json({ error: "Requiere el usuario id" });
+
     try {
       carritoServicio
         .carritoDetalladoPorUsuarioId({ usuarioId })

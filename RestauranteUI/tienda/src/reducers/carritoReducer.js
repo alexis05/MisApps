@@ -3,6 +3,7 @@ import {
   REQUEST_SEND_ADD_TO_CART,
   ADD_CART,
   VIEW_CART_DETAILS,
+  DETALLE_CARRITO,
   BACK_ALL_PRODUCTS,
 } from "../types/tiendaTypes";
 import { Views } from "../constantes/index";
@@ -14,6 +15,9 @@ const initialState = {
     _id: "",
     accion: "",
     productos: [],
+    productosDetallado: [],
+    totalDeProductos: 0,
+    precioTotal: "0.00",
   },
 };
 
@@ -23,6 +27,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loadingGlobal: true,
+      };
+    case DETALLE_CARRITO:
+      return {
+        ...state,
+        loadingGlobal: false,
+        error: "",
+        carrito: {
+          accion: "",
+          _id: action.payload._id,
+          productos: action.payload.productos,
+          productosDetallado: action.payload.productosDetallado,
+          totalDeProductos: action.payload.totalDeProductos,
+          precioTotal: action.payload.precioTotal,
+        },
       };
 
     case ADD_CART:
@@ -34,6 +52,9 @@ export default (state = initialState, action) => {
           accion: "agregar",
           _id: action.payload.carrito._id,
           productos: action.payload.carrito.productos,
+          productosDetallado: action.payload.carrito.productosDetallado,
+          totalDeProductos: action.payload.carrito.totalDeProductos,
+          precioTotal: action.payload.carrito.precioTotal,
         },
       };
 

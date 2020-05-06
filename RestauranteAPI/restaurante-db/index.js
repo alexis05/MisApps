@@ -65,6 +65,7 @@ class ServicioAPI {
 
   async carritoDetalladoPorUsuarioId({ usuarioId }) {
     const all = await this.mongoDB.carritoDetalladoPorUsuarioId(usuarioId);
+    if (!all[0]) return [];
     delete all[0].convertedId;
     delete all[0].cantidadProductos;
     let costoTotal = 0;
