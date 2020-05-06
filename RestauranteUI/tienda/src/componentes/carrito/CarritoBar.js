@@ -46,7 +46,10 @@ class CarritoBar extends Component {
                   </Col>
                   <Col xs={6} className="text-left h-100">
                     <Label className="total-value mb-0">
-                      ${this.props.carrito.precioTotal}
+                      $
+                      {this.props.carrito.precioTotal
+                        ? this.props.carrito.precioTotal
+                        : "0.00"}
                     </Label>
                   </Col>
                   <Col xs={2} className="pr-0 h-100 text-right">
@@ -54,7 +57,13 @@ class CarritoBar extends Component {
                       className="btn form-control btn-view-cart"
                       onClick={this.onClickViewCart}
                     >
-                      <span>( {this.props.carrito.totalDeProductos} )</span>
+                      <span>
+                        ({" "}
+                        {this.props.carrito.totalDeProductos
+                          ? this.props.carrito.totalDeProductos
+                          : "0"}{" "}
+                        )
+                      </span>
                       <img src={ShopingCart} alt="Cart" />
                     </Button>
                   </Col>
