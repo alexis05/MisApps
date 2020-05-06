@@ -131,6 +131,77 @@ class MongoLib {
               as: "productosDetallado",
             },
           },
+          {
+            $addFields: {
+              detalleCarrito: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: {
+                    $map: {
+                      input: "$productosDetallado",
+                      as: "z",
+                      in: {
+                        $cond: [
+                          {
+                            $eq: ["$$z._id", { $toObjectId: "$$r.productoId" }],
+                          },
+                          {
+                            valor: {
+                              $toString: {
+                                $toDecimal: {
+                                  $multiply: [
+                                    { $toDecimal: "$$z.precio" },
+                                    "$$r.cantidad",
+                                  ],
+                                },
+                              },
+                            },
+                          },
+                          { valor: "0.00" },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              cantidadProductos: {
+                $map: {
+                  input: "$productos",
+                  as: "r",
+                  in: { $toInt: "$$r.cantidad" },
+                },
+              },
+            },
+          },
+          {
+            $addFields: {
+              totalDeProductos: { $sum: "$cantidadProductos" },
+            },
+          },
+          {
+            $addFields: {
+              precioTotal: {
+                $sum: {
+                  $map: {
+                    input: "$detalleCarrito",
+                    as: "r",
+                    in: {
+                      $map: {
+                        input: "$$r",
+                        as: "d",
+                        in: { $toDecimal: { $sum: "$$d.valor" } },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
         ])
         .toArray();
     });
