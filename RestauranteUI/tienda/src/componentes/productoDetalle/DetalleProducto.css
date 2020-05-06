@@ -160,4 +160,19 @@
   border-radius: 10px;
   background-color: #f8fbff;
 }
+.container-detail-product .card-img-top{
+  max-width: 300px;
+  max-height: 300px;
+}
 
+@media(min-width:768px){
+  .container-web-card {
+    border-left: 2px solid #fff;
+      border-right: 2px solid #fff;
+      box-shadow: 0 19px 38px rgba(1,1,1,0.1), 0 0px 0px rgba(1,1,1,1);
+      border-radius: 10px;
+      width: 165px;
+    
+      position: relative;
+  }
+}
