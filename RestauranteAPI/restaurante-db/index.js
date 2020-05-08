@@ -74,6 +74,16 @@ class ServicioAPI {
         costoTotal = costoTotal + parseFloat(x.valor);
       });
     });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
     all[0].precioTotal = costoTotal.toFixed(2);
     delete all[0].detalleCarrito;
     return all[0] || [];
@@ -130,11 +140,81 @@ class ServicioAPI {
     delete all[0].convertedId;
     delete all[0].cantidadProductos;
     let costoTotal = 0;
-    all[0].detalleCarrito.map((p) => {
-      p.map((x) => {
-        costoTotal = costoTotal + parseFloat(x.valor);
-      });
-    });
+    // all[0].detalleCarrito.map((p) => {
+    //   p.map((x) => {
+    //     costoTotal = costoTotal + parseFloat(x.valor);
+    //   });
+    // });
+    // all[0].productos.map((prod) => {
+    //   all[0].productosDetallado.map((prodDetalle, index) => {
+    //     if (prod.productoId === prodDetalle._id) {
+    //       all[0].productosDetallado[index].cantidad = prod.cantidad;
+    //     }
+    //   });
+    // });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
+    return all[0] || [];
+  }
+
+  async carritoEdicion({ carrito }) {
+    const usuarioCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+      "carrito",
+      carrito.usuarioId
+    );
+    if (!usuarioCarrito) {
+      await this.mongoDB.createCarrito(carrito);
+    } else {
+      const productosEnElCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+        "carrito",
+        carrito.usuarioId
+      );
+      let productosIdsLista = [];
+      let productosQueDebeEstar = [];
+
+      if (productosEnElCarrito) {
+        carrito.productos.map((producto, index) => {
+          productosEnElCarrito.productos.map((productoEnCarrito) => {
+            if (producto.productoId === productoEnCarrito.productoId) {
+              carrito.productos[index].cantidad = productoEnCarrito.cantidad =
+                producto.cantidad;
+            } else {
+              if (!productosIdsLista.includes(productoEnCarrito.productoId)) {
+                productosIdsLista.push(productoEnCarrito.productoId);
+                productosQueDebeEstar.push(productoEnCarrito);
+              }
+            }
+          });
+        });
+
+        productosQueDebeEstar.map((prod) => {
+          carrito.productos.push(prod);
+        });
+
+        const itemId = productosEnElCarrito._id;
+        const item = carrito;
+        await this.mongoDB.update("carrito", itemId, item);
+      }
+    }
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      carrito.usuarioId
+    );
+    console.log(all[0].detalleCarrito);
+    delete all[0].convertedId;
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    // all[0].detalleCarrito.map((p) => {
+    //   p.map((x) => {
+    //     costoTotal = costoTotal + parseFloat(x.valor);
+    //   });
+    // });
+    // all[0].productos.map((prod) => {
+    //   all[0].productosDetallado.map((prodDetalle, index) => {
+    //     if (prod.productoId === prodDetalle._id) {
+    //       all[0].productosDetallado[index].cantidad = prod.cantidad;
+    //     }
+    //   });
+    // });
     all[0].precioTotal = costoTotal.toFixed(2);
     delete all[0].detalleCarrito;
     return all[0] || [];
