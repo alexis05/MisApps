@@ -1,6 +1,5 @@
 const express = require("express");
 var rp = require("request-promise");
-const URL_API = "http://127.0.0.1:5050";
 var auth = require("express-jwt");
 var guard = require("express-jwt-permissions")();
 const config = require("../../config");
@@ -22,7 +21,7 @@ function productoAPI(app) {
 
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/producto?limit=${limit}&skip=${skip}`,
+        uri: `${config.urlLN}/api/producto?limit=${limit}&skip=${skip}`,
       };
 
       rp(options)
@@ -46,7 +45,7 @@ function productoAPI(app) {
 
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/producto/${productoId}`,
+        uri: `${config.urlLN}/api/producto/${productoId}`,
       };
 
       rp(options)
@@ -71,7 +70,7 @@ function productoAPI(app) {
 
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/producto/restaurante/${restauranteId}`,
+        uri: `${config.urlLN}/api/producto/restaurante/${restauranteId}`,
       };
 
       rp(options)
@@ -97,7 +96,7 @@ function productoAPI(app) {
       });
     var options = {
       method: "POST",
-      uri: `${URL_API}/api/producto`,
+      uri: `${config.urlLN}/api/producto`,
       body: {
         ...producto,
       },

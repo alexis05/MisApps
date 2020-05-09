@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import "./producto.css";
+import { addToCart } from "../../actions/Carrito";
 
 const mostrarPrecioConDosDecimales = (precio) => {
   return (Math.round(precio * 100) / 100).toFixed(2);
@@ -64,53 +66,85 @@ const mostrarFecha = (time) => {
   return time;
 };
 
-const Producto = (props) => (
-  <div className="card">
-    <img
-      className="card-img-top img-fluid"
-      src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
-      alt="Card"
-      width="300"
-      height="150"
-    />
-    <div className="card-body">
-      <h5 className="card-title">{props.nombre}</h5>
-      <p className="card-text pl-1 pr-1">{props.detalle}</p>
-      <div className="row">
-        <div className="col-12">
-          <div className="precio-producto">
-            ${mostrarPrecioConDosDecimales(props.precio)}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div className="card-footer text-center">
-      <div className="col-12">
-        <div className="row d-flex justify-content-center text-center">
-          <div className="col">
-            <Link
-              to={`/Home/Producto/${props._id}`}
-              className="btn btn-primary"
-            >
-              Pedir
-            </Link>
-          </div>
-          <div className="col">
-            <Link to={`/Home/Producto/${props._id}`} className="nav-link">
-              Ver
-            </Link>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <small className="text-muted justify-content-center">
-              Publicado: {mostrarFecha(props.creado)}
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+// const Producto = (props) => {
+class Producto extends Component {
+  onClickAddTocart = () => {
+    let newProduct = {
+      cantidad: 1,
+      restauranteId: this.props.restaurante,
+      productoId: this.props._id,
+    };
+    let body = this.props.carrito;
+    body.accion = "agregar";
+    body.productos = [];
+    body.productos.push(newProduct);
+    this.props.addToCart(body);
+  };
 
-export default Producto;
+  render() {
+    return (
+      <div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
+        <img
+          className="card-img-top img-fluid"
+          src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
+          alt="Card"
+        />
+        <div className="card-body px-3">
+          <div className="row pt-4 justify-content-start">
+            <div className="col-12 text-left">
+              <h5 className="card-title text-left">{this.props.nombre}</h5>
+            </div>
+            <div className="col-12">
+              <p className="card-text mb-0">{this.props.detalle}</p>
+            </div>
+          </div>
+          <div className="rowm d-none">
+            <div className="col-12">
+              <div className="precio-producto">
+                ${mostrarPrecioConDosDecimales(this.props.precio)}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="card-footer w-100  text-center pt-0 pr-1 pl-1 pb-0">
+          <div className="col-12">
+            <div className="row justify-content-end align-items-center">
+              <div className="col-10 text-left">
+                <span className="precio-producto">
+                  ${mostrarPrecioConDosDecimales(this.props.precio)}
+                </span>
+              </div>
+              <div className="col-2 px-0">
+                <button
+                  className="btn btn-add-product"
+                  onClick={this.onClickAddTocart}
+                >
+                  {" "}
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="row d-none">
+              <div className="col">
+                <small className="text-muted justify-content-center">
+                  Publicado: {mostrarFecha(this.props.creado)}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+const mapStateToProps = (state) => ({
+  carrito: state.carritoReducer.carritoReducer.carrito,
+});
+
+const mapDispatchToProps = {
+  addToCart,
+};
+// const mapDispatchToProps = (dispatch) => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Producto);

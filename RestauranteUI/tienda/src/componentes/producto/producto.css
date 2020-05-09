@@ -5,18 +5,111 @@
   min-height: 250px;
 }
 
+.card-product {
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+  /* box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22); */
+  box-shadow: 0 19px 38px rgba(1, 1, 1, 0.1), 0 0px 0px rgba(1, 1, 1, 1);
+  border-radius: 10px;
+  /* max-width: 200px;
+  min-height: 257.77px;
+  max-height: 259.41px; */
+  width: 165px;
+  height: 250.8px;
+  position: relative;
+}
+
+.card-deck {
+  margin: 1rem;
+}
+
+.card-product img {
+  width: auto;
+}
+
 .card-body {
   padding: 0.25rem !important;
 }
 .card-title {
-  text-align: center;
-  justify-content: center;
+  text-align: left;
+  font-size: 14px !important;
+  justify-content: start;
+  /* min-height: 32px; */
+}
+.card-text {
+  text-align: left;
+  font-size: 13px !important;
+  color: #ccc;
+  /* min-height: 38px; */
 }
 .card-footer {
   padding: 10px 10px;
+  background: transparent !important;
+  border: none !important;
+  position: absolute;
+  bottom: 0px;
 }
 .precio-producto {
-  font-size: 21px;
+  font-size: 16px;
+  color: #4cb86a;
+  font-weight: bold;
+}
+
+.container-cart-list .cart-box {
+  /* max-width: 200px; */
+  border-radius: 15px;
+  background-color: transparent;
+  min-width: 300px;
+  margin: auto;
+}
+
+.card-product .btn-add-product {
+  background-color: #4cb86a;
+  position: relative;
+  right: calc(5px);
+  color: white;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 15px;
+}
+
+.cart-box .container-cart-values {
+  border-radius: 10px;
+  background-color: #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+  box-shadow: 0 19px 38px rgba(1, 1, 1, 0.1), 0 0px 0px rgba(1, 1, 1, 1);
+}
+
+.cart-box .btn-view-cart {
+  background-color: #0380f6;
+  color: white;
+  font-size: 13px;
+  color: white;
+  font-size: 13px;
+  width: 85px;
+  height: 45px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-color: transparent;
+}
+.cart-box .btn-view-cart:active {
+  background-color: #0380f6 !important;
+}
+.cart-box .btn-view-cart img {
+  height: 20px;
+  width: 20px;
+  float: right;
+}
+
+.cart-box .total-label {
+  color: #ccc;
+  font-weight: normal;
+  font-size: 13px;
+}
+.cart-box .total-value {
   color: black;
   font-weight: bold;
+  font-size: 13px;
 }

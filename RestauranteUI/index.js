@@ -8,6 +8,7 @@ const productoApi = require("./Controllers/Producto/Producto.js");
 const restauranteApi = require("./Controllers/Restaurante/Restaurante");
 const usuarioApi = require("./Controllers/Usuario/Usuario");
 const publicController = require("./Controllers/index");
+const carritoApi = require("./Controllers/Carrito/Carrito");
 const cookieParser = require("cookie-parser");
 
 const DIST_DIR = path.join(__dirname, "/dist/");
@@ -23,7 +24,8 @@ productoApi(app);
 restauranteApi(app);
 usuarioApi(app);
 publicController(app);
-// Verificar si esta funcionando
+carritoApi(app);
+
 app.get("/", function (req, res, next) {
   res.send("Hola!");
 });
