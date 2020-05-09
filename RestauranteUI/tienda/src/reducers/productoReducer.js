@@ -1,14 +1,14 @@
 import {
   TRAER_PRODUCTOS,
   REQUEST_ENVIADO,
-  REQUEST_ERROR
+  REQUEST_ERROR,
 } from "../types/tiendaTypes";
-import {Views} from "../constantes/index";
+import { Views } from "../constantes/index";
 const initialState = {
   productos: [],
   existenProductos: false,
   loadingGlobal: false,
-  error: ""
+  error: "",
 };
 
 export default (state = initialState, action) => {
@@ -21,7 +21,7 @@ export default (state = initialState, action) => {
         ...state,
         loadingGlobal: false,
         estaFueraDeHome: false,
-        productos: action.payload
+        productos: action.payload,
       };
 
     case REQUEST_ENVIADO:

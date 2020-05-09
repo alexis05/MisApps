@@ -104,7 +104,6 @@ function carritoAPI(app) {
   ) {
     const { body: carrito } = req;
     try {
-      delete carrito.accion;
       carritoServicio
         .carritoEdicion({ carrito })
         .then((data) => {

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Button } from "reactstrap";
-import { backProductListView, detalleCarrito } from "../../actions/Carrito";
+import {
+  backProductListView,
+  detalleCarrito,
+  removeProductToCart,
+} from "../../actions/Carrito";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
@@ -19,6 +23,18 @@ class DetallesCarritoView extends Component {
     }
   };
 
+  onClickDeleteProducto = (productoId) => {
+    let producto = this.props.carrito.productos.filter((prod) => {
+      return prod.productoId === productoId;
+    });
+
+    let body = this.props.carrito;
+    body.accion = "remover";
+    body.productos = [];
+    body.productos.push(producto[0]);
+    this.props.removeProductToCart(body);
+  };
+
   onBackProductList = () => {
     this.props.backProductListView();
   };
@@ -27,6 +43,7 @@ class DetallesCarritoView extends Component {
     this.obtenerDetalleCarrito();
   }
   render() {
+    if (this.props.carrito.productos.length === 0) return "No hay productos";
     return (
       <div className="col-sm-12 details-cart-view ">
         <Row className="justify-content-center">
@@ -89,52 +106,56 @@ class DetallesCarritoView extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {this.props.carrito.productosDetallado.map(
-                        (producto, index) => (
-                          <tr key={index}>
-                            <td>
-                              <div>
-                                <img
-                                  className="card-img-top img-fluid imagenProductoMD"
-                                  src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
-                                  alt="Card"
-                                />
-                                {producto.nombre}
-                              </div>
-                            </td>
-                            <td>
-                              <div>{producto.precio}</div>
-                            </td>
-                            <td>
-                              <div>
-                                <img
-                                  src={ChevronLeft}
-                                  alt="Disminuir cantidad"
-                                ></img>{" "}
-                                <input
-                                  className="productoCantidad"
-                                  type="text"
-                                  defaultValue={producto.cantidad}
-                                ></input>{" "}
-                                <img
-                                  src={ChevronRight}
-                                  alt="Aumentar cantidad"
-                                ></img>
-                              </div>
-                            </td>
-                            <td>
-                              <div>{producto.total}</div>
-                            </td>
-                            <td>
-                              <div>
-                                <span>
-                                  <img src={BasureroIcon} alt="Remover"></img>
-                                </span>
-                              </div>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                      {this.props.carrito.productosDetallado.map((producto) => (
+                        <tr key={producto._id}>
+                          <td>
+                            <div>
+                              <img
+                                className="card-img-top img-fluid imagenProductoMD"
+                                src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
+                                alt="Card"
+                              />
+                              {producto.nombre}
+                            </div>
+                          </td>
+                          <td>
+                            <div>{producto.precio}</div>
+                          </td>
+                          <td>
+                            <div>
+                              <img
+                                src={ChevronLeft}
+                                alt="Disminuir cantidad"
+                              ></img>{" "}
+                              <input
+                                className="productoCantidad"
+                                type="text"
+                                defaultValue={producto.cantidad}
+                              ></input>{" "}
+                              <img
+                                src={ChevronRight}
+                                alt="Aumentar cantidad"
+                              ></img>
+                            </div>
+                          </td>
+                          <td>
+                            <div>{producto.total}</div>
+                          </td>
+                          <td>
+                            <div
+                              onClick={this.onClickDeleteProducto.bind(
+                                null,
+                                producto._id
+                              )}
+                              data-productoid={producto._id}
+                            >
+                              <span>
+                                <img src={BasureroIcon} alt="Remover"></img>
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -154,6 +175,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   backProductListView,
   detalleCarrito,
+  removeProductToCart,
 };
 
 export default connect(

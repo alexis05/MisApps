@@ -3,6 +3,7 @@ export const REQUEST_ENVIADO = "request_enviado";
 export const REQUEST_ERROR = "request_error";
 
 export const ADD_CART = "add_cart";
+export const REMOVE_CART = "remove_cart";
 export const DETALLE_CARRITO = "detalle_carrito";
 export const REQUEST_SEND_ADD_TO_CART = "request_send_add_to_cart";
 export const REQUEST_ERROR_ADD_TO_CART = "request_error_add_to_cart";

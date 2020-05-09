@@ -1,6 +1,7 @@
 import API from "../API";
 import {
   ADD_CART,
+  REMOVE_CART,
   REQUEST_SEND_ADD_TO_CART,
   REREQUEST_ERROR_ADD_TO_CARTQUEST_ERROR,
   VIEW_CART_DETAILS,
@@ -23,6 +24,34 @@ export const addToCart = (product) => async (dispatch) => {
       const carrito = data.data;
       dispatch({
         type: ADD_CART,
+        payload: { carrito },
+      });
+    });
+  } catch (error) {
+    dispatch({
+      type: REREQUEST_ERROR_ADD_TO_CARTQUEST_ERROR,
+      payload: error.message,
+    });
+
+    console.log("Error: ", error.message);
+  }
+};
+
+export const removeProductToCart = (product) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REQUEST_SEND_ADD_TO_CART,
+    });
+
+    delete product.productosDetallado;
+    delete product.totalDeProductos;
+    delete product.precioTotal;
+
+    API.post(`/carritoapi/`, product).then((res) => {
+      const { data } = res;
+      const carrito = data.data;
+      dispatch({
+        type: REMOVE_CART,
         payload: { carrito },
       });
     });

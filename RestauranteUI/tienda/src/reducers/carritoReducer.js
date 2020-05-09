@@ -2,6 +2,7 @@ import {
   REQUEST_ERROR_ADD_TO_CART,
   REQUEST_SEND_ADD_TO_CART,
   ADD_CART,
+  REMOVE_CART,
   VIEW_CART_DETAILS,
   DETALLE_CARRITO,
   BACK_ALL_PRODUCTS,
@@ -50,6 +51,21 @@ export default (state = initialState, action) => {
         error: "",
         carrito: {
           accion: "agregar",
+          _id: action.payload.carrito._id,
+          productos: action.payload.carrito.productos,
+          productosDetallado: action.payload.carrito.productosDetallado,
+          totalDeProductos: action.payload.carrito.totalDeProductos,
+          precioTotal: action.payload.carrito.precioTotal,
+        },
+      };
+
+    case REMOVE_CART:
+      return {
+        ...state,
+        loadingGlobal: false,
+        error: "",
+        carrito: {
+          accion: "remover",
           _id: action.payload.carrito._id,
           productos: action.payload.carrito.productos,
           productosDetallado: action.payload.carrito.productosDetallado,
