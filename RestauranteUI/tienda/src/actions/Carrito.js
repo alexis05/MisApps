@@ -2,10 +2,11 @@ import API from "../API";
 import {
   ADD_CART,
   REQUEST_SEND_ADD_TO_CART,
-  REREQUEST_ERROR_ADD_TO_CARTQUEST_ERROR,
+  REQUEST_ERROR_ADD_TO_CART,
   VIEW_CART_DETAILS,
   BACK_ALL_PRODUCTS,
   DETALLE_CARRITO,
+  EDIT_CART,
 } from "../types/tiendaTypes";
 
 export const addToCart = (product) => async (dispatch) => {
@@ -28,7 +29,35 @@ export const addToCart = (product) => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: REREQUEST_ERROR_ADD_TO_CARTQUEST_ERROR,
+      type: REQUEST_ERROR_ADD_TO_CART,
+      payload: error.message,
+    });
+
+    console.log("Error: ", error.message);
+  }
+};
+
+export const editCart = (product) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REQUEST_SEND_ADD_TO_CART,
+    });
+
+    delete product.productosDetallado;
+    delete product.totalDeProductos;
+    delete product.precioTotal;
+
+    API.post(`/carritoapi/`, product).then((res) => {
+      const { data } = res;
+      const carrito = data.data;
+      dispatch({
+        type: EDIT_CART,
+        payload: { carrito },
+      });
+    });
+  } catch (error) {
+    dispatch({
+      type: REQUEST_ERROR_ADD_TO_CART,
       payload: error.message,
     });
 
@@ -52,7 +81,7 @@ export const detalleCarrito = () => async (dispatch) => {
     });
   } catch (error) {
     dispatch({
-      type: REREQUEST_ERROR_ADD_TO_CARTQUEST_ERROR,
+      type: REQUEST_ERROR_ADD_TO_CART,
       payload: error.message,
     });
 

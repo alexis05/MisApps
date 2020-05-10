@@ -3,7 +3,6 @@ export const REQUEST_ENVIADO = "request_enviado";
 export const REQUEST_ERROR = "request_error";
 
 export const ADD_CART = "add_cart";
-export const DETALLE_CARRITO = "detalle_carrito";
 export const REQUEST_SEND_ADD_TO_CART = "request_send_add_to_cart";
 export const REQUEST_ERROR_ADD_TO_CART = "request_error_add_to_cart";
 
@@ -14,3 +13,6 @@ export const REQUEST_ENVIADO_DETALLE_PRODUCTO =
   "request_enviado_detalle_producto";
 export const REQUEST_ERROR_DETALLE_PRODUCTO = "request_error_detalle_producto";
 export const TRAER_DETALLE_PRODUCTO = "obtener_detalle_producto";
+
+export const EDIT_CART = "edit_cart";
+export const DETALLE_CARRITO = "detalle_carrito";

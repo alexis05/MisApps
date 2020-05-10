@@ -1,0 +1,73 @@
+.productoCantidad {
+  width: 20%;
+}
+
+.imagenProductoMD {
+  width: 150px !important;
+  height: 150 !important;
+}
+
+table {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+  border: 0px solid #4cb86a;
+  margin: 50px auto;
+  background: white;
+}
+th {
+  background: #4cb86a;
+  height: 54px;
+  width: 22%;
+  text-shadow: 0 1px 0 #4cb86a;
+  color: black;
+  font-weight: bold;
+  border: 1px solid #4cb86a;
+  box-shadow: inset 0px 1px 1px #ccc;
+  transition: all 0.2s;
+}
+tr {
+  border-bottom: 1px solid #cccccc;
+}
+tr:last-child {
+  border-bottom: 0px;
+}
+td {
+  border-right: 0px solid #cccccc;
+  padding: 7px;
+  transition: all 0.2s;
+  width: 20px;
+}
+td:last-child {
+  border-right: 0px;
+}
+td.selected {
+  background: #d7e4ef;
+  z-index: 1;
+}
+td input {
+  font-size: 14px;
+  background: none;
+  outline: none;
+  border: 0;
+  display: table-cell;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+td input:focus {
+  box-shadow: 0 1px 0 steelblue;
+  color: steelblue;
+}
+::-moz-selection {
+  background: steelblue;
+  color: white;
+}
+::selection {
+  background: steelblue;
+  color: white;
+}
+.heavyTable {
+  box-shadow: 0 2px 30px rgba(0, 0, 0, 0.2);
+  animation: float 5s infinite;
+}
