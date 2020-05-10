@@ -3,7 +3,6 @@ import {
   REQUEST_ENVIADO,
   REQUEST_ERROR,
 } from "../types/tiendaTypes";
-import { Views } from "../constantes/index";
 const initialState = {
   productos: [],
   existenProductos: false,

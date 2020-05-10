@@ -4,14 +4,63 @@ import { Row, Col, Button } from "reactstrap";
 import {
   backProductListView,
   detalleCarrito,
-  removeProductToCart,
+  editCart,
 } from "../../actions/Carrito";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
 import "./carritoDetalle.css";
+import Spinner from "../../styleGlobal/Spinner";
 
 class DetallesCarritoView extends Component {
+  onBlurCantidad = (element) => {
+    const valor = element.target.value;
+    if (valor < 1) return;
+    const name = element.target.name;
+    const id = element.target.id;
+    if (name !== "cantidad") return;
+    let producto = this.props.carrito.productos.filter((prod) => {
+      return prod.productoId === id;
+    });
+    producto[0].cantidad = Number(valor);
+    let body = this.props.carrito;
+    body.accion = "agregar";
+    body.productos = [];
+    body.productos.push(producto[0]);
+    this.props.editCart(body);
+  };
+
+  onClickDisminuirCantidad = (productoId) => {
+    if (!productoId) return;
+    let producto = this.props.carrito.productos.filter((prod) => {
+      return prod.productoId === productoId;
+    });
+    if (producto[0].cantidad > 0) {
+      if (producto[0].cantidad === 1) return;
+      producto[0].cantidad = Number(producto[0].cantidad) - Number(1);
+      let body = this.props.carrito;
+      body.accion = "agregar";
+      body.productos = [];
+      body.productos.push(producto[0]);
+      this.props.editCart(body);
+    } else {
+      throw "La cantidad del producto debe ser mayor a Cero";
+    }
+  };
+
+  onClickAumentarCantidad = (productoId) => {
+    if (!productoId) return;
+    let producto = this.props.carrito.productos.filter((prod) => {
+      return prod.productoId === productoId;
+    });
+    producto[0].cantidad = Number(producto[0].cantidad) + Number(1);
+    let body = this.props.carrito;
+    body.accion = "agregar";
+    body.productos = [];
+    body.productos.push(producto[0]);
+    this.props.editCart(body);
+  };
+
   obtenerDetalleCarrito = async () => {
     this.setState({ loading: true, error: null });
     try {
@@ -32,7 +81,7 @@ class DetallesCarritoView extends Component {
     body.accion = "remover";
     body.productos = [];
     body.productos.push(producto[0]);
-    this.props.removeProductToCart(body);
+    this.props.editCart(body);
   };
 
   onBackProductList = () => {
@@ -43,7 +92,13 @@ class DetallesCarritoView extends Component {
     this.obtenerDetalleCarrito();
   }
   render() {
-    if (this.props.carrito.productos.length === 0) return "No hay productos";
+    if (this.props.carrito.productos.length === 0)
+      return (
+        <div>
+          <p>No hay productos en el carrito</p>
+          <Button onClick={this.onBackProductList}>{"<-"} Regresar</Button>
+        </div>
+      );
     return (
       <div className="col-sm-12 details-cart-view ">
         <Row className="justify-content-center">
@@ -56,31 +111,35 @@ class DetallesCarritoView extends Component {
                     {this.props.carrito.totalDeProductos}
                   </span>
                 </h4>
-                <ul className="list-group mb-3">
-                  {this.props.carrito.productosDetallado.map(
-                    (producto, index) => (
-                      <li
-                        key={index}
-                        className="list-group-item d-flex justify-content-between lh-condensed"
-                      >
-                        <div className="text-left">
-                          <div className="ml-0 pl-0 my-0">
-                            {producto.nombre}
+                {this.props.carrito.productosDetallado ? (
+                  <ul className="list-group mb-3">
+                    {this.props.carrito.productosDetallado.map(
+                      (producto, index) => (
+                        <li
+                          key={index}
+                          className="list-group-item d-flex justify-content-between lh-condensed"
+                        >
+                          <div className="text-left">
+                            <div className="ml-0 pl-0 my-0">
+                              {producto.nombre}
+                            </div>
+                            <small className="text-muted">
+                              {producto.detalle}
+                            </small>
                           </div>
-                          <small className="text-muted">
-                            {producto.detalle}
-                          </small>
-                        </div>
-                        <span className="text-muted">${producto.total}</span>
-                      </li>
-                    )
-                  )}
+                          <span className="text-muted">${producto.total}</span>
+                        </li>
+                      )
+                    )}
 
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Total</span>
-                    <strong>${this.props.carrito.precioTotal}</strong>
-                  </li>
-                </ul>
+                    <li className="list-group-item d-flex justify-content-between">
+                      <span>Total</span>
+                      <strong>${this.props.carrito.precioTotal}</strong>
+                    </li>
+                  </ul>
+                ) : (
+                  <Spinner></Spinner>
+                )}
 
                 <form className="card p-2">
                   <div className="input-group text-center justify-content-center">
@@ -95,69 +154,86 @@ class DetallesCarritoView extends Component {
               <div className="col-md-8 order-md-1">
                 <h4 className="mb-3">Productos en el carrito</h4>
                 <div className="table-responsive">
-                  <table className="table table-sm heavyTable">
-                    <thead>
-                      <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.props.carrito.productosDetallado.map((producto) => (
-                        <tr key={producto._id}>
-                          <td>
-                            <div>
-                              <img
-                                className="card-img-top img-fluid imagenProductoMD"
-                                src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
-                                alt="Card"
-                              />
-                              {producto.nombre}
-                            </div>
-                          </td>
-                          <td>
-                            <div>{producto.precio}</div>
-                          </td>
-                          <td>
-                            <div>
-                              <img
-                                src={ChevronLeft}
-                                alt="Disminuir cantidad"
-                              ></img>{" "}
-                              <input
-                                className="productoCantidad"
-                                type="text"
-                                defaultValue={producto.cantidad}
-                              ></input>{" "}
-                              <img
-                                src={ChevronRight}
-                                alt="Aumentar cantidad"
-                              ></img>
-                            </div>
-                          </td>
-                          <td>
-                            <div>{producto.total}</div>
-                          </td>
-                          <td>
-                            <div
-                              onClick={this.onClickDeleteProducto.bind(
-                                null,
-                                producto._id
-                              )}
-                              data-productoid={producto._id}
-                            >
-                              <span>
-                                <img src={BasureroIcon} alt="Remover"></img>
-                              </span>
-                            </div>
-                          </td>
+                  {this.props.carrito.productosDetallado ? (
+                    <table className="table table-sm heavyTable">
+                      <thead>
+                        <tr>
+                          <th>Producto</th>
+                          <th>Precio</th>
+                          <th>Cantidad</th>
+                          <th>Total</th>
+                          <th></th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {this.props.carrito.productosDetallado.map(
+                          (producto) => (
+                            <tr key={producto._id}>
+                              <td>
+                                <div>
+                                  <img
+                                    className="card-img-top img-fluid imagenProductoMD"
+                                    src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
+                                    alt="Card"
+                                  />
+                                  {producto.nombre}
+                                </div>
+                              </td>
+                              <td>
+                                <div>{producto.precio}</div>
+                              </td>
+                              <td>
+                                <div>
+                                  <img
+                                    onClick={this.onClickDisminuirCantidad.bind(
+                                      null,
+                                      producto._id
+                                    )}
+                                    src={ChevronLeft}
+                                    alt="Disminuir cantidad"
+                                  ></img>{" "}
+                                  <input
+                                    name="cantidad"
+                                    id={producto._id}
+                                    onBlur={this.onBlurCantidad}
+                                    className="productoCantidad"
+                                    type="text"
+                                    defaultValue={producto.cantidad}
+                                  ></input>{" "}
+                                  <img
+                                    onClick={this.onClickAumentarCantidad.bind(
+                                      null,
+                                      producto._id
+                                    )}
+                                    src={ChevronRight}
+                                    alt="Aumentar cantidad"
+                                  ></img>
+                                </div>
+                              </td>
+                              <td>
+                                <div>{producto.total}</div>
+                              </td>
+                              <td>
+                                <div
+                                  onClick={this.onClickDeleteProducto.bind(
+                                    null,
+                                    producto._id
+                                  )}
+                                  data-productoid={producto._id}
+                                >
+                                  <span>
+                                    <img src={BasureroIcon} alt="Remover"></img>
+                                  </span>
+                                </div>
+                              </td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <Spinner></Spinner>
+                  )}
                 </div>
               </div>
             </Row>
@@ -170,12 +246,13 @@ class DetallesCarritoView extends Component {
 }
 const mapStateToProps = (state) => ({
   carrito: state.carritoReducer.carritoReducer.carrito,
+  loadingGlobal: state.carritoReducer.carritoReducer.loadingGlobal,
 });
 
 const mapDispatchToProps = {
   backProductListView,
   detalleCarrito,
-  removeProductToCart,
+  editCart,
 };
 
 export default connect(

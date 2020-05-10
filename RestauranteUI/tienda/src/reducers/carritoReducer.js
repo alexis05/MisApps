@@ -1,11 +1,11 @@
 import {
-  REQUEST_ERROR_ADD_TO_CART,
-  REQUEST_SEND_ADD_TO_CART,
   ADD_CART,
-  REMOVE_CART,
+  EDIT_CART,
   VIEW_CART_DETAILS,
   DETALLE_CARRITO,
   BACK_ALL_PRODUCTS,
+  REQUEST_ERROR_ADD_TO_CART,
+  REQUEST_SEND_ADD_TO_CART,
 } from "../types/tiendaTypes";
 import { Views } from "../constantes/index";
 const initialState = {
@@ -59,13 +59,13 @@ export default (state = initialState, action) => {
         },
       };
 
-    case REMOVE_CART:
+    case EDIT_CART:
       return {
         ...state,
         loadingGlobal: false,
         error: "",
         carrito: {
-          accion: "remover",
+          accion: "",
           _id: action.payload.carrito._id,
           productos: action.payload.carrito.productos,
           productosDetallado: action.payload.carrito.productosDetallado,
@@ -78,9 +78,9 @@ export default (state = initialState, action) => {
       return { ...state, error: action.payload, loadingGlobal: false };
 
     case VIEW_CART_DETAILS:
-      return { ...state, viewActive: Views.DETAILSCART };
+      return { ...state, viewActive: Views.DETAILSCART, loadingGlobal: false };
     case BACK_ALL_PRODUCTS:
-      return { ...state, viewActive: Views.PRODUCTLIST };
+      return { ...state, viewActive: Views.PRODUCTLIST, loadingGlobal: false };
 
     default:
       return state;
