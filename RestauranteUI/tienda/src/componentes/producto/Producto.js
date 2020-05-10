@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import "./producto.css";
 import { addToCart } from "../../actions/Carrito";
 
+
 const mostrarPrecioConDosDecimales = (precio) => {
   return (Math.round(precio * 100) / 100).toFixed(2);
 };
@@ -68,7 +69,8 @@ const mostrarFecha = (time) => {
 
 // const Producto = (props) => {
 class Producto extends Component {
-  onClickAddTocart = () => {
+  onClickAddTocart = (e) => {
+    e.preventDefault();
     let newProduct = {
       cantidad: 1,
       restauranteId: this.props.restaurante,
@@ -76,6 +78,7 @@ class Producto extends Component {
     };
     let body = this.props.carrito;
     body.accion = "agregar";
+    body.productos = [];
     body.productos = [];
     body.productos.push(newProduct);
     this.props.addToCart(body);

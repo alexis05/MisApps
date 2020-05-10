@@ -16,7 +16,6 @@ class DetalleProducto extends Component {
   componentDidMount() {
     this.obtenerDetalleProducto(this.props.match.params.productoId);
   }
-
   obtenerDetalleProducto = async productoId => {
     try {
       this.props.traerDetalleProducto(productoId);
@@ -30,7 +29,7 @@ class DetalleProducto extends Component {
       return <SpinnerGlobal mostrar={this.props.loadingGlobal} />;
     }
     return (
-      <div>
+      <div className="h-100 container">
         <ProductoDetallado></ProductoDetallado>
       </div>
     );

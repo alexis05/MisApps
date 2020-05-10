@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {Views} from "../../constantes/index";
 import Producto from "./Producto";
@@ -22,20 +23,24 @@ class ListaProducto extends Component {
                         className="card-deck mb-2 pb-2 pt-3 px-0 mx-0 col-auto"
                         key={index}
                       >
-                        <Producto
-                          nombre={producto.nombre}
-                          precio={producto.precio}
-                          detalle={producto.detalle}
-                          creado={producto.registrado}
-                          restaurante={producto.restaurante}
-                          _id={producto._id}
-                        />
+                          <Link to={`/Home/Producto/${producto._id}`} className="nav-link px-0">
+
+                            <Producto
+                              nombre={producto.nombre}
+                              precio={producto.precio}
+                              detalle={producto.detalle}
+                              creado={producto.registrado}
+                              restaurante={producto.restaurante}
+                              _id={producto._id}
+                            />
+                          </Link>
                       </div>
+                     
                     ))}
                   </div>
               </div>
             
-              <CarritoBar /> 
+              <CarritoBar className="d-md-none" onlyButton={false} /> 
             </div>
           : ""}
           

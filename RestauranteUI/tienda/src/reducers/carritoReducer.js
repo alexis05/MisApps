@@ -7,11 +7,12 @@ import {
   REQUEST_ERROR_ADD_TO_CART,
   REQUEST_SEND_ADD_TO_CART,
 } from "../types/tiendaTypes";
-import { Views } from "../constantes/index";
+import { Views,tengoEsteProductoEnElCarrito } from "../constantes/index";
 const initialState = {
   error: "",
   loadingGlobal: false,
   viewActive: Views.PRODUCTLIST,
+  detalleProducto:{},
   carrito: {
     _id: "",
     accion: "",
@@ -29,7 +30,7 @@ export default (state = initialState, action) => {
         ...state,
         loadingGlobal: true,
       };
-    case DETALLE_CARRITO:
+    case DETALLE_CARRITO:    
       return {
         ...state,
         loadingGlobal: false,
@@ -45,6 +46,7 @@ export default (state = initialState, action) => {
       };
 
     case ADD_CART:
+      console.log("Producto ",action.payload);
       return {
         ...state,
         loadingGlobal: false,
