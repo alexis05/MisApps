@@ -16,7 +16,6 @@ class DetalleProducto extends Component {
   componentDidMount() {
     this.obtenerDetalleProducto(this.props.match.params.productoId);
   }
-
   obtenerDetalleProducto = async productoId => {
     try {
       this.props.traerDetalleProducto(productoId);

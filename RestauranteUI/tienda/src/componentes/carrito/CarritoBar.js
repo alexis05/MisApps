@@ -11,6 +11,7 @@ import {
 class CarritoBar extends Component {
   state = {
     loading: false,
+    showButtonOnlyViewCart: this.props.onlyButton
   };
   componentDidMount() {
     this.obtenerDetalleCarrito();
@@ -34,8 +35,27 @@ class CarritoBar extends Component {
     if (this.state.loading) {
       return <div>cargando...</div>;
     }
+
+    if(this.state.showButtonOnlyViewCart){
+      return (
+              <Button
+                className="btn form-control btn-view-cart"
+                onClick={this.onClickViewCart}
+              >
+                <span>
+                  ({" "}
+                  {this.props.carrito.totalDeProductos
+                    ? this.props.carrito.totalDeProductos
+                    : "0"}{" "}
+                  )
+                </span>
+                <img src={ShopingCart} alt="Cart" />
+              </Button>
+      );
+    }
+
     return (
-      <div className="col-sm-12 container-cart-list">
+      <div className="col-sm-12 container-cart-list d-md-none">
         <Row className="justify-content-center">
           <Col sm={12} className="text-center">
             <div className="fixed-bottom">

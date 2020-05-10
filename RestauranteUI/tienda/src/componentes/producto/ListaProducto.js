@@ -40,7 +40,7 @@ class ListaProducto extends Component {
                   </div>
               </div>
             
-              <CarritoBar /> 
+              <CarritoBar className="d-md-none" onlyButton={false} /> 
             </div>
           : ""}
           

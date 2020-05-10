@@ -109,15 +109,23 @@
 
 .container-detail-product .btn-add-card{
   border-radius: 8px;
-  background-color: #3750b5;
+  background-color: #4cb86a !important;
+  border:none;
+  height:38px;
   width: 100%;
 }
-.container-detail-product .btn-back{
+
+.container-detail-product .btn-add-card:focus{
+
+  background-color: #389452 !important;
+}
+.container-detail-product .btn-back,.container-detail-product .btn-back:focus{
   /* border-radius: 50%; */
   border-radius: 8px;
-  background-color: transparent;
+  background-color: transparent !important;
   border: 0px solid #ccc;
   color: black;
+  border:none !important;
 }
 .container-detail-product .btn-plus{
   /* background-color: #4cb86a; */
@@ -175,4 +183,10 @@
     
       position: relative;
   }
+}
+
+.btn-view-cart{
+  border-radius: 8px !important;
+  background-color: #3750b5 !important;
+  width: 100%;
 }
