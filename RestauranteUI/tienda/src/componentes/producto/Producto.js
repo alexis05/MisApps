@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import "./producto.css";
 import { addToCart } from "../../actions/Carrito";
 
+
 const mostrarPrecioConDosDecimales = (precio) => {
   return (Math.round(precio * 100) / 100).toFixed(2);
 };
