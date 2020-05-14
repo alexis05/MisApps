@@ -13,6 +13,10 @@ import "./carritoDetalle.css";
 import Spinner from "../../styleGlobal/Spinner";
 
 class DetallesCarritoView extends Component {
+  state = {
+    mostrarInputs: false,
+  };
+
   onBlurCantidad = (element) => {
     const valor = element.target.value;
     if (valor < 1) return;
@@ -87,6 +91,17 @@ class DetallesCarritoView extends Component {
   onBackProductList = () => {
     this.props.backProductListView();
   };
+  onHiddenInputsToPedido = () => {
+    this.setState({ mostrarInputs: false });
+  };
+
+  onDisplayInputsToPedido = () => {
+    this.setState({ mostrarInputs: true });
+  };
+
+  onDisplayCheckout = () => {
+    this.setState({ mostrarInputs: false });
+  };
 
   componentDidMount() {
     this.obtenerDetalleCarrito();
@@ -106,47 +121,76 @@ class DetallesCarritoView extends Component {
             <Row>
               <div className="col-md-4 order-md-2 mb-4">
                 <h4 className="d-flex justify-content-between align-items-center mb-3">
-                  <span className="text-muted">Detalle</span>
+                  <span className="text-muted">Carrito de compras</span>
                   <span className="badge badge-secondary badge-pill">
                     {this.props.carrito.totalDeProductos}
                   </span>
                 </h4>
-                {this.props.carrito.productosDetallado ? (
-                  <ul className="list-group mb-3">
-                    {this.props.carrito.productosDetallado.map(
-                      (producto, index) => (
-                        <li
-                          key={index}
-                          className="list-group-item d-flex justify-content-between lh-condensed"
-                        >
-                          <div className="text-left">
-                            <div className="ml-0 pl-0 my-0">
-                              {producto.nombre}
-                            </div>
-                            <small className="text-muted">
-                              {producto.detalle}
-                            </small>
-                          </div>
-                          <span className="text-muted">${producto.total}</span>
-                        </li>
-                      )
-                    )}
-
-                    <li className="list-group-item d-flex justify-content-between">
-                      <span>Total</span>
-                      <strong>${this.props.carrito.precioTotal}</strong>
-                    </li>
-                  </ul>
-                ) : (
-                  <Spinner></Spinner>
-                )}
+                <ul className="list-group mb-3">
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>Costo de envio</span>
+                    <strong>$10.00</strong>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>SubTotal</span>
+                    <strong>${this.props.carrito.precioTotal}</strong>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>Total</span>
+                    <strong>${this.props.carrito.precioTotal}</strong>
+                  </li>
+                </ul>
 
                 <form className="card p-2">
                   <div className="input-group text-center justify-content-center">
                     <div className="input-group-append">
-                      <button type="submit" className="btn btn-success">
-                        Comprar
-                      </button>
+                      {this.state.mostrarInputs ? (
+                        <div className="col-12">
+                          <div className="mb-3">
+                            <label htmlFor="direccion">
+                              Direccion de envio
+                            </label>
+                            <textarea
+                              className="form-control"
+                              id="direccion"
+                              placeholder="1234 David Chiriqui"
+                            ></textarea>
+                            <div className="invalid-feedback">
+                              Por favor introduzca su direccion de envio.
+                            </div>
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="nota">Nota del pedido</label>
+                            <textarea
+                              className="form-control"
+                              id="nota"
+                              placeholder="Puedes ingresar una nota para la tienda"
+                            ></textarea>
+                            <div className="invalid-feedback">
+                              Ingrese una nota del pedido para la tienda.
+                            </div>
+                          </div>
+                          <Button
+                            className="btn btn-danger"
+                            onClick={this.onHiddenInputsToPedido}
+                          >
+                            Cancelar
+                          </Button>{" "}
+                          <Button
+                            className="btn btn-success"
+                            onClick={this.onDisplayInputsToPedido}
+                          >
+                            Continuar
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          className="btn btn-success"
+                          onClick={this.onDisplayInputsToPedido}
+                        >
+                          Continuar
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </form>

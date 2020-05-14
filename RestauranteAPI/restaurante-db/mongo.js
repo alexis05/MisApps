@@ -245,6 +245,14 @@ class MongoLib {
       .then((result) => result.insertedId);
   }
 
+  createPedido(pedido) {
+    return this.connect()
+      .then((db) => {
+        return db.collection("pedido").insertOne(pedido);
+      })
+      .then((result) => result.insertedId);
+  }
+
   createCarrito(carrito) {
     return this.connect()
       .then((db) => {
