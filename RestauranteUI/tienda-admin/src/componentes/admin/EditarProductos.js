@@ -4,23 +4,30 @@ import Cookies from "universal-cookie";
 import { Redirect } from "react-router-dom";
 import Spinner from "../Spinner";
 
-class NuevoProducto extends React.Component {
+class EditarProductos extends React.Component {
   state = {
     loading: false,
     error: null,
-    data: undefined,
+    Item: "",
+    nombre: "",
+    precio: "",
+    detalle: "",
+    disponible: "",
+    foto: "",
     usaurioId: undefined,
     restaurante: undefined,
     redirectProductoList: false,
-    foto:""
+    value: {},
   };
 
   componentDidMount() {
     const cookies = new Cookies();
     const restauranteId = cookies.get("rt");
-    
-    this.setState({ restauranteId: restauranteId });
+    this.setState({
+      restauranteId: restauranteId,
+    });
     this.fechDataUsuarioLogueado();
+    this.GetDataProducto();
   }
 
   fechDataUsuarioLogueado = async () => {
@@ -34,6 +41,7 @@ class NuevoProducto extends React.Component {
           value: { ...this.state.value, registrado_por: res.data.data._id },
         });
       });
+      console.log("Llamada usuarios");
     } catch (error) {
       this.setState({ loading: false, error: error });
     }
@@ -50,6 +58,12 @@ class NuevoProducto extends React.Component {
     console.log(this.state.value);
   };
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    this.UpdateDataProducto(this.state.value);
+  };
+
   handleCheckBox = (e) => {
     this.setState({
       value: {
@@ -58,22 +72,30 @@ class NuevoProducto extends React.Component {
         restaurante: this.state.restauranteId,
       },
     });
-    
-  };
-  handleSubmit = (e) => {
-    e.preventDefault();
+
     console.log(this.state.value);
-    this.crearProducto(this.state.value);
   };
 
-  crearProducto = async (producto) => {
-    this.setState({ loading: true, error: null });
+  GetDataProducto = async (e) => {
+    this.setState({
+      loading: true,
+      error: null,
+    });
     try {
-      await API.post(`productoapi/producto`, producto).then((res) => {
+      let getproductid = this.props.match.params.productId;
+
+      await API.get(`productoapi/producto/${getproductid}`).then((res) => {
+        console.log(res.data, "Data Api");
+
         this.setState({
           loading: false,
-          data: res.data,
-          redirectProductoList: true,
+          value: {
+            nombre: res.data.data.nombre,
+            detalle: res.data.data.detalle,
+            precio: res.data.data.precio,
+            disponible: res.data.data.disponible,
+            foto: res.data.data.foto,
+          },
         });
       });
     } catch (error) {
@@ -81,22 +103,48 @@ class NuevoProducto extends React.Component {
     }
   };
 
+  UpdateDataProducto = async (producto) => {
+    this.setState({
+      loading: true,
+      error: null,
+    });
+    try {
+      let getproductid = this.props.match.params.productId;
+
+      await API.put(`productoapi/producto/${getproductid}`, producto).then(
+        (res) => {
+          this.setState({
+            loading: false,
+            redirectProductoList: true,
+          });
+        }
+      );
+    } catch (error) {
+      this.setState({ loading: false, error: error });
+      console.log("Error API");
+    }
+  };
+
   render() {
+    if (this.state.loading == true) {
+      return "Loding ..";
+    }
     if (this.state.redirectProductoList) {
       return <Redirect to="/Admin/Productos" />;
     }
     return (
-      <div className="container">
-        <h2>Crear Producto</h2>
+      <div className="col-md-6">
+        <h2>Editando Productos</h2>
 
-        <form onSubmit={this.handleSubmit} autoComplete="off">
+        <form onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <label>Nombre</label>
+            <label>Descripcion</label>
             <input
               className="form-control"
               type="text"
               onChange={this.handleChange}
               name="nombre"
+              value={this.state.value.nombre}
             />
           </div>
 
@@ -105,18 +153,20 @@ class NuevoProducto extends React.Component {
             <input
               className="form-control"
               type="text"
-              onChange={this.handleChange}
               name="precio"
+              value={this.state.value.precio}
+              onChange={this.handleChange}
             />
           </div>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Descripcion Adicional</span>
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <span className="input-group-text">Descripcion Adicional</span>
             </div>
             <textarea
-              class="form-control"
+              className="form-control"
               onChange={this.handleChange}
               name="detalle"
+              value={this.state.value.detalle}
               aria-label="Descripcion Adicional"
             ></textarea>
           </div>
@@ -129,6 +179,7 @@ class NuevoProducto extends React.Component {
               id="disponible"
               onClick={this.handleCheckBox}
               name="disponible"
+              checked={this.state.value.disponible}
             />
           </div>
 
@@ -139,6 +190,7 @@ class NuevoProducto extends React.Component {
               type="bo"
               onChange={this.handleChange}
               name="foto"
+              value={this.state.value.foto}
             />
           </div>
 
@@ -158,11 +210,11 @@ class NuevoProducto extends React.Component {
           ) : (
             <span></span>
           )}
-          <button className="btn btn-primary">Guardar</button>
+          <button className="btn btn-primary">Actualizar</button>
         </form>
       </div>
     );
   }
 }
 
-export default NuevoProducto;
+export default EditarProductos;

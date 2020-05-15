@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import API from "../../API";
 import Cookies from "universal-cookie";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class Productos extends Component {
   state = {
@@ -44,10 +44,6 @@ class Productos extends Component {
     if (this.state.clicCrearProducto) {
       return <Redirect to="/Admin/Producto/Nuevo" />;
     }
-    if (this.state.clickEdit) {
-      
-      return <Redirect to ={{pathname:"/Admin/Producto/Editar",state:{idProducto:this.state.dataeditable._id}}}  />;
-    }
 
     return (
       <main role="main" className="container">
@@ -62,7 +58,7 @@ class Productos extends Component {
         </div>
         <div className="row">
           <div className="table-responsive">
-            <table className="table table-striped table-sm">
+            <table className="table table-striped table-lg">
               <thead>
                 <tr>
                   <th>Nombre</th>
@@ -82,12 +78,10 @@ class Productos extends Component {
                       {producto.disponible ? "Si" : "No"}
                     </td>
                     <td id={producto._id}>
-                      <button
-                        className="btn btn-link"
-                        onClick={() => this.handleClick(producto)}
-                      >
-                        editar
-                      </button>
+                      <Link to={`Productos/${producto._id}/Editar`}>
+                      editar
+                      </Link>
+                   
                     </td>
                   </tr>
                 ))}

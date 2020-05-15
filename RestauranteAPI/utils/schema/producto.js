@@ -14,7 +14,7 @@ const crearProductoSchema = Joi.object({
   disponible: Joi.bool(),
   restaurante: Joi.string(),
   precio: Joi.number().min(1).max(1000000).required(),
-  fotos: Joi.string().required(),
+  fotos: Joi.string(),
   tags: productoTagSchema,
   restaurante: restauranteIdSchema,
 });
