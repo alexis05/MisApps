@@ -6,7 +6,7 @@ import HomeBO from "./componentes/admin/HomeBO";
 import MenuBO from "./componentes/admin/menu/MenuBO";
 import Dasboard from "./componentes/admin/Dashboard";
 import Productos from "./componentes/admin/Productos";
-
+import EditarProductos from "./componentes/admin/EditarProductos";
 class App extends Component {
   render() {
     return (
@@ -21,6 +21,11 @@ class App extends Component {
                 exact
                 path="/Admin/Producto/Nuevo"
                 component={NuevoProducto}
+              />
+               <Route
+                exact
+                path="/Admin/Producto/Editar"
+                component={EditarProductos}
               />
             </MenuBO>
           </HomeBO>

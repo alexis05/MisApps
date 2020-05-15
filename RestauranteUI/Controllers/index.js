@@ -34,6 +34,7 @@ function PublicController(app) {
         auth.sign(
           { ...json, exp: Math.floor(Date.now() / 1000) + 60 * 720 },
           function (err, token) {
+            console.log(token);
             res.status(200).json({
               mensaje: "OK",
               token: token,

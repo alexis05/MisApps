@@ -57,6 +57,9 @@ class NuevoProducto extends React.Component {
         restaurante: this.state.restauranteId,
       },
     });
+    console.log(this.state.value);
+    console.log(e.target.name);
+    console.log(this.state.restauranteId);
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -107,15 +110,16 @@ class NuevoProducto extends React.Component {
               name="precio"
             />
           </div>
-
-          <div className="form-group">
-            <label>Detalle</label>
-            <input
-              className="form-control"
-              type="textarea"
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Descripcion Adicional</span>
+            </div>
+            <textarea
+              class="form-control"
               onChange={this.handleChange}
               name="detalle"
-            />
+              aria-label="Descripcion Adicional"
+            ></textarea>
           </div>
 
           <div className="form-group">
@@ -133,9 +137,9 @@ class NuevoProducto extends React.Component {
             <label>Fotos</label>
             <input
               className="form-control"
-              type="text"
+              type="bo"
               onChange={this.handleChange}
-              name="fotos"
+              name="foto"
             />
           </div>
 
