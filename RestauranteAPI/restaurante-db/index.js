@@ -109,6 +109,7 @@ class ServicioAPI {
     all[0].productos.map((prod) => {
       all[0].productosDetallado.map((prodDetalle, index) => {
         if (prod.productoId === prodDetalle._id.toString()) {
+          all[0].productosDetallado[index].estado = "pendiente";
           all[0].productosDetallado[index].cantidad = prod.cantidad;
           all[0].productosDetallado[index].total = (
             Number(prod.cantidad) * Number(prodDetalle.precio)

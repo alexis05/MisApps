@@ -5,7 +5,10 @@ import {
   backProductListView,
   detalleCarrito,
   editCart,
+  pedidoRealizado,
 } from "../../actions/Carrito";
+import { Redirect } from "react-router-dom";
+import { hacerPedido } from "../../actions/Pedido";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
@@ -15,6 +18,7 @@ import Spinner from "../../styleGlobal/Spinner";
 class DetallesCarritoView extends Component {
   state = {
     mostrarInputs: false,
+    pedido: undefined,
   };
 
   onBlurCantidad = (element) => {
@@ -103,17 +107,50 @@ class DetallesCarritoView extends Component {
     this.setState({ mostrarInputs: false });
   };
 
+  onBlur = (e) => {
+    this.setState({
+      pedido: {
+        ...this.state.pedido,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      pedido: {
+        ...this.state.pedido,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  onHacerPedido = () => {
+    try {
+      this.props.hacerPedido(this.state.pedido);
+      this.setState({ loading: false });
+    } catch (error) {
+      this.setState({ loading: false, error: error.message });
+      console.log("Error: ", error.message);
+    }
+  };
+
   componentDidMount() {
     this.obtenerDetalleCarrito();
   }
   render() {
-    if (this.props.carrito.productos.length === 0)
+    if (this.props.idPedidoRealizado.length > 0) {
+      return <Redirect to={`/Home/Pedido/${this.props.idPedidoRealizado}`} />;
+    }
+    if (this.state.loading) return <Spinner></Spinner>;
+    if (this.props.carrito.productos.length === 0) {
       return (
         <div>
-          <p>No hay productos en el carrito</p>
+          <p>No hay productos en el carrito.</p>
           <Button onClick={this.onBackProductList}>{"<-"} Regresar</Button>
         </div>
       );
+    }
     return (
       <div className="col-sm-12 details-cart-view ">
         <Row className="justify-content-center">
@@ -147,12 +184,15 @@ class DetallesCarritoView extends Component {
                       {this.state.mostrarInputs ? (
                         <div className="col-12">
                           <div className="mb-3">
-                            <label htmlFor="direccion">
+                            <label htmlFor="direccionEnvio">
                               Direccion de envio
                             </label>
                             <textarea
+                              name="direccionEnvio"
+                              onBlur={this.onBlur}
+                              onChange={this.handleChange}
                               className="form-control"
-                              id="direccion"
+                              id="direccionEnvio"
                               placeholder="1234 David Chiriqui"
                             ></textarea>
                             <div className="invalid-feedback">
@@ -162,6 +202,9 @@ class DetallesCarritoView extends Component {
                           <div className="mb-3">
                             <label htmlFor="nota">Nota del pedido</label>
                             <textarea
+                              name="nota"
+                              onBlur={this.onBlur}
+                              onChange={this.handleChange}
                               className="form-control"
                               id="nota"
                               placeholder="Puedes ingresar una nota para la tienda"
@@ -178,9 +221,9 @@ class DetallesCarritoView extends Component {
                           </Button>{" "}
                           <Button
                             className="btn btn-success"
-                            onClick={this.onDisplayInputsToPedido}
+                            onClick={this.onHacerPedido}
                           >
-                            Continuar
+                            Comprar
                           </Button>
                         </div>
                       ) : (
@@ -291,12 +334,15 @@ class DetallesCarritoView extends Component {
 const mapStateToProps = (state) => ({
   carrito: state.carritoReducer.carritoReducer.carrito,
   loadingGlobal: state.carritoReducer.carritoReducer.loadingGlobal,
+  idPedidoRealizado: state.carritoReducer.pedidoReducer.idPedidoRealizado,
 });
 
 const mapDispatchToProps = {
   backProductListView,
   detalleCarrito,
   editCart,
+  hacerPedido,
+  pedidoRealizado,
 };
 
 export default connect(

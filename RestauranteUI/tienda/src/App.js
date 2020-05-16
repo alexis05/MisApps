@@ -5,8 +5,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Tienda from "./componentes/Tienda";
 import Login from "./componentes/login";
 import CrearRestaurante from "./componentes/restaurante/CrearRestaurante";
- import ProductoDetallado from "./componentes/productoDetalle/DetalleProducto";
+import ProductoDetallado from "./componentes/productoDetalle/DetalleProducto";
 import MenuSuperior from "./template/menu/menuSuperior";
+import PedidoDetalle from "./componentes/pedido/PedidoDetalle";
 
 const App = () => (
   <Provider store={store}>
@@ -16,6 +17,11 @@ const App = () => (
         <Route exact path="/Nueva/Tienda" component={CrearRestaurante} />
         <MenuSuperior>
           <Route exact path="/Home" component={Tienda} />
+          <Route
+            exact
+            path="/Home/Pedido/:pedidoId"
+            component={PedidoDetalle}
+          />
           <Route
             exact
             path="/Home/Producto/:productoId"

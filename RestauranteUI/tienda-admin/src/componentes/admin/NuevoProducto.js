@@ -46,7 +46,6 @@ class NuevoProducto extends React.Component {
         restaurante: this.state.restauranteId,
       },
     });
-    console.log(this.state.value);
   };
 
   handleCheckBox = (e) => {
