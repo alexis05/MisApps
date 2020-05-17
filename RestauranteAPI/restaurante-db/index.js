@@ -58,6 +58,15 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getPedidosPorUsuarioId({ usuarioId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorUsuarioId(
+      usuarioId,
+      skip,
+      limit
+    );
+    return all || [];
+  }
+
   async carritoDetallado({ carritoId }) {
     const all = await this.mongoDB.carritoDetallado(carritoId);
     return all || [];
@@ -92,6 +101,54 @@ class ServicioAPI {
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;
+  }
+
+  async createPedido({ pedido }) {
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      pedido.usuarioId
+    );
+    if (!all[0]) return [];
+
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          delete all[0].productosDetallado[index].activo;
+          delete all[0].productosDetallado[index].disponible;
+          all[0].productosDetallado[index].estado = "pendiente";
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    let pedidoACrear = {
+      usuarioId: pedido.usuarioId,
+      estado: "activo",
+      fechaPedido: new Date(),
+      direccionEnvio: pedido.direccionEnvio,
+      nota: pedido.nota,
+      precioTotal: costoTotal.toFixed(2),
+      productos: all[0].productosDetallado,
+    };
+
+    const crearPedido = await this.mongoDB.createPedido(pedidoACrear);
+    if (crearPedido) {
+      const item = {
+        productos: [],
+        usuarioId: pedido.usuarioId,
+      };
+      const itemId = all[0]._id;
+      await this.mongoDB.update("carrito", itemId, item);
+    }
+    return crearPedido;
   }
 
   async createCarrito({ carrito }) {
