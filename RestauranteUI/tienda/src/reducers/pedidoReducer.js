@@ -2,12 +2,14 @@ import {
   HACER_PEDIDO,
   REQUEST_ENVIADO_HACER_PEDIDO,
   REQUEST_ERROR_HACER_PEDIDO,
+  OBTENER_PEDIDO,
 } from "../types/tiendaTypes";
 
 const initialState = {
   error: "",
   loadingGlobal: false,
   idPedidoRealizado: "",
+  pedido: "",
 };
 
 export default (state = initialState, action) => {
@@ -16,6 +18,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loadingGlobal: true,
+      };
+
+    case OBTENER_PEDIDO:
+      return {
+        ...state,
+        loadingGlobal: false,
+        error: "",
+        pedido: action.payload.idPedido,
       };
 
     case HACER_PEDIDO:
