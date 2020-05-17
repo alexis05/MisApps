@@ -121,7 +121,7 @@ class ProductoDetallado extends Component {
             {this.state.howManyInTheCar  > 0 ?
             <Row className="justify-content-center py-3 py-md-2 px-3">
               <Col xs={12} sm={12} md={"auto"} className="text-center container-quantity-info py-3">
-                  <span className="label-info">Tienes {this.state.howManyInTheCar} unidades en el carrito</span>
+                  <span className="label-info">Tienes {this.state.howManyInTheCar} {this.state.howManyInTheCar > 1 ? "unidades" :""} en el carrito</span>
               </Col>
             </Row>
             :""}
