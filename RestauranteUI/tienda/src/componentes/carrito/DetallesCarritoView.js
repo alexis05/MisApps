@@ -5,9 +5,7 @@ import {
   backProductListView,
   detalleCarrito,
   editCart,
-  pedidoRealizado,
 } from "../../actions/Carrito";
-import { Redirect } from "react-router-dom";
 import { hacerPedido } from "../../actions/Pedido";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
@@ -129,6 +127,7 @@ class DetallesCarritoView extends Component {
     try {
       this.props.hacerPedido(this.state.pedido);
       this.setState({ loading: false });
+      this.props.backProductListView();
     } catch (error) {
       this.setState({ loading: false, error: error.message });
       console.log("Error: ", error.message);
@@ -139,9 +138,6 @@ class DetallesCarritoView extends Component {
     this.obtenerDetalleCarrito();
   }
   render() {
-    if (this.props.idPedidoRealizado.length > 0) {
-      return <Redirect to={`/Home/Pedido/${this.props.idPedidoRealizado}`} />;
-    }
     if (this.state.loading) return <Spinner></Spinner>;
     if (this.props.carrito.productos.length === 0) {
       return (
@@ -334,7 +330,6 @@ class DetallesCarritoView extends Component {
 const mapStateToProps = (state) => ({
   carrito: state.carritoReducer.carritoReducer.carrito,
   loadingGlobal: state.carritoReducer.carritoReducer.loadingGlobal,
-  idPedidoRealizado: state.carritoReducer.pedidoReducer.idPedidoRealizado,
 });
 
 const mapDispatchToProps = {
@@ -342,7 +337,6 @@ const mapDispatchToProps = {
   detalleCarrito,
   editCart,
   hacerPedido,
-  pedidoRealizado,
 };
 
 export default connect(

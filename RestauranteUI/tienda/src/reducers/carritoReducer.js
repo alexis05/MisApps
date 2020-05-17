@@ -7,7 +7,7 @@ import {
   REQUEST_ERROR_ADD_TO_CART,
   REQUEST_SEND_ADD_TO_CART,
 } from "../types/tiendaTypes";
-import { Views, tengoEsteProductoEnElCarrito } from "../constantes/index";
+import { Views } from "../constantes/index";
 const initialState = {
   error: "",
   loadingGlobal: false,
