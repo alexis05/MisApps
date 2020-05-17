@@ -24,12 +24,14 @@ function pedidoAPI(app) {
     }
   });
 
-  router.get("/porusuario/:itemId", async function (req, res, next) {
-    const { itemId } = req.params;
+  router.get("/porusuario/:usuarioId", async function (req, res, next) {
+    const { usuarioId } = req.params;
+    let limit = req.query.limit;
+    let skip = req.query.skip;
     try {
       // TODO: por hacer el servicio
       pedidoServicio
-        .getItem({ itemId })
+        .getPedidosPorUsuarioId({ usuarioId, skip, limit })
         .then((data) => {
           res.status(200).json({
             data: data,
