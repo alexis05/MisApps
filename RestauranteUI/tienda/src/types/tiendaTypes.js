@@ -16,3 +16,9 @@ export const TRAER_DETALLE_PRODUCTO = "obtener_detalle_producto";
 
 export const EDIT_CART = "edit_cart";
 export const DETALLE_CARRITO = "detalle_carrito";
+
+export const REQUEST_ENVIADO_HACER_PEDIDO = "request_enviado_hacer_pedido";
+export const REQUEST_ERROR_HACER_PEDIDO = "request_error_hacer_pedido";
+export const HACER_PEDIDO = "hacer_pedido";
+export const PEDIDO_REALIZADO = "pedido_realizado";
+export const OBTENER_PEDIDO = "obtener_pedido";

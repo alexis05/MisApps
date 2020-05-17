@@ -7,6 +7,7 @@ import {
   BACK_ALL_PRODUCTS,
   DETALLE_CARRITO,
   EDIT_CART,
+  PEDIDO_REALIZADO,
 } from "../types/tiendaTypes";
 
 export const addToCart = (product) => async (dispatch) => {
@@ -97,5 +98,10 @@ export const viewCart = () => (dispatch) => {
 export const backProductListView = () => (dispatch) => {
   dispatch({
     type: BACK_ALL_PRODUCTS,
+  });
+};
+export const pedidoRealizado = () => (dispatch) => {
+  dispatch({
+    type: PEDIDO_REALIZADO,
   });
 };

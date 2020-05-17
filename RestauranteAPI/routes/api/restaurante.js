@@ -120,6 +120,7 @@ function restaurantesAPI(app) {
                 creado,
                 activo,
                 eslogan,
+                direccion,
                 owner: data,
               };
               var item = restauranteData;

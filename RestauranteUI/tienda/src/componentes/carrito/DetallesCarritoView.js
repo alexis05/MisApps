@@ -5,7 +5,10 @@ import {
   backProductListView,
   detalleCarrito,
   editCart,
+  pedidoRealizado,
 } from "../../actions/Carrito";
+import { Redirect } from "react-router-dom";
+import { hacerPedido } from "../../actions/Pedido";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
@@ -13,6 +16,11 @@ import "./carritoDetalle.css";
 import Spinner from "../../styleGlobal/Spinner";
 
 class DetallesCarritoView extends Component {
+  state = {
+    mostrarInputs: false,
+    pedido: undefined,
+  };
+
   onBlurCantidad = (element) => {
     const valor = element.target.value;
     if (valor < 1) return;
@@ -87,18 +95,62 @@ class DetallesCarritoView extends Component {
   onBackProductList = () => {
     this.props.backProductListView();
   };
+  onHiddenInputsToPedido = () => {
+    this.setState({ mostrarInputs: false });
+  };
+
+  onDisplayInputsToPedido = () => {
+    this.setState({ mostrarInputs: true });
+  };
+
+  onDisplayCheckout = () => {
+    this.setState({ mostrarInputs: false });
+  };
+
+  onBlur = (e) => {
+    this.setState({
+      pedido: {
+        ...this.state.pedido,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      pedido: {
+        ...this.state.pedido,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  onHacerPedido = () => {
+    try {
+      this.props.hacerPedido(this.state.pedido);
+      this.setState({ loading: false });
+    } catch (error) {
+      this.setState({ loading: false, error: error.message });
+      console.log("Error: ", error.message);
+    }
+  };
 
   componentDidMount() {
     this.obtenerDetalleCarrito();
   }
   render() {
-    if (this.props.carrito.productos.length === 0)
+    if (this.props.idPedidoRealizado.length > 0) {
+      return <Redirect to={`/Home/Pedido/${this.props.idPedidoRealizado}`} />;
+    }
+    if (this.state.loading) return <Spinner></Spinner>;
+    if (this.props.carrito.productos.length === 0) {
       return (
         <div>
-          <p>No hay productos en el carrito</p>
+          <p>No hay productos en el carrito.</p>
           <Button onClick={this.onBackProductList}>{"<-"} Regresar</Button>
         </div>
       );
+    }
     return (
       <div className="col-sm-12 details-cart-view ">
         <Row className="justify-content-center">
@@ -106,47 +158,82 @@ class DetallesCarritoView extends Component {
             <Row>
               <div className="col-md-4 order-md-2 mb-4">
                 <h4 className="d-flex justify-content-between align-items-center mb-3">
-                  <span className="text-muted">Detalle</span>
+                  <span className="text-muted">Carrito de compras</span>
                   <span className="badge badge-secondary badge-pill">
                     {this.props.carrito.totalDeProductos}
                   </span>
                 </h4>
-                {this.props.carrito.productosDetallado ? (
-                  <ul className="list-group mb-3">
-                    {this.props.carrito.productosDetallado.map(
-                      (producto, index) => (
-                        <li
-                          key={index}
-                          className="list-group-item d-flex justify-content-between lh-condensed"
-                        >
-                          <div className="text-left">
-                            <div className="ml-0 pl-0 my-0">
-                              {producto.nombre}
-                            </div>
-                            <small className="text-muted">
-                              {producto.detalle}
-                            </small>
-                          </div>
-                          <span className="text-muted">${producto.total}</span>
-                        </li>
-                      )
-                    )}
-
-                    <li className="list-group-item d-flex justify-content-between">
-                      <span>Total</span>
-                      <strong>${this.props.carrito.precioTotal}</strong>
-                    </li>
-                  </ul>
-                ) : (
-                  <Spinner></Spinner>
-                )}
+                <ul className="list-group mb-3">
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>Costo de envio</span>
+                    <strong>$10.00</strong>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>SubTotal</span>
+                    <strong>${this.props.carrito.precioTotal}</strong>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between">
+                    <span>Total</span>
+                    <strong>${this.props.carrito.precioTotal}</strong>
+                  </li>
+                </ul>
 
                 <form className="card p-2">
                   <div className="input-group text-center justify-content-center">
                     <div className="input-group-append">
-                      <button type="submit" className="btn btn-success">
-                        Comprar
-                      </button>
+                      {this.state.mostrarInputs ? (
+                        <div className="col-12">
+                          <div className="mb-3">
+                            <label htmlFor="direccionEnvio">
+                              Direccion de envio
+                            </label>
+                            <textarea
+                              name="direccionEnvio"
+                              onBlur={this.onBlur}
+                              onChange={this.handleChange}
+                              className="form-control"
+                              id="direccionEnvio"
+                              placeholder="1234 David Chiriqui"
+                            ></textarea>
+                            <div className="invalid-feedback">
+                              Por favor introduzca su direccion de envio.
+                            </div>
+                          </div>
+                          <div className="mb-3">
+                            <label htmlFor="nota">Nota del pedido</label>
+                            <textarea
+                              name="nota"
+                              onBlur={this.onBlur}
+                              onChange={this.handleChange}
+                              className="form-control"
+                              id="nota"
+                              placeholder="Puedes ingresar una nota para la tienda"
+                            ></textarea>
+                            <div className="invalid-feedback">
+                              Ingrese una nota del pedido para la tienda.
+                            </div>
+                          </div>
+                          <Button
+                            className="btn btn-danger"
+                            onClick={this.onHiddenInputsToPedido}
+                          >
+                            Cancelar
+                          </Button>{" "}
+                          <Button
+                            className="btn btn-success"
+                            onClick={this.onHacerPedido}
+                          >
+                            Comprar
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          className="btn btn-success"
+                          onClick={this.onDisplayInputsToPedido}
+                        >
+                          Continuar
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </form>
@@ -247,12 +334,15 @@ class DetallesCarritoView extends Component {
 const mapStateToProps = (state) => ({
   carrito: state.carritoReducer.carritoReducer.carrito,
   loadingGlobal: state.carritoReducer.carritoReducer.loadingGlobal,
+  idPedidoRealizado: state.carritoReducer.pedidoReducer.idPedidoRealizado,
 });
 
 const mapDispatchToProps = {
   backProductListView,
   detalleCarrito,
   editCart,
+  hacerPedido,
+  pedidoRealizado,
 };
 
 export default connect(
