@@ -25,6 +25,7 @@ export default (state = initialState, action) => {
         ...state,
         loadingGlobal: false,
         error: "",
+        idPedidoRealizado: "",
         pedido: action.payload.idPedido,
       };
 

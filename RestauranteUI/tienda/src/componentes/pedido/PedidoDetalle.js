@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { obtenerPedido } from "../../actions/Pedido";
+import { backProductListView } from "../../actions/Carrito";
 import { Row, Col, Button } from "reactstrap";
+import { Redirect } from "react-router-dom";
 
 const mapStateToProps = (reducer) => ({
   pedido: reducer.carritoReducer.pedidoReducer,
@@ -13,11 +15,9 @@ const mapDispatchToProps = {
 
 class PedidoDetalle extends Component {
   componentDidMount() {
-    console.log(this.props);
     this.props.obtenerPedido(this.props.match.params.pedidoId);
   }
   render() {
-    console.log(this.props);
     if (this.props.pedido.pedido._id) {
       return (
         <div className="pt-2 mt-2 col-12">

@@ -5,9 +5,14 @@ import { Views } from "../../constantes/index";
 import Producto from "./Producto";
 import CarritoBar from "../carrito/CarritoBar";
 import DetallesCarritoView from "../carrito/DetallesCarritoView";
+import { Redirect } from "react-router-dom";
 
 class ListaProducto extends Component {
   render() {
+    console.log(this.props);
+    if (this.props.idPedidoRealizado.length > 0) {
+      return <Redirect to={`/Home/Pedido/${this.props.idPedidoRealizado}`} />;
+    }
     return (
       <div>
         {this.props.viewActive === Views.PRODUCTLIST ? (
@@ -54,6 +59,7 @@ class ListaProducto extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  idPedidoRealizado: state.carritoReducer.pedidoReducer.idPedidoRealizado,
   productos: state.productoReducer.productoReducer.productos,
   viewActive: state.carritoReducer.carritoReducer.viewActive,
 });
