@@ -58,6 +58,15 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getPedidosPorUsuarioId({ usuarioId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorUsuarioId(
+      usuarioId,
+      skip,
+      limit
+    );
+    return all || [];
+  }
+
   async carritoDetallado({ carritoId }) {
     const all = await this.mongoDB.carritoDetallado(carritoId);
     return all || [];
@@ -109,6 +118,8 @@ class ServicioAPI {
     all[0].productos.map((prod) => {
       all[0].productosDetallado.map((prodDetalle, index) => {
         if (prod.productoId === prodDetalle._id.toString()) {
+          delete all[0].productosDetallado[index].activo;
+          delete all[0].productosDetallado[index].disponible;
           all[0].productosDetallado[index].estado = "pendiente";
           all[0].productosDetallado[index].cantidad = prod.cantidad;
           all[0].productosDetallado[index].total = (
@@ -119,6 +130,7 @@ class ServicioAPI {
     });
     all[0].precioTotal = costoTotal.toFixed(2);
     let pedidoACrear = {
+      usuarioId: pedido.usuarioId,
       estado: "activo",
       fechaPedido: new Date(),
       direccionEnvio: pedido.direccionEnvio,
