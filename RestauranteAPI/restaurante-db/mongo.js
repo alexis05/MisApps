@@ -237,10 +237,29 @@ class MongoLib {
     });
   }
 
+  getPedidosPorUsuarioId(usuarioId, skip, limit) {
+    return this.connect().then((db) => {
+      return db
+        .collection("pedido")
+        .find({ usuarioId: usuarioId })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {
         return db.collection(collection).insertOne(data);
+      })
+      .then((result) => result.insertedId);
+  }
+
+  createPedido(pedido) {
+    return this.connect()
+      .then((db) => {
+        return db.collection("pedido").insertOne(pedido);
       })
       .then((result) => result.insertedId);
   }

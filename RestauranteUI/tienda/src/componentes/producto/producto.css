@@ -34,6 +34,7 @@
   text-align: left;
   font-size: 14px !important;
   justify-content: start;
+  color: black;
   /* min-height: 32px; */
 }
 .card-text {
@@ -80,9 +81,9 @@
   box-shadow: 0 19px 38px rgba(1, 1, 1, 0.1), 0 0px 0px rgba(1, 1, 1, 1);
 }
 
-.cart-box .btn-view-cart {
-  background-color: #0380f6;
-  color: white;
+.cart-box .btn-view-cart{
+  background-color:#3750b5;
+  color:white;
   font-size: 13px;
   color: white;
   font-size: 13px;
@@ -94,8 +95,8 @@
   border-bottom-left-radius: 10px;
   border-color: transparent;
 }
-.cart-box .btn-view-cart:active {
-  background-color: #0380f6 !important;
+.cart-box .btn-view-cart:active{
+  background-color:#3750b5 !important;
 }
 .cart-box .btn-view-cart img {
   height: 20px;
