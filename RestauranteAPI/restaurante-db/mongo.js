@@ -248,6 +248,17 @@ class MongoLib {
     });
   }
 
+  getPedidosPorRestauranteId(restauranteId, skip, limit) {
+    return this.connect().then((db) => {
+      return db
+        .collection("pedido")
+        .find({ "productos.restaurante": restauranteId })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {

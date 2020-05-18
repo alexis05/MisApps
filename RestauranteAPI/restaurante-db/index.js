@@ -67,6 +67,22 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getPedidosPorRetauranteId({ restauranteId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorRestauranteId(
+      restauranteId,
+      skip,
+      limit
+    );
+    let misProductosPedidos;
+    all.map((p, index) => {
+      all[index].productos = p.productos.filter((producto) => {
+        return producto.restaurante === restauranteId;
+      });
+    });
+
+    return all || [];
+  }
+
   async carritoDetallado({ carritoId }) {
     const all = await this.mongoDB.carritoDetallado(carritoId);
     return all || [];

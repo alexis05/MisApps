@@ -29,7 +29,6 @@ function pedidoAPI(app) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     try {
-      // TODO: por hacer el servicio
       pedidoServicio
         .getPedidosPorUsuarioId({ usuarioId, skip, limit })
         .then((data) => {
@@ -47,9 +46,8 @@ function pedidoAPI(app) {
   router.get("/porrestaurante/:restauranteId", async function (req, res, next) {
     const { restauranteId } = req.params;
     try {
-      // TODO: por hacer el servicio
       pedidoServicio
-        .getProductosDeRestaurante({ restauranteId })
+        .getPedidosPorRetauranteId({ restauranteId })
         .then((data) => {
           res.status(200).json({
             data: data,
