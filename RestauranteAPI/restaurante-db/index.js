@@ -73,7 +73,6 @@ class ServicioAPI {
       skip,
       limit
     );
-    let misProductosPedidos;
     all.map((p, index) => {
       all[index].productos = p.productos.filter((producto) => {
         return producto.restaurante === restauranteId;
@@ -136,7 +135,7 @@ class ServicioAPI {
         if (prod.productoId === prodDetalle._id.toString()) {
           delete all[0].productosDetallado[index].activo;
           delete all[0].productosDetallado[index].disponible;
-          all[0].productosDetallado[index].estado = "pendiente";
+          all[0].productosDetallado[index].estado = "Pendiente";
           all[0].productosDetallado[index].cantidad = prod.cantidad;
           all[0].productosDetallado[index].total = (
             Number(prod.cantidad) * Number(prodDetalle.precio)
@@ -330,6 +329,11 @@ class ServicioAPI {
       itemId,
       item
     );
+    return actualizarItem;
+  }
+
+  async cambiarEstadoPedido({ pedido }) {
+    const actualizarItem = await this.mongoDB.updateEstadoPedido(pedido);
     return actualizarItem;
   }
 

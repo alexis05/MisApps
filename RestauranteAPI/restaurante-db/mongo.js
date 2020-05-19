@@ -283,6 +283,21 @@ class MongoLib {
       .then((result) => result.insertedId);
   }
 
+  updateEstadoPedido(pedido) {
+    return this.connect()
+      .then((db) => {
+        return db.collection("pedido").updateOne(
+          {
+            _id: ObjectId(pedido.pedidoId),
+            "productos._id": ObjectId(pedido.productoId),
+            "productos.restaurante": pedido.restauranteId,
+          },
+          { $set: { "productos.0.estado": pedido.estado } },
+          { upsert: false }
+        );
+      })
+      .then((result) => result.upsertedId || pedido.pedidoId);
+  }
   update(collection, id, data) {
     return this.connect()
       .then((db) => {

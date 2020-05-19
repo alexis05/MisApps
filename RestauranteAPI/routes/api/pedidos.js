@@ -1,6 +1,11 @@
 const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
 const pedidoCollection = "pedido";
+const validation = require("../../utils/middlewares/validationHandlers");
+const {
+  crearPedidoSchema,
+  estadoPedidoSchema,
+} = require("../../utils/schema/pedido");
 
 function pedidoAPI(app) {
   const router = express.Router();
@@ -60,7 +65,11 @@ function pedidoAPI(app) {
     }
   });
 
-  router.post("/", async function (req, res, next) {
+  router.post("/", validation(crearPedidoSchema), async function (
+    req,
+    res,
+    next
+  ) {
     const { body: pedido } = req;
 
     try {
@@ -77,12 +86,27 @@ function pedidoAPI(app) {
       next(err);
     }
   });
+
+  router.put("/", validation(estadoPedidoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: pedido } = req;
+    try {
+      pedidoServicio
+        .cambiarEstadoPedido({ pedido })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
 }
 
 module.exports = pedidoAPI;
-
-// get de pedidos por usuarios
-
-// get de pedidos por restaurante
-
-// post para aprobar o denegar o despachar un pedido
