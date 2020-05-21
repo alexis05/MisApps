@@ -67,6 +67,21 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getPedidosPorRetauranteId({ restauranteId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorRestauranteId(
+      restauranteId,
+      skip,
+      limit
+    );
+    all.map((p, index) => {
+      all[index].productos = p.productos.filter((producto) => {
+        return producto.restaurante === restauranteId;
+      });
+    });
+
+    return all || [];
+  }
+
   async carritoDetallado({ carritoId }) {
     const all = await this.mongoDB.carritoDetallado(carritoId);
     return all || [];
@@ -120,7 +135,7 @@ class ServicioAPI {
         if (prod.productoId === prodDetalle._id.toString()) {
           delete all[0].productosDetallado[index].activo;
           delete all[0].productosDetallado[index].disponible;
-          all[0].productosDetallado[index].estado = "pendiente";
+          all[0].productosDetallado[index].estado = "Pendiente";
           all[0].productosDetallado[index].cantidad = prod.cantidad;
           all[0].productosDetallado[index].total = (
             Number(prod.cantidad) * Number(prodDetalle.precio)
@@ -314,6 +329,11 @@ class ServicioAPI {
       itemId,
       item
     );
+    return actualizarItem;
+  }
+
+  async cambiarEstadoPedido({ pedido }) {
+    const actualizarItem = await this.mongoDB.updateEstadoPedido(pedido);
     return actualizarItem;
   }
 
