@@ -97,8 +97,7 @@ function productosAPI(app) {
 
   router.put(
     "/:itemId",
-    validation({ itemId: productoIdSchema }, "params"),
-    validation(actProductoSchema),
+   
     async function (req, res, next) {
       const { itemId } = req.params;
       const { body: item } = req;

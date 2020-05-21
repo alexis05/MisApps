@@ -14,6 +14,7 @@ const {
 function usuariosAPI(app) {
   const router = express.Router();
   app.use("/api/usuario", router);
+  
   const usuarioServicio = ServicioAPI(usuarioCollection);
 
   router.get("/", async function (req, res, next) {

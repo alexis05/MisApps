@@ -12,6 +12,29 @@ function pedidoAPI(app) {
   app.use("/api/pedido", router);
   const pedidoServicio = ServicioAPI(pedidoCollection);
 
+  router.get("/", async function (req, res, next) {
+    let limit = req.query.limit;
+    let skip = req.query.skip;
+    const { tags } = req.query;
+    try {
+      pedidoServicio
+        .getAll({
+          tags,
+          skip,
+          limit,
+        })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
+
   router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
     try {
@@ -86,6 +109,28 @@ function pedidoAPI(app) {
       next(err);
     }
   });
+
+  router.put(
+    "/:itemId",
+
+    async function (req, res, next) {
+      const { itemId } = req.params;
+      const { body: item } = req;
+      try {
+        pedidoServicio
+          .update({ itemId, item })
+          .then((data) => {
+            res.status(200).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 
   router.put("/", validation(estadoPedidoSchema), async function (
     req,
