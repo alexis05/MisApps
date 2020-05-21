@@ -1,6 +1,5 @@
 const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
-const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
 const productoCollection = "producto";
 
