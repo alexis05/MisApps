@@ -51,7 +51,7 @@ class MenuBO extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="col-2">
+        <div className="col-md-2">
           <nav className="d-none d-md-block bg-light sidebar">
             <div className="sidebar-sticky">
               <ul className="nav flex-column">

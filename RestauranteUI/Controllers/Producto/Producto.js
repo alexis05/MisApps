@@ -106,34 +106,34 @@ function productoAPI(app) {
   });
 
 
-router.put(`/producto/:productoId`, auth(config.auth), guard.check(["admin"]), 
+  router.put(`/producto/:productoId`, auth(config.auth), guard.check(["admin"]), 
 
-function (req,res,next) {
-  const { productoId } = req.params;
-  const { body: producto } = req;
-  if (!producto)
-    return res.status(400).json({
-      mensaje: "json es requerido",
-    });
-  var options = {
-    method: "PUT",
-    uri: `${config.urlLN}/api/producto/${productoId}`,
-    body: {
-      ...producto,
-    },
-    json: true, // Automatically stringifies the body to JSON
-  };
-
-  rp(options)
-    .then(function (parsedBody) {
-      res.setHeader("Content-Type", "application/json");
-      res.status(201).json(parsedBody);
-    })
-    .catch(function (err) {
-      console.log("Ha occurido un error: ", err);
-      next(err);
-    });
-});
+  function (req,res,next) {
+    const { productoId } = req.params;
+    const { body: producto } = req;
+    if (!producto)
+      return res.status(400).json({
+        mensaje: "json es requerido",
+      });
+    var options = {
+      method: "PUT",
+      uri: `${config.urlLN}/api/producto/${productoId}`,
+      body: {
+        ...producto,
+      },
+      json: true, // Automatically stringifies the body to JSON
+    };
+  
+    rp(options)
+      .then(function (parsedBody) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).json(parsedBody);
+      })
+      .catch(function (err) {
+        console.log("Ha occurido un error: ", err);
+        next(err);
+      });
+  });
 }
 
 
