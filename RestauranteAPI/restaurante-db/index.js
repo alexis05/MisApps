@@ -1,6 +1,5 @@
 const MongoLib = require("./mongo");
 
-
 class ServicioAPI {
   constructor(collectionName) {
     this.collection = collectionName;
@@ -15,6 +14,12 @@ class ServicioAPI {
 
   async getItem({ itemId }) {
     const item = await this.mongoDB.get(this.collection, itemId);
+    if (this.collection === "pedido") {
+      const usaurioDetalle = await this.mongoDB.get("usuario", item.usuarioId);
+      delete usaurioDetalle.clave;
+      delete usaurioDetalle.role;
+      item.usuarioDetalle = usaurioDetalle;
+    }
     return item || [];
   }
 
@@ -164,6 +169,9 @@ class ServicioAPI {
       };
       const itemId = all[0]._id;
       await this.mongoDB.update("carrito", itemId, item);
+      let transaccion = await this.mongoDB.countPedidos();
+      pedidoACrear.transaccion = transaccion;
+      await this.mongoDB.update("pedido", crearPedido, pedidoACrear);
     }
     return crearPedido;
   }

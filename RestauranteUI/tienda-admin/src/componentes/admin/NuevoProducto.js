@@ -12,13 +12,13 @@ class NuevoProducto extends React.Component {
     usaurioId: undefined,
     restaurante: undefined,
     redirectProductoList: false,
-    foto:""
+    foto: "",
   };
 
   componentDidMount() {
     const cookies = new Cookies();
     const restauranteId = cookies.get("rt");
-    
+
     this.setState({ restauranteId: restauranteId });
     this.fechDataUsuarioLogueado();
   }
@@ -57,7 +57,6 @@ class NuevoProducto extends React.Component {
         restaurante: this.state.restauranteId,
       },
     });
-    
   };
   handleSubmit = (e) => {
     e.preventDefault();
@@ -135,9 +134,9 @@ class NuevoProducto extends React.Component {
             <label>Fotos</label>
             <input
               className="form-control"
-              type="bo"
+              type="html"
               onChange={this.handleChange}
-              name="foto"
+              name="fotos"
             />
           </div>
 

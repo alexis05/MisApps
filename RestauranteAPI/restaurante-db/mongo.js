@@ -40,6 +40,12 @@ class MongoLib {
     });
   }
 
+  countPedidos() {
+    return this.connect().then((db) => {
+      return db.collection("pedido").count();
+    });
+  }
+
   getAll(collection, query, skip, limit) {
     return this.connect().then((db) => {
       return db

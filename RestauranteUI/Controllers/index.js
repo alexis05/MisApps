@@ -1,5 +1,5 @@
 const express = require("express");
-const URL_API = "http://127.0.0.1:5050";
+const config = require("../config");
 var rp = require("request-promise");
 const auth = require("../auth");
 
@@ -15,7 +15,7 @@ function PublicController(app) {
       });
     var options = {
       method: "POST",
-      uri: `${URL_API}/api/auth`,
+      uri: `${config.urlLN}/api/auth`,
       body: {
         ...user,
       },
