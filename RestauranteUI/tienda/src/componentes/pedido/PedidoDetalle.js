@@ -28,11 +28,6 @@ class PedidoDetalle extends Component {
                   <h3>Pedido #{this.props.pedido.pedido.transaccion}</h3>
                 </Col>
               </Row>
-              <Row>
-                <Col className="text-center justify-content-center pb-3">
-                  ID Pedido: {this.props.pedido.pedido._id}
-                </Col>
-              </Row>
             </div>
           </Row>
           <Row>
@@ -42,7 +37,7 @@ class PedidoDetalle extends Component {
                   <Row>
                     <div className="col-3">
                       <Row>
-                        <Col>PEDIDO REALIZADO:</Col>
+                        <Col>REALIZADO:</Col>
                       </Row>
                       <Row>
                         <Col>{this.props.pedido.pedido.fechaPedido}</Col>
@@ -105,6 +100,11 @@ class PedidoDetalle extends Component {
                   </div>
                 ))}
               </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="text-center justify-content-center pb-3">
+              Referencia: {this.props.pedido.pedido._id}
             </Col>
           </Row>
         </div>
