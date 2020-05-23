@@ -25,12 +25,12 @@ class PedidoDetalle extends Component {
             <div className="col-12">
               <Row>
                 <Col className="text-center justify-content-center">
-                  Tu Pedido:
+                  <h3>Pedido #{this.props.pedido.pedido.transaccion}</h3>
                 </Col>
               </Row>
               <Row>
                 <Col className="text-center justify-content-center pb-3">
-                  {this.props.pedido.pedido._id}
+                  ID Pedido: {this.props.pedido.pedido._id}
                 </Col>
               </Row>
             </div>
