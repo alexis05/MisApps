@@ -10,6 +10,52 @@ function pedidoAPI(app) {
   app.use("/pedidoapi", router);
 
   router.get(
+    `/pedido`,
+    auth(config.auth),
+    guard.check(["admin"], ["user"]),
+    function (req, res, next) {
+      if (!req.query.limit) return res.send({ error: "Requiere limite" });
+      if (!req.query.skip)
+        return res.send({ error: "Requiere cantidad a ignorar" });
+      let limit = req.query.limit;
+      let skip = req.query.skip;
+
+      var options = {
+        method: "GET",
+        uri: `${config.urlLN}/api/pedido?limit=${limit}&skip=${skip}`,
+      };
+
+      rp(options)
+        .then(function (producto) {
+          res.setHeader("Content-Type", "application/json");
+          res.end(producto);
+        })
+        .catch(function (err) {
+          console.log("Ha ocurrido un error: ", err);
+        });
+    }
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  router.get(
     `/pedido/:pedidoId`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),
@@ -93,6 +139,72 @@ function pedidoAPI(app) {
         });
     }
   );
+
+
+  router.put(`/:pedidoId`, auth(config.auth), guard.check(["admin"]), 
+  function (req,res,next) {
+    const { pedidoId } = req.params;
+    const { body: pedido } = req;
+    if (!pedido)
+      return res.status(400).json({
+        mensaje: "json es requerido",
+      });
+    var options = {
+      method: "PUT",
+      uri: `${config.urlLN}/api/${pedidoId}`,
+      body: {
+        ...pedido,
+      },
+      json: true, // Automatically stringifies the body to JSON
+    };
+  
+    rp(options)
+      .then(function (parsedBody) {
+        res.setHeader("Content-Type", "application/json");
+        res.status(201).json(parsedBody);
+      })
+      .catch(function (err) {
+        console.log("Ha occurido un error: ", err);
+        next(err);
+      });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 module.exports = pedidoAPI;

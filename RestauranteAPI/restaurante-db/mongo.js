@@ -40,6 +40,12 @@ class MongoLib {
     });
   }
 
+  countPedidos() {
+    return this.connect().then((db) => {
+      return db.collection("pedido").count();
+    });
+  }
+
   getAll(collection, query, skip, limit) {
     return this.connect().then((db) => {
       return db
@@ -248,6 +254,17 @@ class MongoLib {
     });
   }
 
+  getPedidosPorRestauranteId(restauranteId, skip, limit) {
+    return this.connect().then((db) => {
+      return db
+        .collection("pedido")
+        .find({ "productos.restaurante": restauranteId })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .toArray();
+    });
+  }
+
   create(collection, data) {
     return this.connect()
       .then((db) => {
@@ -272,6 +289,21 @@ class MongoLib {
       .then((result) => result.insertedId);
   }
 
+  updateEstadoPedido(pedido) {
+    return this.connect()
+      .then((db) => {
+        return db.collection("pedido").updateOne(
+          {
+            _id: ObjectId(pedido.pedidoId),
+            "productos._id": ObjectId(pedido.productoId),
+            "productos.restaurante": pedido.restauranteId,
+          },
+          { $set: { "productos.0.estado": pedido.estado } },
+          { upsert: false }
+        );
+      })
+      .then((result) => result.upsertedId || pedido.pedidoId);
+  }
   update(collection, id, data) {
     return this.connect()
       .then((db) => {

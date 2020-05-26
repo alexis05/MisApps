@@ -10,20 +10,25 @@ const productoIdSchema = Joi.string()
   .regex(/^[0-9a-fA-F]{24}$/)
   .required();
 
+const pedidoIdSchema = Joi.string()
+  .regex(/^[0-9a-fA-F]{24}$/)
+  .required();
+
 const crearPedidoSchema = Joi.object({
   usuarioId: usuarioIdSchema,
-  lugarEntrega: Joi.string().required(),
+  direccionEnvio: Joi.string().required(),
   nota: Joi.optional(),
-  productos: Joi.array().items(
-    Joi.object().keys({
-      productoId: productoIdSchema,
-      cantidad: Joi.number().integer().min(1).max(90000),
-      precio: Joi.number().required(),
-      restauranteId: restauranteIdSchema,
-    })
-  ),
 });
 
+const estadoPedidoSchema = Joi.object({
+  pedidoId: pedidoIdSchema,
+  productoId: productoIdSchema,
+  restauranteId: restauranteIdSchema,
+  estado: Joi.string()
+    .valid("Despachado", "Entregado", "Cancelado", "Pendiente")
+    .required(),
+});
 module.exports = {
   crearPedidoSchema,
+  estadoPedidoSchema,
 };

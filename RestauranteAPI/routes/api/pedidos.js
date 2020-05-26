@@ -1,11 +1,39 @@
 const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
 const pedidoCollection = "pedido";
+const validation = require("../../utils/middlewares/validationHandlers");
+const {
+  crearPedidoSchema,
+  estadoPedidoSchema,
+} = require("../../utils/schema/pedido");
 
 function pedidoAPI(app) {
   const router = express.Router();
   app.use("/api/pedido", router);
   const pedidoServicio = ServicioAPI(pedidoCollection);
+
+  router.get("/", async function (req, res, next) {
+    let limit = req.query.limit;
+    let skip = req.query.skip;
+    const { tags } = req.query;
+    try {
+      pedidoServicio
+        .getAll({
+          tags,
+          skip,
+          limit,
+        })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
 
   router.get("/:itemId", async function (req, res, next) {
     const { itemId } = req.params;
@@ -29,7 +57,6 @@ function pedidoAPI(app) {
     let limit = req.query.limit;
     let skip = req.query.skip;
     try {
-      // TODO: por hacer el servicio
       pedidoServicio
         .getPedidosPorUsuarioId({ usuarioId, skip, limit })
         .then((data) => {
@@ -47,9 +74,8 @@ function pedidoAPI(app) {
   router.get("/porrestaurante/:restauranteId", async function (req, res, next) {
     const { restauranteId } = req.params;
     try {
-      // TODO: por hacer el servicio
       pedidoServicio
-        .getProductosDeRestaurante({ restauranteId })
+        .getPedidosPorRetauranteId({ restauranteId })
         .then((data) => {
           res.status(200).json({
             data: data,
@@ -62,7 +88,11 @@ function pedidoAPI(app) {
     }
   });
 
-  router.post("/", async function (req, res, next) {
+  router.post("/", validation(crearPedidoSchema), async function (
+    req,
+    res,
+    next
+  ) {
     const { body: pedido } = req;
 
     try {
@@ -79,12 +109,49 @@ function pedidoAPI(app) {
       next(err);
     }
   });
+
+  router.put(
+    "/:itemId",
+
+    async function (req, res, next) {
+      const { itemId } = req.params;
+      const { body: item } = req;
+      try {
+        pedidoServicio
+          .update({ itemId, item })
+          .then((data) => {
+            res.status(200).json({
+              data: data,
+              mensaje: "OK",
+            });
+          })
+          .catch((err) => next(err));
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+  router.put("/", validation(estadoPedidoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: pedido } = req;
+    try {
+      pedidoServicio
+        .cambiarEstadoPedido({ pedido })
+        .then((data) => {
+          res.status(200).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
+    }
+  });
 }
 
 module.exports = pedidoAPI;
-
-// get de pedidos por usuarios
-
-// get de pedidos por restaurante
-
-// post para aprobar o denegar o despachar un pedido

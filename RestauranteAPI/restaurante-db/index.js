@@ -1,4 +1,5 @@
 const MongoLib = require("./mongo");
+
 class ServicioAPI {
   constructor(collectionName) {
     this.collection = collectionName;
@@ -13,6 +14,12 @@ class ServicioAPI {
 
   async getItem({ itemId }) {
     const item = await this.mongoDB.get(this.collection, itemId);
+    if (this.collection === "pedido") {
+      const usaurioDetalle = await this.mongoDB.get("usuario", item.usuarioId);
+      delete usaurioDetalle.clave;
+      delete usaurioDetalle.role;
+      item.usuarioDetalle = usaurioDetalle;
+    }
     return item || [];
   }
 
@@ -64,6 +71,21 @@ class ServicioAPI {
       skip,
       limit
     );
+    return all || [];
+  }
+
+  async getPedidosPorRetauranteId({ restauranteId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorRestauranteId(
+      restauranteId,
+      skip,
+      limit
+    );
+    all.map((p, index) => {
+      all[index].productos = p.productos.filter((producto) => {
+        return producto.restaurante === restauranteId;
+      });
+    });
+
     return all || [];
   }
 
@@ -120,7 +142,7 @@ class ServicioAPI {
         if (prod.productoId === prodDetalle._id.toString()) {
           delete all[0].productosDetallado[index].activo;
           delete all[0].productosDetallado[index].disponible;
-          all[0].productosDetallado[index].estado = "pendiente";
+          all[0].productosDetallado[index].estado = "Pendiente";
           all[0].productosDetallado[index].cantidad = prod.cantidad;
           all[0].productosDetallado[index].total = (
             Number(prod.cantidad) * Number(prodDetalle.precio)
@@ -147,6 +169,9 @@ class ServicioAPI {
       };
       const itemId = all[0]._id;
       await this.mongoDB.update("carrito", itemId, item);
+      let transaccion = await this.mongoDB.countPedidos();
+      pedidoACrear.transaccion = transaccion;
+      await this.mongoDB.update("pedido", crearPedido, pedidoACrear);
     }
     return crearPedido;
   }
@@ -314,6 +339,11 @@ class ServicioAPI {
       itemId,
       item
     );
+    return actualizarItem;
+  }
+
+  async cambiarEstadoPedido({ pedido }) {
+    const actualizarItem = await this.mongoDB.updateEstadoPedido(pedido);
     return actualizarItem;
   }
 

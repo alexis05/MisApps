@@ -1,6 +1,5 @@
 const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
-const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
 const productoCollection = "producto";
 
@@ -98,8 +97,7 @@ function productosAPI(app) {
 
   router.put(
     "/:itemId",
-    validation({ itemId: productoIdSchema }, "params"),
-    validation(actProductoSchema),
+   
     async function (req, res, next) {
       const { itemId } = req.params;
       const { body: item } = req;
