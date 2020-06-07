@@ -42,6 +42,10 @@ app.get("/Home*", function (req, res, next) {
   res.sendFile(HTML_FILE);
 });
 
+app.get("/Mispedidos*", function (req, res, next) {
+  res.sendFile(HTML_FILE);
+});
+
 app.get("/Nueva/Tienda/", function (req, res, next) {
   res.sendFile(HTML_FILE);
 });

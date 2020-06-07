@@ -22,3 +22,8 @@ export const REQUEST_ERROR_HACER_PEDIDO = "request_error_hacer_pedido";
 export const HACER_PEDIDO = "hacer_pedido";
 export const PEDIDO_REALIZADO = "pedido_realizado";
 export const OBTENER_PEDIDO = "obtener_pedido";
+
+export const REQUEST_ENVIADO_MIS_PEDIDOS = "request_enviado_mis_pedidos";
+export const REQUEST_ERROR_Mis_PEDIDOS = "request_error_mis_pedidos";
+export const REQUEST_OBTENIDO_MIS_PEDIDOS = "request_obtenido_mis_pedidos";
+

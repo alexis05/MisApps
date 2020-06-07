@@ -10,6 +10,33 @@ function pedidoAPI(app) {
   app.use("/pedidoapi", router);
 
   router.get(
+    `/mispedidos`,
+    auth(config.auth),
+    guard.check(["admin"], ["user"]),
+    function (req, res, next) {
+      const { headers } = req;
+      const token = headers["authorization"];
+      securityTools = new SecurityTools(token);
+      const usuarioId = securityTools.decodeToken();
+      var options = {
+        method: "GET",
+        uri: `${config.urlLN}/api/pedido/porusuario/${usuarioId}?skip=0&limit=20`,
+      };
+
+      rp(options)
+        .then(function (pedidos) {
+          res.setHeader("Content-Type", "application/json");
+          res.end(pedidos);
+        })
+        .catch(function (err) {
+          console.log("Ha ocurrido un error: ", err);
+        });
+    }
+  );
+
+
+
+  router.get(
     `/pedido`,
     auth(config.auth),
     guard.check(["admin"], ["user"]),

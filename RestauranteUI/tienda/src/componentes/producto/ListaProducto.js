@@ -9,7 +9,6 @@ import { Redirect } from "react-router-dom";
 
 class ListaProducto extends Component {
   render() {
-    console.log(this.props);
     if (this.props.idPedidoRealizado.length > 0) {
       return <Redirect to={`/Home/Pedido/${this.props.idPedidoRealizado}`} />;
     }

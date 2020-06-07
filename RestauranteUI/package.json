@@ -7,6 +7,7 @@
     "start:dev": "concurrently \"nodemon index\" \"npm run build:dev\"",
     "start:devbo": "concurrently \"nodemon index\" \"webpack -w --config ./webpack.bo.dev.config.js\"",
     "start:devtienda": "concurrently \"nodemon index\" \"webpack -w --config ./webpack.dev.config.js\" \"webpack -w --config ./webpack.bo.dev.config.js\"",
+    "start:deved": "concurrently \"nodemon index\" \"webpack -w --config ./webpack.dev.configed.js\"",
     "build": "webpack --config ./webpack.config.js --mode production && webpack --config ./webpack.bo.config.js --mode production",
     "build:dev": "webpack --config ./webpack.dev.config.js --mode development && webpack --config ./webpack.bo.dev.config.js --mode development"
   },
