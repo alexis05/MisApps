@@ -1,4 +1,5 @@
 const MongoLib = require("./mongo");
+
 class ServicioAPI {
   constructor(collectionName) {
     this.collection = collectionName;
@@ -13,6 +14,12 @@ class ServicioAPI {
 
   async getItem({ itemId }) {
     const item = await this.mongoDB.get(this.collection, itemId);
+    if (this.collection === "pedido") {
+      const usaurioDetalle = await this.mongoDB.get("usuario", item.usuarioId);
+      delete usaurioDetalle.clave;
+      delete usaurioDetalle.role;
+      item.usuarioDetalle = usaurioDetalle;
+    }
     return item || [];
   }
 
@@ -42,9 +49,288 @@ class ServicioAPI {
     return all || [];
   }
 
+  async getCarritoPorUsuarioId({ usuarioId }) {
+    const all = await this.mongoDB.getCarritoPorUsuarioId(
+      this.collection,
+      usuarioId
+    );
+    return all || [];
+  }
+
+  async getDetalleCarrito({ productos }) {
+    const all = await this.mongoDB.getDetalleCarrito(
+      this.collection,
+      productos
+    );
+    return all || [];
+  }
+
+  async getPedidosPorUsuarioId({ usuarioId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorUsuarioId(
+      usuarioId,
+      skip,
+      limit
+    );
+    return all || [];
+  }
+
+  async getPedidosPorRetauranteId({ restauranteId, skip, limit }) {
+    const all = await this.mongoDB.getPedidosPorRestauranteId(
+      restauranteId,
+      skip,
+      limit
+    );
+    all.map((p, index) => {
+      all[index].productos = p.productos.filter((producto) => {
+        return producto.restaurante === restauranteId;
+      });
+    });
+
+    return all || [];
+  }
+
+  async carritoDetallado({ carritoId }) {
+    const all = await this.mongoDB.carritoDetallado(carritoId);
+    return all || [];
+  }
+
+  async carritoDetalladoPorUsuarioId({ usuarioId }) {
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(usuarioId);
+    if (!all[0]) return [];
+    delete all[0].convertedId;
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
+    return all[0] || [];
+  }
+
   async create({ item }) {
     const crearItem = await this.mongoDB.create(this.collection, item);
     return crearItem;
+  }
+
+  async createPedido({ pedido }) {
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      pedido.usuarioId
+    );
+    if (!all[0]) return [];
+
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          delete all[0].productosDetallado[index].activo;
+          delete all[0].productosDetallado[index].disponible;
+          all[0].productosDetallado[index].estado = "Pendiente";
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    let pedidoACrear = {
+      usuarioId: pedido.usuarioId,
+      estado: "activo",
+      fechaPedido: new Date(),
+      direccionEnvio: pedido.direccionEnvio,
+      nota: pedido.nota,
+      precioTotal: costoTotal.toFixed(2),
+      productos: all[0].productosDetallado,
+    };
+
+    const crearPedido = await this.mongoDB.createPedido(pedidoACrear);
+    if (crearPedido) {
+      const item = {
+        productos: [],
+        usuarioId: pedido.usuarioId,
+      };
+      const itemId = all[0]._id;
+      await this.mongoDB.update("carrito", itemId, item);
+      let transaccion = await this.mongoDB.countPedidos();
+      pedidoACrear.transaccion = transaccion;
+      await this.mongoDB.update("pedido", crearPedido, pedidoACrear);
+    }
+    return crearPedido;
+  }
+
+  async createCarrito({ carrito }) {
+    const usuarioCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+      "carrito",
+      carrito.usuarioId
+    );
+    if (!usuarioCarrito) {
+      await this.mongoDB.createCarrito(carrito);
+    } else {
+      const productosEnElCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+        "carrito",
+        carrito.usuarioId
+      );
+      let productosIdsLista = [];
+      let productosQueDebeEstar = [];
+
+      if (productosEnElCarrito) {
+        carrito.productos.map((producto, index) => {
+          productosEnElCarrito.productos.map((productoEnCarrito) => {
+            if (producto.productoId === productoEnCarrito.productoId) {
+              carrito.productos[index].cantidad =
+                productoEnCarrito.cantidad + producto.cantidad;
+            } else {
+              if (!productosIdsLista.includes(productoEnCarrito.productoId)) {
+                productosIdsLista.push(productoEnCarrito.productoId);
+                productosQueDebeEstar.push(productoEnCarrito);
+              }
+            }
+          });
+        });
+
+        productosQueDebeEstar.map((prod) => {
+          carrito.productos.push(prod);
+        });
+
+        const itemId = productosEnElCarrito._id;
+        const item = carrito;
+        await this.mongoDB.update("carrito", itemId, item);
+      }
+    }
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      carrito.usuarioId
+    );
+    if (!all[0]) return [];
+    delete all[0].convertedId;
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
+    return all[0] || [];
+  }
+
+  async carritoEdicion({ carrito }) {
+    const usuarioCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+      "carrito",
+      carrito.usuarioId
+    );
+    if (!usuarioCarrito) {
+      await this.mongoDB.createCarrito(carrito);
+    } else {
+      const productosEnElCarrito = await this.mongoDB.getCarritoPorUsuarioId(
+        "carrito",
+        carrito.usuarioId
+      );
+
+      let productosIdsLista = [];
+      let productosQueDebeEstar = [];
+      let item;
+      if (productosEnElCarrito) {
+        if (carrito.accion === "agregar") {
+          delete carrito.accion;
+          carrito.productos.map((producto, index) => {
+            productosEnElCarrito.productos.map((productoEnCarrito) => {
+              if (producto.productoId === productoEnCarrito.productoId) {
+                carrito.productos[index].cantidad = productoEnCarrito.cantidad =
+                  producto.cantidad;
+              } else {
+                if (!productosIdsLista.includes(productoEnCarrito.productoId)) {
+                  productosIdsLista.push(productoEnCarrito.productoId);
+                  productosQueDebeEstar.push(productoEnCarrito);
+                }
+              }
+            });
+          });
+
+          productosQueDebeEstar.map((prod) => {
+            carrito.productos.push(prod);
+          });
+          item = carrito;
+        } else if (carrito.accion === "remover") {
+          delete carrito.accion;
+
+          carrito.productos.map((productoRemover) => {
+            productosQueDebeEstar = productosEnElCarrito.productos.filter(
+              (productoEnCarrito) => {
+                return (
+                  productoEnCarrito.productoId !== productoRemover.productoId
+                );
+              }
+            );
+          });
+          delete carrito.productos;
+          carrito.productos = productosQueDebeEstar;
+          item = carrito;
+        } else {
+          throw "La accion enviada no esta soportada";
+        }
+        const itemId = productosEnElCarrito._id;
+        if (item) {
+          await this.mongoDB.update("carrito", itemId, item);
+        } else {
+          throw "No se pudo guardar";
+        }
+      }
+    }
+
+    const all = await this.mongoDB.carritoDetalladoPorUsuarioId(
+      carrito.usuarioId
+    );
+    if (!all[0]) return [];
+    delete all[0].convertedId;
+    delete all[0].cantidadProductos;
+    let costoTotal = 0;
+    all[0].detalleCarrito.map((p) => {
+      p.map((x) => {
+        costoTotal = costoTotal + parseFloat(x.valor);
+      });
+    });
+    all[0].productos.map((prod) => {
+      all[0].productosDetallado.map((prodDetalle, index) => {
+        if (prod.productoId === prodDetalle._id.toString()) {
+          all[0].productosDetallado[index].cantidad = prod.cantidad;
+          all[0].productosDetallado[index].total = (
+            Number(prod.cantidad) * Number(prodDetalle.precio)
+          ).toFixed(2);
+        }
+      });
+    });
+    all[0].precioTotal = costoTotal.toFixed(2);
+    delete all[0].detalleCarrito;
+    return all[0] || [];
   }
 
   async update({ itemId, item }) {
@@ -53,6 +339,11 @@ class ServicioAPI {
       itemId,
       item
     );
+    return actualizarItem;
+  }
+
+  async cambiarEstadoPedido({ pedido }) {
+    const actualizarItem = await this.mongoDB.updateEstadoPedido(pedido);
     return actualizarItem;
   }
 

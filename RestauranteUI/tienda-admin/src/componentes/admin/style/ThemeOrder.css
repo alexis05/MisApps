@@ -1,0 +1,94 @@
+body {
+  font-family: sans-serif !important;
+}
+
+.order-container {
+  margin-top: 0;
+  width: 100%;
+  height: auto;
+  padding: 30px;
+  border: 1px solid #eaeaea;
+  background: #fff;
+  -webkit-box-shadow: none;
+  box-shadow: none !important;
+}
+
+.no_order {
+  width: 5%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ccc;
+}
+
+.energyplus-orders--item-badge {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+
+.estado_order{
+    position:relative;
+    padding-left: 30px;
+    font-size: 10px;
+}
+
+
+
+
+.estado_order span {
+	content: "";
+	position: absolute;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	margin-top: -3px;
+	padding-top: 4px;
+	color: #fff;
+	overflow: hidden;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+	
+}
+
+
+
+.circulo {
+    width: 100px;
+    height: 100px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background: #5cb85c;
+    
+}
+
+
+.cliente_order_Name {
+    
+        font-size: 16px;
+        line-height: 21px;
+        margin-bottom: 7px;
+        margin-top: 10px;
+    
+}
+
+.cliente_order_direccion {
+    font-size: 12px;
+    color: #333;
+    line-height: 19px;
+}
+
+.detalle_orden{
+    font-size: 12px;
+}
+
+
+@media (max-width: 960px)
+{
+.energyplus-orders--item-badge {
+    flex: 0 0 10.333333% !important;
+    max-width: 10.333333% !important;
+}
+}

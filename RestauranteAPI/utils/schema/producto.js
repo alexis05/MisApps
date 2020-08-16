@@ -4,7 +4,7 @@ const productoIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 const restauranteIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 const productoTagSchema = Joi.array().items(Joi.string().max(10));
 
-const crearProductoSchema = {
+const crearProductoSchema = Joi.object({
   nombre: Joi.string().max(50).required(),
   detalle: Joi.string(),
   creado: Joi.date(),
@@ -14,12 +14,12 @@ const crearProductoSchema = {
   disponible: Joi.bool(),
   restaurante: Joi.string(),
   precio: Joi.number().min(1).max(1000000).required(),
-  fotos: Joi.string().required(),
+  fotos: Joi.string(),
   tags: productoTagSchema,
   restaurante: restauranteIdSchema,
-};
+});
 
-const actProductoSchema = {
+const actProductoSchema = Joi.object({
   nombre: Joi.string().max(50).required(),
   detalle: Joi.string(),
   ultima_actualizacion: Joi.date(),
@@ -28,7 +28,7 @@ const actProductoSchema = {
   precio: Joi.number().min(1).max(1000000).required(),
   fotos: Joi.string().required(),
   tags: productoTagSchema,
-};
+});
 
 module.exports = {
   productoIdSchema,

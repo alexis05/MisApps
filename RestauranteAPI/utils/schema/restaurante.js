@@ -2,7 +2,7 @@ const Joi = require("@hapi/joi");
 
 const restauranteIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
-const crearRestauranteSchema = {
+const crearRestauranteSchema = Joi.object({
   nombre: Joi.string().max(50).required(),
   telefono: Joi.number().required(),
   email: Joi.string().required(),
@@ -10,9 +10,9 @@ const crearRestauranteSchema = {
   esloga: Joi.string().required(),
   direccion: Joi.string().required(),
   clave: Joi.string().required(),
-};
+});
 
-const actRestauranteSchema = {
+const actRestauranteSchema = Joi.object({
   nombre: Joi.string().max(50).required(),
   telefono: Joi.number().required(),
   email: Joi.string().required(),
@@ -20,7 +20,7 @@ const actRestauranteSchema = {
   esloga: Joi.string().required(),
   direccion: Joi.string().required(),
   clave: Joi.string().required(),
-};
+});
 
 module.exports = {
   restauranteIdSchema,

@@ -12,12 +12,13 @@ class NuevoProducto extends React.Component {
     usaurioId: undefined,
     restaurante: undefined,
     redirectProductoList: false,
+    foto: "",
   };
 
   componentDidMount() {
     const cookies = new Cookies();
     const restauranteId = cookies.get("rt");
-    console.log(restauranteId);
+
     this.setState({ restauranteId: restauranteId });
     this.fechDataUsuarioLogueado();
   }
@@ -46,7 +47,6 @@ class NuevoProducto extends React.Component {
         restaurante: this.state.restauranteId,
       },
     });
-    console.log(this.state.value);
   };
 
   handleCheckBox = (e) => {
@@ -107,19 +107,20 @@ class NuevoProducto extends React.Component {
               name="precio"
             />
           </div>
-
-          <div className="form-group">
-            <label>Detalle</label>
-            <input
-              className="form-control"
-              type="textarea"
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Descripcion Adicional</span>
+            </div>
+            <textarea
+              class="form-control"
               onChange={this.handleChange}
               name="detalle"
-            />
+              aria-label="Descripcion Adicional"
+            ></textarea>
           </div>
 
           <div className="form-group">
-            <label htmlFor="disponible">Disponible para la venta</label>
+            <label htmlFor="disponible">Disponible</label>
             <input
               className="form-control"
               type="checkbox"
@@ -133,7 +134,7 @@ class NuevoProducto extends React.Component {
             <label>Fotos</label>
             <input
               className="form-control"
-              type="text"
+              type="html"
               onChange={this.handleChange}
               name="fotos"
             />

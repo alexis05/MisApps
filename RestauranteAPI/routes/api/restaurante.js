@@ -13,7 +13,7 @@ const {
   actRestauranteSchema,
 } = require("../../utils/schema/restaurante");
 
-function restaurantesAPI(app, keycloak) {
+function restaurantesAPI(app) {
   const router = express.Router();
   app.use("/api/restaurante", router);
   const restServicio = ServicioAPI(restauranteCollection);
@@ -120,6 +120,7 @@ function restaurantesAPI(app, keycloak) {
                 creado,
                 activo,
                 eslogan,
+                direccion,
                 owner: data,
               };
               var item = restauranteData;

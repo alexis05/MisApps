@@ -1,6 +1,5 @@
 const express = require("express");
 const ServicioAPI = require("../../restaurante-db");
-const { config } = require("../../config");
 const validation = require("../../utils/middlewares/validationHandlers");
 const productoCollection = "producto";
 
@@ -10,7 +9,7 @@ const {
   actProductoSchema,
 } = require("../../utils/schema/producto");
 
-function productosAPI(app, keycloak) {
+function productosAPI(app) {
   const router = express.Router();
   app.use("/api/producto", router);
   const productoServicio = ServicioAPI(productoCollection);
@@ -72,33 +71,33 @@ function productosAPI(app, keycloak) {
     }
   });
 
-  router.post(
-    "/",
-    /*validation(crearProductoSchema),*/ async function (req, res, next) {
-      const { body: item } = req;
+  router.post("/", validation(crearProductoSchema), async function (
+    req,
+    res,
+    next
+  ) {
+    const { body: item } = req;
 
-      item.activo = true;
-      item.registrado = new Date();
-      try {
-        productoServicio
-          .create({ item })
-          .then((data) => {
-            res.status(201).json({
-              data: data,
-              mensaje: "OK",
-            });
-          })
-          .catch((err) => next(err));
-      } catch (err) {
-        next(err);
-      }
+    item.activo = true;
+    item.registrado = new Date();
+    try {
+      productoServicio
+        .create({ item })
+        .then((data) => {
+          res.status(201).json({
+            data: data,
+            mensaje: "OK",
+          });
+        })
+        .catch((err) => next(err));
+    } catch (err) {
+      next(err);
     }
-  );
+  });
 
   router.put(
     "/:itemId",
-    validation({ itemId: productoIdSchema }, "params"),
-    validation(actProductoSchema),
+   
     async function (req, res, next) {
       const { itemId } = req.params;
       const { body: item } = req;

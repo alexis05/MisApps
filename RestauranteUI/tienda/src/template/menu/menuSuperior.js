@@ -28,8 +28,8 @@ const MenuSuperior = (props) => (
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/">
-              Favoritos
+            <Link className="nav-link" to="/Mispedidos">
+              Mis pedidos
             </Link>
           </li>
           <li className="nav-item dropdown">

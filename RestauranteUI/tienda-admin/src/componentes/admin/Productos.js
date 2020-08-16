@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import API from "../../API";
 import Cookies from "universal-cookie";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 class Productos extends Component {
   state = {
@@ -9,7 +9,16 @@ class Productos extends Component {
     error: null,
     data: [],
     clicCrearProducto: false,
+    clickEdit: false,
+    dataeditable: {_id:""},
   };
+
+  handleClick(producto) {
+    this.setState({
+      dataeditable: producto,
+      clickEdit: true,
+    });
+  }
 
   componentDidMount() {
     this.fetchDataMisProductos();
@@ -29,12 +38,15 @@ class Productos extends Component {
       this.setState({ loading: false, error: error });
     }
   };
+
+
   render() {
     if (this.state.clicCrearProducto) {
       return <Redirect to="/Admin/Producto/Nuevo" />;
     }
+
     return (
-      <main role="main" className="col-md-11 ml-sm-auto col-lg-12 pt-3 px-4">
+      <main role="main" className="container">
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
           <h1 className="h2">Lista de productos</h1>
           <button
@@ -46,24 +58,31 @@ class Productos extends Component {
         </div>
         <div className="row">
           <div className="table-responsive">
-            <table className="table table-striped table-sm">
+            <table className="table table-striped table-lg">
               <thead>
                 <tr>
                   <th>Nombre</th>
                   <th>Detalle</th>
                   <th>Precio</th>
-                  <th>Disponible</th>
+                  <th className="text-center">Stock</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 {this.state.data.map((producto, index) => (
-                  <tr key={index}>
+                  <tr key={index} >
                     <td>{producto.nombre}</td>
                     <td>{producto.detalle}</td>
                     <td>{producto.precio}</td>
-                    <td>{producto.disponible ? "Si" : "No"}</td>
-                    <td>editar</td>
+                    <td className="text-center">
+                      {producto.disponible ? "Si" : "No"}
+                    </td>
+                    <td id={producto._id}>
+                      <Link to={`Productos/${producto._id}/Editar`}>
+                      editar
+                      </Link>
+                   
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -1,5 +1,4 @@
 const express = require("express");
-const URL_API = "http://127.0.0.1:5050";
 var rp = require("request-promise");
 var auth = require("express-jwt");
 var guard = require("express-jwt-permissions")();
@@ -19,7 +18,7 @@ function restauranteAPI(app) {
 
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/restaurante?limit=${limit}&skip=${skip}`,
+        uri: `${config.urlLN}/api/restaurante?limit=${limit}&skip=${skip}`,
       };
 
       rp(options)
@@ -46,7 +45,7 @@ function restauranteAPI(app) {
         });
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/restaurante/${restauranteId}`,
+        uri: `${config.urlLN}/api/restaurante/${restauranteId}`,
       };
 
       rp(options)
@@ -73,7 +72,7 @@ function restauranteAPI(app) {
         });
       var options = {
         method: "GET",
-        uri: `${URL_API}/api/restaurante/mis/tiendas/${ownerId}`,
+        uri: `${config.urlLN}/api/restaurante/mis/tiendas/${ownerId}`,
       };
 
       rp(options)
@@ -100,7 +99,7 @@ function restauranteAPI(app) {
         });
       var options = {
         method: "POST",
-        uri: `${URL_API}/api/restaurante`,
+        uri: `${config.urlLN}/api/restaurante`,
         body: {
           ...restaurante,
         },
@@ -136,7 +135,7 @@ function restauranteAPI(app) {
         });
       var options = {
         method: "PUT",
-        uri: `${URL_API}/api/restaurante/${restauranteId}`,
+        uri: `${config.urlLN}/api/restaurante/${restauranteId}`,
         body: {
           ...restaurante,
         },

@@ -5,23 +5,24 @@ import { traerProductos } from "../../actions/obtenerProductos";
 import BottomScrollListener from "react-bottom-scroll-listener";
 import SpinnerGlobal from "../../styleGlobal/SpinnerGlobal";
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   productos: state.productoReducer.productoReducer.productos,
   existeMasProductos: state.productoReducer.productoReducer.existenProductos,
-  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal
+  loadingGlobal: state.productoReducer.productoReducer.loadingGlobal,
+  carrito: state.carritoReducer.carritoReducer.carrito,
 });
 const mapDispatchToProps = {
-  traerProductos
+  traerProductos,
 };
 
 class Productos extends Component {
   state = {
-    loading: true,
+    loading: false,
     error: null,
     limitValue: 50,
     skipValue: 0,
     nuevosProductosAPaginar: 50,
-    consultarProductos: true
+    consultarProductos: true,
   };
 
   handleOnDocumentBottom = () => {
