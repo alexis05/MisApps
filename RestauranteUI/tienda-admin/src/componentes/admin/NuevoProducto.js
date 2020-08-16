@@ -3,6 +3,10 @@ import API from "../../API";
 import Cookies from "universal-cookie";
 import { Redirect } from "react-router-dom";
 import Spinner from "../Spinner";
+import CKEditor from "ckeditor4-react";
+import SwitchButton from "../utils/MySwitchButton";
+import TagInput from "../utils/TagInput";
+import { Row } from "reactstrap";
 
 class NuevoProducto extends React.Component {
   state = {
@@ -58,6 +62,34 @@ class NuevoProducto extends React.Component {
       },
     });
   };
+
+  handleChangeSwitchDisponible = (data) => {
+    this.setState({
+      value: {
+        ...this.state.value,
+        disponible: data.checked,
+      },
+    });
+  };
+  handleClickSwitchDisponible = (data) => {
+    this.setState({
+      value: {
+        ...this.state.value,
+        disponible: data.checked,
+      },
+    });
+  };
+
+  handleChangeCKEditor = (data) => {
+    console.log(data);
+    this.setState({
+      value: {
+        ...this.state.value,
+        detalle: data,
+      },
+    });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     console.log(this.state.value);
@@ -107,27 +139,46 @@ class NuevoProducto extends React.Component {
               name="precio"
             />
           </div>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Descripcion Adicional</span>
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <span className="input-group-text">Descripción del producto</span>
             </div>
-            <textarea
-              class="form-control"
-              onChange={this.handleChange}
+            <CKEditor
+              data=""
+              onChange={(evt) =>
+                this.handleChangeCKEditor(evt.editor.getData())
+              }
               name="detalle"
-              aria-label="Descripcion Adicional"
-            ></textarea>
+            />
+          </div>
+
+          <div className="form-group pt-3">
+            <label>
+              Publicar producto (Es necesario para recibir pedidos de este
+              producto).
+            </label>
+
+            <Row>
+              <div className="col-12">
+                <SwitchButton
+                  onChange={this.handleChangeSwitchDisponible}
+                  onClick={this.handleClickSwitchDisponible}
+                  id="disponible"
+                  name="disponible"
+                ></SwitchButton>
+              </div>
+            </Row>
           </div>
 
           <div className="form-group">
-            <label htmlFor="disponible">Disponible</label>
-            <input
+            <label>
+              Etiquetas del producto (ayuda a categorizar el producto).
+            </label>
+            <TagInput
               className="form-control"
-              type="checkbox"
-              id="disponible"
-              onClick={this.handleCheckBox}
-              name="disponible"
-            />
+              onChange={this.handleChangeTags}
+              name="tag"
+            ></TagInput>
           </div>
 
           <div className="form-group">

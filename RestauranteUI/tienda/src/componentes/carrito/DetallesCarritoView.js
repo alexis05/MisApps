@@ -125,7 +125,6 @@ class DetallesCarritoView extends Component {
   };
 
   onHacerPedido = () => {
-    console.log(this.state.pedido);
     if (this.state.pedido) {
       if (
         this.state.pedido.hasOwnProperty("direccionEnvio") &&
