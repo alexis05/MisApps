@@ -17,6 +17,7 @@ class DetallesCarritoView extends Component {
   state = {
     mostrarInputs: false,
     pedido: undefined,
+    mostrarValidacionDireccionDeEnvio: false,
   };
 
   onBlurCantidad = (element) => {
@@ -124,13 +125,24 @@ class DetallesCarritoView extends Component {
   };
 
   onHacerPedido = () => {
-    try {
-      this.props.hacerPedido(this.state.pedido);
-      this.setState({ loading: false });
-      this.props.backProductListView();
-    } catch (error) {
-      this.setState({ loading: false, error: error.message });
-      console.log("Error: ", error.message);
+    console.log(this.state.pedido);
+    if (this.state.pedido) {
+      if (
+        this.state.pedido.hasOwnProperty("direccionEnvio") &&
+        this.state.pedido.direccionEnvio !== ""
+      ) {
+        try {
+          this.setState({ mostrarValidacionDireccionDeEnvio: false });
+          this.props.hacerPedido(this.state.pedido);
+          this.setState({ loading: false });
+          this.props.backProductListView();
+        } catch (error) {
+          this.setState({ loading: false, error: error.message });
+          console.log("Error: ", error.message);
+        }
+      }
+    } else {
+      this.setState({ mostrarValidacionDireccionDeEnvio: true });
     }
   };
 
@@ -161,7 +173,7 @@ class DetallesCarritoView extends Component {
                 </h4>
                 <ul className="list-group mb-3">
                   <li className="list-group-item d-flex justify-content-between">
-                    <span>Costo de envio</span>
+                    <span>Costo de envío</span>
                     <strong>$10.00</strong>
                   </li>
                   <li className="list-group-item d-flex justify-content-between">
@@ -181,7 +193,7 @@ class DetallesCarritoView extends Component {
                         <div className="col-12">
                           <div className="mb-3">
                             <label htmlFor="direccionEnvio">
-                              Direccion de envio
+                              Dirección de envío
                             </label>
                             <textarea
                               name="direccionEnvio"
@@ -192,7 +204,7 @@ class DetallesCarritoView extends Component {
                               placeholder="1234 David Chiriqui"
                             ></textarea>
                             <div className="invalid-feedback">
-                              Por favor introduzca su direccion de envio.
+                              Por favor introduzca su dirección de envío.
                             </div>
                           </div>
                           <div className="mb-3">
@@ -209,6 +221,16 @@ class DetallesCarritoView extends Component {
                               Ingrese una nota del pedido para la tienda.
                             </div>
                           </div>
+                          {this.state.mostrarValidacionDireccionDeEnvio ? (
+                            <div>
+                              <span className="text-danger">
+                                Debe ingresar una direción de envío.
+                              </span>
+                              <br></br>
+                            </div>
+                          ) : (
+                            <span></span>
+                          )}
                           <Button
                             className="btn btn-danger"
                             onClick={this.onHiddenInputsToPedido}
