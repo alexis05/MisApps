@@ -10,6 +10,7 @@ import { hacerPedido } from "../../actions/Pedido";
 import BasureroIcon from "../../images/basurero.svg";
 import ChevronRight from "../../images/chevron-right.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
+import ImgBack from "../../images/img-back.png";
 import "./carritoDetalle.css";
 import Spinner from "../../styleGlobal/Spinner";
 
@@ -159,191 +160,217 @@ class DetallesCarritoView extends Component {
       );
     }
     return (
-      <div className="col-sm-12 details-cart-view ">
-        <Row className="justify-content-center">
-          <Col sm={12} className="text-center">
-            <Row>
-              <div className="col-md-4 order-md-2 mb-4">
-                <h4 className="d-flex justify-content-between align-items-center mb-3">
-                  <span className="text-muted">Carrito de compras</span>
-                  <span className="badge badge-secondary badge-pill">
-                    {this.props.carrito.totalDeProductos}
-                  </span>
-                </h4>
-                <ul className="list-group mb-3">
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Costo de envío</span>
-                    <strong>$10.00</strong>
-                  </li>
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>SubTotal</span>
-                    <strong>${this.props.carrito.precioTotal}</strong>
-                  </li>
-                  <li className="list-group-item d-flex justify-content-between">
-                    <span>Total</span>
-                    <strong>${this.props.carrito.precioTotal}</strong>
-                  </li>
-                </ul>
+      <div>
+        <Row>
+          <div className="col-sm-12 details-cart-view">
+            <div>
+              <Row className="d-flex justify-content-between align-items-center">
+                <div className="col-2">
+                  <img
+                    width="22px"
+                    src={ImgBack}
+                    alt="back-to-home"
+                    onClick={() => this.onBackProductList()}
+                  ></img>
+                </div>
+                <div className="col-8">
+                  <h4 className="text-center">
+                    <span className="text-muted">Carrito de compras</span>
+                  </h4>
+                </div>
+                <div className="col-2">
+                  <h4>
+                    <span className="badge badge-secondary badge-pill">
+                      {this.props.carrito.totalDeProductos}
+                    </span>
+                  </h4>
+                </div>
+              </Row>
+              <hr></hr>
+            </div>
+            <Row className="justify-content-center">
+              <Col sm={12} className="text-center">
+                <Row>
+                  <div className="col-md-4 order-md-2 mb-4">
+                    <ul className="list-group mb-3">
+                      <li className="list-group-item d-flex justify-content-between">
+                        <span>Costo de envío</span>
+                        <strong>$10.00</strong>
+                      </li>
+                      <li className="list-group-item d-flex justify-content-between">
+                        <span>SubTotal</span>
+                        <strong>${this.props.carrito.precioTotal}</strong>
+                      </li>
+                      <li className="list-group-item d-flex justify-content-between">
+                        <span>Total</span>
+                        <strong>${this.props.carrito.precioTotal}</strong>
+                      </li>
+                    </ul>
 
-                <form className="card p-2">
-                  <div className="input-group text-center justify-content-center">
-                    <div className="input-group-append">
-                      {this.state.mostrarInputs ? (
-                        <div className="col-12">
-                          <div className="mb-3">
-                            <label htmlFor="direccionEnvio">
-                              Dirección de envío
-                            </label>
-                            <textarea
-                              name="direccionEnvio"
-                              onBlur={this.onBlur}
-                              onChange={this.handleChange}
-                              className="form-control"
-                              id="direccionEnvio"
-                              placeholder="1234 David Chiriqui"
-                            ></textarea>
-                            <div className="invalid-feedback">
-                              Por favor introduzca su dirección de envío.
-                            </div>
-                          </div>
-                          <div className="mb-3">
-                            <label htmlFor="nota">Nota del pedido</label>
-                            <textarea
-                              name="nota"
-                              onBlur={this.onBlur}
-                              onChange={this.handleChange}
-                              className="form-control"
-                              id="nota"
-                              placeholder="Puedes ingresar una nota para la tienda"
-                            ></textarea>
-                            <div className="invalid-feedback">
-                              Ingrese una nota del pedido para la tienda.
-                            </div>
-                          </div>
-                          {this.state.mostrarValidacionDireccionDeEnvio ? (
-                            <div>
-                              <span className="text-danger">
-                                Debe ingresar una direción de envío.
-                              </span>
-                              <br></br>
+                    <form className="card p-2">
+                      <div className="input-group text-center justify-content-center">
+                        <div className="input-group-append">
+                          {this.state.mostrarInputs ? (
+                            <div className="col-12">
+                              <div className="mb-3">
+                                <label htmlFor="direccionEnvio">
+                                  Dirección de envío
+                                </label>
+                                <textarea
+                                  name="direccionEnvio"
+                                  onBlur={this.onBlur}
+                                  onChange={this.handleChange}
+                                  className="form-control"
+                                  id="direccionEnvio"
+                                  placeholder="1234 David Chiriqui"
+                                ></textarea>
+                                <div className="invalid-feedback">
+                                  Por favor introduzca su dirección de envío.
+                                </div>
+                              </div>
+                              <div className="mb-3">
+                                <label htmlFor="nota">Nota del pedido</label>
+                                <textarea
+                                  name="nota"
+                                  onBlur={this.onBlur}
+                                  onChange={this.handleChange}
+                                  className="form-control"
+                                  id="nota"
+                                  placeholder="Puedes ingresar una nota para la tienda"
+                                ></textarea>
+                                <div className="invalid-feedback">
+                                  Ingrese una nota del pedido para la tienda.
+                                </div>
+                              </div>
+                              {this.state.mostrarValidacionDireccionDeEnvio ? (
+                                <div>
+                                  <span className="text-danger">
+                                    Debe ingresar una direción de envío.
+                                  </span>
+                                  <br></br>
+                                </div>
+                              ) : (
+                                <span></span>
+                              )}
+                              <Button
+                                className="btn btn-danger"
+                                onClick={this.onHiddenInputsToPedido}
+                              >
+                                Cancelar
+                              </Button>{" "}
+                              <Button
+                                className="btn btn-success"
+                                onClick={this.onHacerPedido}
+                              >
+                                Comprar
+                              </Button>
                             </div>
                           ) : (
-                            <span></span>
+                            <Button
+                              className="btn btn-success"
+                              onClick={this.onDisplayInputsToPedido}
+                            >
+                              Continuar
+                            </Button>
                           )}
-                          <Button
-                            className="btn btn-danger"
-                            onClick={this.onHiddenInputsToPedido}
-                          >
-                            Cancelar
-                          </Button>{" "}
-                          <Button
-                            className="btn btn-success"
-                            onClick={this.onHacerPedido}
-                          >
-                            Comprar
-                          </Button>
                         </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div className="col-md-8 order-md-1">
+                    <h4 className="">Productos en el carrito</h4>
+                    <div className="table-responsive">
+                      {this.props.carrito.productosDetallado ? (
+                        <table className="table table-sm heavyTable">
+                          <thead>
+                            <tr>
+                              <th>Producto</th>
+                              <th>Precio</th>
+                              <th>Cantidad</th>
+                              <th>Total</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.props.carrito.productosDetallado.map(
+                              (producto) => (
+                                <tr key={producto._id}>
+                                  <td>
+                                    <div>
+                                      <img
+                                        className="card-img-top img-fluid imagenProductoMD"
+                                        src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
+                                        alt="Card"
+                                      />
+                                      {producto.nombre}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div>{producto.precio}</div>
+                                  </td>
+                                  <td>
+                                    <div>
+                                      <img
+                                        onClick={this.onClickDisminuirCantidad.bind(
+                                          null,
+                                          producto._id
+                                        )}
+                                        src={ChevronLeft}
+                                        alt="Disminuir cantidad"
+                                      ></img>{" "}
+                                      <input
+                                        name="cantidad"
+                                        id={producto._id}
+                                        onBlur={this.onBlurCantidad}
+                                        className="productoCantidad"
+                                        type="text"
+                                        defaultValue={producto.cantidad}
+                                      ></input>{" "}
+                                      <img
+                                        onClick={this.onClickAumentarCantidad.bind(
+                                          null,
+                                          producto._id
+                                        )}
+                                        src={ChevronRight}
+                                        alt="Aumentar cantidad"
+                                      ></img>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div>{producto.total}</div>
+                                  </td>
+                                  <td>
+                                    <div
+                                      onClick={this.onClickDeleteProducto.bind(
+                                        null,
+                                        producto._id
+                                      )}
+                                      data-productoid={producto._id}
+                                    >
+                                      <span>
+                                        <img
+                                          src={BasureroIcon}
+                                          alt="Remover"
+                                        ></img>
+                                      </span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              )
+                            )}
+                          </tbody>
+                        </table>
                       ) : (
-                        <Button
-                          className="btn btn-success"
-                          onClick={this.onDisplayInputsToPedido}
-                        >
-                          Continuar
-                        </Button>
+                        <Spinner></Spinner>
                       )}
                     </div>
                   </div>
-                </form>
-              </div>
-              <div className="col-md-8 order-md-1">
-                <h4 className="mb-3">Productos en el carrito</h4>
-                <div className="table-responsive">
-                  {this.props.carrito.productosDetallado ? (
-                    <table className="table table-sm heavyTable">
-                      <thead>
-                        <tr>
-                          <th>Producto</th>
-                          <th>Precio</th>
-                          <th>Cantidad</th>
-                          <th>Total</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.props.carrito.productosDetallado.map(
-                          (producto) => (
-                            <tr key={producto._id}>
-                              <td>
-                                <div>
-                                  <img
-                                    className="card-img-top img-fluid imagenProductoMD"
-                                    src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
-                                    alt="Card"
-                                  />
-                                  {producto.nombre}
-                                </div>
-                              </td>
-                              <td>
-                                <div>{producto.precio}</div>
-                              </td>
-                              <td>
-                                <div>
-                                  <img
-                                    onClick={this.onClickDisminuirCantidad.bind(
-                                      null,
-                                      producto._id
-                                    )}
-                                    src={ChevronLeft}
-                                    alt="Disminuir cantidad"
-                                  ></img>{" "}
-                                  <input
-                                    name="cantidad"
-                                    id={producto._id}
-                                    onBlur={this.onBlurCantidad}
-                                    className="productoCantidad"
-                                    type="text"
-                                    defaultValue={producto.cantidad}
-                                  ></input>{" "}
-                                  <img
-                                    onClick={this.onClickAumentarCantidad.bind(
-                                      null,
-                                      producto._id
-                                    )}
-                                    src={ChevronRight}
-                                    alt="Aumentar cantidad"
-                                  ></img>
-                                </div>
-                              </td>
-                              <td>
-                                <div>{producto.total}</div>
-                              </td>
-                              <td>
-                                <div
-                                  onClick={this.onClickDeleteProducto.bind(
-                                    null,
-                                    producto._id
-                                  )}
-                                  data-productoid={producto._id}
-                                >
-                                  <span>
-                                    <img src={BasureroIcon} alt="Remover"></img>
-                                  </span>
-                                </div>
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-                  ) : (
-                    <Spinner></Spinner>
-                  )}
-                </div>
-              </div>
+                </Row>
+              </Col>
             </Row>
-          </Col>
+          </div>
         </Row>
-        <Button onClick={this.onBackProductList}>{"<-"} Regresar</Button>
       </div>
     );
   }
