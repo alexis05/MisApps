@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import parser from "html-react-parser";
 import { connect } from "react-redux";
 import "./producto.css";
 import { addToCart } from "../../actions/Carrito";
-
 
 const mostrarPrecioConDosDecimales = (precio) => {
   return (Math.round(precio * 100) / 100).toFixed(2);
@@ -84,6 +84,9 @@ class Producto extends Component {
     this.props.addToCart(body);
   };
 
+  substringDescripcionCorta = (value) => {
+    return value.substring(0, 100) + "...";
+  };
   render() {
     return (
       <div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
@@ -98,7 +101,11 @@ class Producto extends Component {
               <h5 className="card-title text-left">{this.props.nombre}</h5>
             </div>
             <div className="col-12">
-              <p className="card-text mb-0">{this.props.detalle}</p>
+              <p className="card-text mb-0">
+                {this.props.descripcion_corta
+                  ? this.substringDescripcionCorta(this.props.descripcion_corta)
+                  : ""}
+              </p>
             </div>
           </div>
           <div className="rowm d-none">

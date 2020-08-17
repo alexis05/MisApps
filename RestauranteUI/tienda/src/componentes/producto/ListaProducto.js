@@ -30,7 +30,7 @@ class ListaProducto extends Component {
                       <Producto
                         nombre={producto.nombre}
                         precio={producto.precio}
-                        detalle={producto.detalle}
+                        descripcion_corta={producto.descripcion_corta}
                         creado={producto.registrado}
                         restaurante={producto.restaurante}
                         _id={producto._id}

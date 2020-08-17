@@ -77,7 +77,6 @@ function productosAPI(app) {
     next
   ) {
     const { body: item } = req;
-
     item.activo = true;
     item.registrado = new Date();
     try {
@@ -97,7 +96,7 @@ function productosAPI(app) {
 
   router.put(
     "/:itemId",
-   
+
     async function (req, res, next) {
       const { itemId } = req.params;
       const { body: item } = req;

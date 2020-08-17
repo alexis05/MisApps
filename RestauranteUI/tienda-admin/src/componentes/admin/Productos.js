@@ -10,7 +10,7 @@ class Productos extends Component {
     data: [],
     clicCrearProducto: false,
     clickEdit: false,
-    dataeditable: {_id:""},
+    dataeditable: { _id: "" },
   };
 
   handleClick(producto) {
@@ -39,7 +39,6 @@ class Productos extends Component {
     }
   };
 
-
   render() {
     if (this.state.clicCrearProducto) {
       return <Redirect to="/Admin/Producto/Nuevo" />;
@@ -62,7 +61,7 @@ class Productos extends Component {
               <thead>
                 <tr>
                   <th>Nombre</th>
-                  <th>Detalle</th>
+                  <th>Descripción Corta</th>
                   <th>Precio</th>
                   <th className="text-center">Stock</th>
                   <th></th>
@@ -70,18 +69,17 @@ class Productos extends Component {
               </thead>
               <tbody>
                 {this.state.data.map((producto, index) => (
-                  <tr key={index} >
+                  <tr key={index}>
                     <td>{producto.nombre}</td>
-                    <td>{producto.detalle}</td>
+                    <td>{producto.descripcion_corta}</td>
                     <td>{producto.precio}</td>
                     <td className="text-center">
                       {producto.disponible ? "Si" : "No"}
                     </td>
                     <td id={producto._id}>
                       <Link to={`Productos/${producto._id}/Editar`}>
-                      editar
+                        editar
                       </Link>
-                   
                     </td>
                   </tr>
                 ))}

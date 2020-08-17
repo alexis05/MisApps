@@ -53,6 +53,16 @@ class NuevoProducto extends React.Component {
     });
   };
 
+  handleChangeTags = (data) => {
+    console.log(data.tags);
+    this.setState({
+      value: {
+        ...this.state.value,
+        tags: data.tags,
+      },
+    });
+  };
+
   handleCheckBox = (e) => {
     this.setState({
       value: {
@@ -139,9 +149,26 @@ class NuevoProducto extends React.Component {
               name="precio"
             />
           </div>
+
           <div className="input-group">
             <div className="input-group-prepend">
-              <span className="input-group-text">Descripción del producto</span>
+              <span className="input-group-text">
+                Descripción del producto (máximo 100 caracteres).
+              </span>
+            </div>
+            <input
+              className="form-control"
+              maxLength="100"
+              type="text"
+              onChange={this.handleChange}
+              name="descripcion_corta"
+            />
+          </div>
+          <br></br>
+
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <span className="input-group-text">Detalles del producto</span>
             </div>
             <CKEditor
               data=""
