@@ -248,6 +248,7 @@ class MongoLib {
       return db
         .collection("pedido")
         .find({ usuarioId: usuarioId })
+        .sort({ fechaPedido: -1 })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .toArray();
@@ -259,6 +260,7 @@ class MongoLib {
       return db
         .collection("pedido")
         .find({ "productos.restaurante": restauranteId })
+        .sort({ fechaPedido: -1 })
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .toArray();

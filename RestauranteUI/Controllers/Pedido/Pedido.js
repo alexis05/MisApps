@@ -34,8 +34,6 @@ function pedidoAPI(app) {
     }
   );
 
-
-
   router.get(
     `/pedido`,
     auth(config.auth),
@@ -63,24 +61,34 @@ function pedidoAPI(app) {
     }
   );
 
+  router.get(
+    `/porrestaurante/:restauranteId`,
+    auth(config.auth),
+    guard.check(["admin"], ["user"]),
+    function (req, res, next) {
+      if (!req.query.limit) return res.send({ error: "Requiere limite" });
+      if (!req.query.skip)
+        return res.send({ error: "Requiere cantidad a ignorar" });
+      let limit = req.query.limit;
+      let skip = req.query.skip;
+      const { restauranteId } = req.params;
+      if (!restauranteId) return res.send({ error: "Requiere el pedido id" });
 
+      var options = {
+        method: "GET",
+        uri: `${config.urlLN}/api/pedido/porrestaurante/${restauranteId}?limit=${limit}&skip=${skip}`,
+      };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      rp(options)
+        .then(function (producto) {
+          res.setHeader("Content-Type", "application/json");
+          res.end(producto);
+        })
+        .catch(function (err) {
+          console.log("Ha ocurrido un error: ", err);
+        });
+    }
+  );
 
   router.get(
     `/pedido/:pedidoId`,
@@ -167,9 +175,11 @@ function pedidoAPI(app) {
     }
   );
 
-
-  router.put(`/:pedidoId`, auth(config.auth), guard.check(["admin"]), 
-  function (req,res,next) {
+  router.put(`/:pedidoId`, auth(config.auth), guard.check(["admin"]), function (
+    req,
+    res,
+    next
+  ) {
     const { pedidoId } = req.params;
     const { body: pedido } = req;
     if (!pedido)
@@ -184,7 +194,7 @@ function pedidoAPI(app) {
       },
       json: true, // Automatically stringifies the body to JSON
     };
-  
+
     rp(options)
       .then(function (parsedBody) {
         res.setHeader("Content-Type", "application/json");
@@ -195,43 +205,6 @@ function pedidoAPI(app) {
         next(err);
       });
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 module.exports = pedidoAPI;

@@ -26,6 +26,16 @@ class PedidoDetalle extends Component {
               <Row>
                 <Col className="text-center justify-content-center">
                   <h3>Pedido #{this.props.pedido.pedido.transaccion}</h3>
+                  <div>
+                    <Row>
+                      <Col className="col-6">REALIZADO:</Col>
+                      <Col className="col-6">Referencia:</Col>
+                    </Row>
+                    <Row>
+                      <Col className="col-6">{pedido.pedido.fechaPedido}</Col>
+                      <Col className="col-6">{pedido.pedido._id}</Col>
+                    </Row>
+                  </div>
                 </Col>
               </Row>
             </div>
@@ -35,15 +45,7 @@ class PedidoDetalle extends Component {
               <div className="card">
                 <div className="card-header">
                   <Row>
-                    <div className="col-3">
-                      <Row>
-                        <Col>REALIZADO:</Col>
-                      </Row>
-                      <Row>
-                        <Col>{this.props.pedido.pedido.fechaPedido}</Col>
-                      </Row>
-                    </div>
-                    <div className="col-2">
+                    <div className="col-4">
                       <Row>
                         <Col>TOTAL:</Col>
                       </Row>
@@ -59,7 +61,7 @@ class PedidoDetalle extends Component {
                         <Col>{this.props.pedido.pedido.direccionEnvio}</Col>
                       </Row>
                     </div>
-                    <div className="col-2">
+                    <div className="col-3">
                       <Row>
                         <Col>ESTADO:</Col>
                       </Row>
@@ -94,17 +96,16 @@ class PedidoDetalle extends Component {
                     </div>
                     <div className="row">
                       <div className="col-12">
-                        <p className="card-text">{producto.detalle}</p>
+                        <p className="card-text">
+                          {producto.descripcion_corta
+                            ? producto.descripcion_corta
+                            : null}
+                        </p>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col className="text-center justify-content-center pb-3">
-              Referencia: {this.props.pedido.pedido._id}
             </Col>
           </Row>
         </div>

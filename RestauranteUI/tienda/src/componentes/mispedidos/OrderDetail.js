@@ -1,21 +1,22 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import {Row,Col,Label,Button} from "reactstrap";
+import { Row, Col, Label, Button } from "reactstrap";
 import { obtenerPedido } from "../../actions/Pedido";
 import ImgBack from "../../images/img-back.png";
 import styled from "styled-components";
 
 const ButtonBack = styled(Button)`
-    border-radius: 8px;
+  border-radius: 8px;
+  background-color: transparent !important;
+  border: 0px solid #ccc;
+  color: black;
+  border: none !important;
+  :focus,
+  :active {
     background-color: transparent !important;
     border: 0px solid #ccc;
     color: black;
-    border:none !important;
-  :focus,:active{
-    background-color: transparent !important;
-    border: 0px solid #ccc;
-    color: black;
-    border:none !important;
+    border: none !important;
   }
 `;
 
@@ -26,27 +27,37 @@ const mapStateToProps = (reducer) => ({
 const mapDispatchToProps = {
   obtenerPedido,
 };
- function OrderDetail ({obtenerPedido,id,pedido,onBack,orderNumber}) {
+function OrderDetail({ obtenerPedido, id, pedido, onBack, orderNumber }) {
   const [searched, setData] = useState(false);
- 
+
   useEffect(() => {
-      setData(false);
-      obtenerPedido(id);
-      setData(true);
-      
+    setData(false);
+    obtenerPedido(id);
+    setData(true);
   }, {});
-      return (
-       
-        <div className="col-12">
-          {pedido.pedido !== "" && searched ?
-          
-          <>
+  return (
+    <div className="col-12">
+      {pedido.pedido !== "" && searched ? (
+        <>
           <Row className="py-2 justify-content-center">
             <Col className="text-center">
-              <ButtonBack className="btn-back px-2 float-left " onClick={()=> onBack()}>
-                  <img src={ImgBack} alt="back"></img>
+              <ButtonBack
+                className="btn-back px-2 float-left "
+                onClick={() => onBack()}
+              >
+                <img src={ImgBack} alt="back"></img>
               </ButtonBack>
               <h3>Pedido #{pedido.pedido.transaccion}</h3>
+              <div>
+                <Row>
+                  <Col className="col-6">REALIZADO:</Col>
+                  <Col className="col-6">Referencia:</Col>
+                </Row>
+                <Row>
+                  <Col className="col-6">{pedido.pedido.fechaPedido}</Col>
+                  <Col className="col-6">{pedido.pedido._id}</Col>
+                </Row>
+              </div>
             </Col>
           </Row>
           <Row>
@@ -54,15 +65,7 @@ const mapDispatchToProps = {
               <div className="card">
                 <div className="card-header">
                   <Row>
-                    <div className="col-3">
-                      <Row>
-                        <Col>REALIZADO:</Col>
-                      </Row>
-                      <Row>
-                        <Col>{pedido.pedido.fechaPedido}</Col>
-                      </Row>
-                    </div>
-                    <div className="col-2">
+                    <div className="col-4">
                       <Row>
                         <Col>TOTAL:</Col>
                       </Row>
@@ -78,7 +81,7 @@ const mapDispatchToProps = {
                         <Col>{pedido.pedido.direccionEnvio}</Col>
                       </Row>
                     </div>
-                    <div className="col-2">
+                    <div className="col-3">
                       <Row>
                         <Col>ESTADO:</Col>
                       </Row>
@@ -113,7 +116,11 @@ const mapDispatchToProps = {
                     </div>
                     <div className="row">
                       <div className="col-12">
-                        <p className="card-text">{producto.detalle}</p>
+                        <p className="card-text">
+                          {producto.descripcion_corta
+                            ? producto.descripcion_corta
+                            : null}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -121,32 +128,29 @@ const mapDispatchToProps = {
               </div>
             </Col>
           </Row>
-          <Row>
-            <Col className="text-center justify-content-center pb-3">
-              Referencia: {pedido.pedido._id}
-            </Col>
-          </Row> 
-          </>
-          :
-            <Row>
-              <div className="col-12">
-                <Row className="align-items-center">
-                  <Col className="text-center justify-content-center">
-                    <ButtonBack className="btn-back px-2 float-left " onClick={()=> onBack()}>
-                        <img src={ImgBack} alt="back"></img>
-                    </ButtonBack>
-                    <h3>Pedido #{orderNumber}</h3>
-                  </Col>
-                </Row>
-              </div>
+        </>
+      ) : (
+        <Row>
+          <div className="col-12">
+            <Row className="align-items-center">
+              <Col className="text-center justify-content-center">
+                <ButtonBack
+                  className="btn-back px-2 float-left "
+                  onClick={() => onBack()}
+                >
+                  <img src={ImgBack} alt="back"></img>
+                </ButtonBack>
+                <h3>Pedido #{orderNumber}</h3>
+              </Col>
             </Row>
-          }
-        </div>
-      );
-     
-    }
-    // return <div></div>;
+          </div>
+        </Row>
+      )}
+    </div>
+  );
+}
+// return <div></div>;
 //   }
 // }
 
- export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);

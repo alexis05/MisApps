@@ -16,13 +16,10 @@ class ListaProducto extends Component {
       <div>
         {this.props.viewActive === Views.PRODUCTLIST ? (
           <div>
-            <div className="col-12 px-0 pt-2">
-              <div className="row justify-content-around justify-content-lg-start  pb-5">
+            <div className="col-12 px-0">
+              <div className="row justify-content-around justify-content-lg-start">
                 {this.props.productos.map((producto, index) => (
-                  <div
-                    className="card-deck mb-2 pb-2 pt-3 px-0 mx-0 col-auto"
-                    key={index}
-                  >
+                  <div className="card-deck px-0 mx-0 col-auto" key={index}>
                     <Link
                       to={`/Home/Producto/${producto._id}`}
                       className="nav-link px-0"

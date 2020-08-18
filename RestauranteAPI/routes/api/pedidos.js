@@ -72,10 +72,13 @@ function pedidoAPI(app) {
   });
 
   router.get("/porrestaurante/:restauranteId", async function (req, res, next) {
+    let limit = req.query.limit;
+    let skip = req.query.skip;
     const { restauranteId } = req.params;
+
     try {
       pedidoServicio
-        .getPedidosPorRetauranteId({ restauranteId })
+        .getPedidosPorRetauranteId({ restauranteId, skip, limit })
         .then((data) => {
           res.status(200).json({
             data: data,

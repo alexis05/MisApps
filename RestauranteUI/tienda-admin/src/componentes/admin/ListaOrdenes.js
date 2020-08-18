@@ -10,9 +10,9 @@ class ListaOrdenes extends Component {
   state = {
     loading: true,
     error: null,
-    data:[],
+    data: [],
     modalIsOpen: false,
-    idpedido:undefined,
+    idpedido: undefined,
     pedido: undefined,
   };
 
@@ -20,14 +20,12 @@ class ListaOrdenes extends Component {
     this.GetPedidos();
   }
 
-
   handleChangePedido = (e) => {
     this.setState({
-     pedido:{estado:"Procesando"},
+      pedido: { estado: "Procesando" },
     });
     console.log(this.state.pedido);
   };
-
 
   handleModalClose = (e) => {
     this.setState({
@@ -44,8 +42,12 @@ class ListaOrdenes extends Component {
     try {
       await API.get(`pedidoapi/pedido/${pedidoid}`).then((res) => {
         console.log(res.data.data);
-        this.setState({loading: false,modalIsOpen: true,idpedido: pedidoid,pedido: res.data.data});
-        
+        this.setState({
+          loading: false,
+          modalIsOpen: true,
+          idpedido: pedidoid,
+          pedido: res.data.data,
+        });
       });
       console.log(this.state);
     } catch (error) {
@@ -53,15 +55,17 @@ class ListaOrdenes extends Component {
     }
   };
 
-
-
   GetPedidos = async () => {
+    const cookies = new Cookies();
+    const restauranteId = cookies.get("rt");
+    if (!restauranteId) throw "El ID de la tienda no es valido.";
     this.setState({ loading: true, error: null });
     try {
-      await API.get(`pedidoapi/pedido?limit=${50}&skip=${0}`).then((res) => {
+      await API.get(
+        `pedidoapi/porrestaurante/${restauranteId}?limit=${50}&skip=${0}`
+      ).then((res) => {
         this.setState({ loading: false, data: res.data.data });
       });
-     
     } catch (error) {
       this.setState({ loading: false, error: error });
     }
@@ -75,14 +79,12 @@ class ListaOrdenes extends Component {
     try {
       let getpedidoid = this.state.idpedido;
 
-      await API.put(`/pedido/${getpedidoid}`,pedido).then(
-        (res) => {
-          this.setState({
-            loading: false,
-            redirectProductoList: true,
-          });
-        }
-      );
+      await API.put(`/pedido/${getpedidoid}`, pedido).then((res) => {
+        this.setState({
+          loading: false,
+          redirectProductoList: true,
+        });
+      });
     } catch (error) {
       this.setState({ loading: false, error: error });
       console.log("Error API");
@@ -92,7 +94,7 @@ class ListaOrdenes extends Component {
   render() {
     return (
       <div className="container-fluid ">
-        {this.state.data.map((producto, index) => (
+        {this.state.data.map((producto) => (
           <button
             id={producto._id}
             className="order-container"
@@ -100,7 +102,7 @@ class ListaOrdenes extends Component {
           >
             <div className="row d-flex align-items-center">
               <div className="text-center no_order">
-                <span>{index}</span>
+                <span>{producto.transaccion}</span>
               </div>
 
               <div className="col col-sm-2 col-md-1 energyplus-orders--item-badge text-center">
@@ -159,9 +161,8 @@ class ListaOrdenes extends Component {
           onClose={this.handleModalClose}
           onOpen={this.handleModalOpen}
           idpedido={this.state.idpedido}
-          datosPedido = {this.state.pedido}
-          
-          chancgePedido ={this.handleChangePedido}
+          datosPedido={this.state.pedido}
+          chancgePedido={this.handleChangePedido}
         ></Modal>
       </div>
     );

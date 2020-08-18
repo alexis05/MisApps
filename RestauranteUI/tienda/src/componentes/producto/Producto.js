@@ -89,14 +89,14 @@ class Producto extends Component {
   };
   render() {
     return (
-      <div className="card-product mb-2 mx-xs-0 mx-md-2 mx-lg-3 pt-2">
+      <div className="card-product mx-xs-0 mx-md-2 mx-lg-3">
         <img
           className="card-img-top img-fluid"
           src="https://ak0.picdn.net/shutterstock/videos/22010890/thumb/2.jpg"
           alt="Card"
         />
         <div className="card-body px-3">
-          <div className="row pt-4 justify-content-start">
+          <div className="row pt-q justify-content-start">
             <div className="col-12 text-left">
               <h5 className="card-title text-left">{this.props.nombre}</h5>
             </div>
@@ -135,7 +135,7 @@ class Producto extends Component {
               </div>
             </div>
 
-            <div className="row d-none">
+            <div className="row">
               <div className="col">
                 <small className="text-muted justify-content-center">
                   Publicado: {mostrarFecha(this.props.creado)}
