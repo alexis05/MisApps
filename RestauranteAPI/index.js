@@ -8,6 +8,9 @@ const usuariosApi = require("./routes/api/usuario");
 const authApi = require("./routes/api/auth");
 const carritosApi = require("./routes/api/carritos");
 const pedidosApi = require("./routes/api/pedidos");
+const tipoProductoApi = require("./routes/api/config/tipoProducto");
+const atributosApi = require("./routes/api/config/atributos");
+const categoriaApi = require("./routes/api/config/categoria");
 
 app.use(bodyParser.json());
 
@@ -17,9 +20,12 @@ usuariosApi(app);
 carritosApi(app);
 pedidosApi(app);
 authApi(app);
+atributosApi(app);
+tipoProductoApi(app);
+categoriaApi(app);
 
 app.get("/console/up", function (request, response, next) {
-  response.send("Hola!!");
+  response.send("Test!!");
 });
 
 const server = app.listen(5050, function () {

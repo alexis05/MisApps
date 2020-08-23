@@ -3,7 +3,7 @@ import Productos from "./producto/Productos";
 
 const Tienda = () => {
   return (
-    <div className="px-3">
+    <div className="px-1">
       <Productos />
     </div>
   );

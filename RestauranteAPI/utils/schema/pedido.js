@@ -27,6 +27,7 @@ const estadoPedidoSchema = Joi.object({
   estado: Joi.string()
     .valid("Despachado", "Entregado", "Cancelado", "Pendiente")
     .required(),
+  // @TODO: falta el precio
 });
 module.exports = {
   crearPedidoSchema,

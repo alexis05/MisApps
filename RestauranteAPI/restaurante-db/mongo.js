@@ -21,13 +21,19 @@ class MongoLib {
     if (!!MongoLib.intancia) {
       return MongoLib.intancia;
     }
-    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true });
+    this.client = new MongoClient(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     this.dbName = DB_NAME;
     MongoLib.intancia = this;
   }
 
   connect() {
     return new Promise((resolve, reject) => {
+      console.log(
+        `----Esta conectado a la bd: ${this.client.isConnected()} - ${new Date().toUTCString()}`
+      );
       this.client.connect((error) => {
         if (error) {
           console.log("No se pudo conectar a la bd atravez de la instancia ..");
@@ -66,6 +72,12 @@ class MongoLib {
   getByEmail(collection, email) {
     return this.connect().then((db) => {
       return db.collection(collection).findOne({ email: email });
+    });
+  }
+
+  existsThisCategory(nombre) {
+    return this.connect().then((db) => {
+      return db.collection("categorias").findOne({ nombre: nombre });
     });
   }
 

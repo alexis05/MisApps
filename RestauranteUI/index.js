@@ -10,7 +10,12 @@ const usuarioApi = require("./Controllers/Usuario/Usuario");
 const publicController = require("./Controllers/index");
 const carritoApi = require("./Controllers/Carrito/Carrito");
 const pedidoApi = require("./Controllers/Pedido/Pedido");
+const atritbutoApi = require("./Controllers/Config/Atributos");
+const categoriaApi = require("./Controllers/Config/Categoria");
+const tipoProductoApi = require("./Controllers/Config/TipoProducto");
+
 const cookieParser = require("cookie-parser");
+const tipoProductoAPI = require("./Controllers/Config/TipoProducto");
 
 const DIST_DIR = path.join(__dirname, "/dist/");
 const HTML_FILE = path.join(DIST_DIR, "index.html");
@@ -27,6 +32,9 @@ usuarioApi(app);
 publicController(app);
 carritoApi(app);
 pedidoApi(app);
+atritbutoApi(app);
+categoriaApi(app);
+tipoProductoApi(app);
 
 app.get("/", function (req, res, next) {
   res.send("Hola!");

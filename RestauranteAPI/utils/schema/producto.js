@@ -1,8 +1,11 @@
 const Joi = require("@hapi/joi");
+const regexId = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
 
-const productoIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
-const restauranteIdSchema = Joi.string().regex(/^[0-9a-fA-F]{24}$/);
+const productoIdSchema = regexId;
+const restauranteIdSchema = regexId;
 const productoTagSchema = Joi.array().items(Joi.string());
+const tipoProductoSchema = regexId;
+const categoriaSchema = regexId;
 
 const crearProductoSchema = Joi.object({
   nombre: Joi.string().max(50).required(),
@@ -15,9 +18,12 @@ const crearProductoSchema = Joi.object({
   disponible: Joi.bool(),
   restaurante: Joi.string(),
   precio: Joi.number().min(1).max(1000000).required(),
+  precio_sin_descuento: Joi.number().min(1).max(1000000).required(),
   fotos: Joi.string(),
   tags: productoTagSchema,
   restaurante: restauranteIdSchema,
+  tipo_producot: tipoProductoSchema,
+  categoria: categoriaSchema,
 });
 
 const actProductoSchema = Joi.object({

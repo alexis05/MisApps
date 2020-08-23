@@ -188,7 +188,9 @@ class MenuBO extends Component {
             </div>
           </nav>
         </div>
-        <div className="col-9 pt-3 px-4">{this.props.children}</div>
+        <div className="offset-xs-0 offset-sm-0 offset-md-2 offset-lg-2 col-xs-12 col-sm-12  col-md-10 col-lg-10 pt-3 px-4">
+          {this.props.children}
+        </div>
       </React.Fragment>
     );
   }

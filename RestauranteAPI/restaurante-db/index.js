@@ -33,6 +33,12 @@ class ServicioAPI {
     return item || [];
   }
 
+  async checkIfExistsThisCategory({ nombre }) {
+    const item = await this.mongoDB.existsThisCategory(this.collection, nombre);
+    if (item) return true;
+    return false;
+  }
+
   async getMisRestaurantes({ usuarioId }) {
     const all = await this.mongoDB.getMisRestaurantes(
       this.collection,

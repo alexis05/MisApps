@@ -1,6 +1,7 @@
 import React from "react";
 import API from "../../API";
 import Cookies from "universal-cookie";
+import { Link } from "react-router-dom";
 
 class PerfilTienda extends React.Component {
   state = {
@@ -72,11 +73,87 @@ class PerfilTienda extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-sm-10 col-md-8 col-lg-6 mx-auto d-table">
+          <div className="col-sm-12 col-md-12 col-lg-12 mx-auto d-table">
             <div className="d-table-cell align-middle">
-              <div className="text-center mt-4">
+              <div className="text-center mt-1">
                 <h1 className="h2">{this.state.data.data.nombre}</h1>
-                <p className="lead">Puede editar los siguientes valores</p>
+                <div className="container">
+                  <div className="card-deck mb-3 text-center">
+                    <div className="card mb-4 shadow-sm">
+                      <div className="card-header">
+                        <h4 className="my-0 font-weight-normal">Categorias</h4>
+                      </div>
+                      <div className="card-body">
+                        <ul className="list-unstyled mt-1 mb-1">
+                          <li>Categorizar productos para ser encontrados.</li>
+                        </ul>
+                      </div>
+                      <div className="card-footer">
+                        <Link
+                          className="underlineHover aLink"
+                          to="/Admin/Categorias"
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-lg btn-block btn-primary"
+                          >
+                            Ir
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="card mb-4 shadow-sm">
+                      <div className="card-header">
+                        <h4 className="my-0 font-weight-normal">Atributos</h4>
+                      </div>
+                      <div className="card-body">
+                        <ul className="list-unstyled mt-1 mb-1">
+                          <li>Añada los atributos del producto.</li>
+                        </ul>
+                      </div>
+                      <div className="card-footer">
+                        <Link
+                          className="underlineHover aLink"
+                          to="/Admin/Atributos"
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-lg btn-block btn-primary"
+                          >
+                            Ir
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="card mb-4 shadow-sm">
+                      <div className="card-header">
+                        <h4 className="my-0 font-weight-normal">
+                          Tipo de producto
+                        </h4>
+                      </div>
+                      <div className="card-body">
+                        <ul className="list-unstyled mt-1 mb-1">
+                          <li>Define los tipos de productos que vendes.</li>
+                        </ul>
+                      </div>
+                      <div className="card-footer">
+                        <Link
+                          className="underlineHover aLink"
+                          to="/Admin/TipoProductos"
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-lg btn-block btn-primary"
+                          >
+                            Ir
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr></hr>
+                <h3 className="lead">Actualice los datos de su tienda.</h3>
               </div>
 
               <div className="card">

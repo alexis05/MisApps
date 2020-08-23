@@ -8,6 +8,9 @@ import Dasboard from "./componentes/admin/Dashboard";
 import Ordenes from "./componentes/admin/ListaOrdenes";
 import Productos from "./componentes/admin/Productos";
 import EditarProductos from "./componentes/admin/EditarProductos";
+import Categorias from "./componentes/admin/categoria";
+import Atriculos from "./componentes/admin/atributos";
+import TipoProductos from "./componentes/admin/tipoProducto";
 class App extends Component {
   render() {
     return (
@@ -19,8 +22,23 @@ class App extends Component {
               <Route exact path="/Admin/Ordenes" component={Ordenes} />
               <Route exact path="/Admin/MiTienda" component={PerfilTienda} />
               <Route exact path="/Admin/Productos" component={Productos} />
-              <Route exact path="/Admin/Producto/Nuevo" component={NuevoProducto}/>
-              <Route exact path="/Admin/Productos/:productId/Editar" component={EditarProductos}/>
+              <Route
+                exact
+                path="/Admin/Producto/Nuevo"
+                component={NuevoProducto}
+              />
+              <Route
+                exact
+                path="/Admin/Productos/:productId/Editar"
+                component={EditarProductos}
+              />
+              <Route exact path="/Admin/Categorias" component={Categorias} />
+              <Route exact path="/Admin/Atributos" component={Atriculos} />
+              <Route
+                exact
+                path="/Admin/TipoProductos"
+                component={TipoProductos}
+              />
             </MenuBO>
           </HomeBO>
         </Switch>
