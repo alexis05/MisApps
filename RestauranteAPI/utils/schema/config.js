@@ -17,7 +17,7 @@ const crearAtributoSchema = Joi.object({
 
 const tipoProductoSchema = Joi.object({
   nombre: Joi.string().required(),
-  tipo: Joi.boolean(),
+  tipo: Joi.string().valid("digital", "fisico"),
   impuesto: Joi.number(),
   atributo: atributoIdSchema,
 });

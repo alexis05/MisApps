@@ -33,8 +33,18 @@ class ServicioAPI {
     return item || [];
   }
 
+  async createIfNotExistsThisCategory({ item }) {
+    const result = await this.mongoDB.existsThisCategory(item.nombre);
+    if (!result) {
+      const crearItem = await this.mongoDB.create("categorias", item);
+      return crearItem;
+    }
+    return false;
+  }
+
   async checkIfExistsThisCategory({ nombre }) {
     const item = await this.mongoDB.existsThisCategory(this.collection, nombre);
+    console.log(item);
     if (item) return true;
     return false;
   }

@@ -55,6 +55,8 @@ class index extends Component {
               <thead>
                 <tr>
                   <th>Nombre</th>
+                  <th>Tipo</th>
+                  <th>Impuesto</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -63,6 +65,8 @@ class index extends Component {
                 {this.state.data.map((tipoProducto, index) => (
                   <tr key={index}>
                     <td>{tipoProducto.nombre}</td>
+                    <td>{tipoProducto.tipo}</td>
+                    <td>{tipoProducto.impuesto} %</td>
                     <td id={tipoProducto._id}>
                       <Link to={`TipoProducto/${tipoProducto._id}/Editar`}>
                         editar

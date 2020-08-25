@@ -55,25 +55,20 @@ function AtributosConfigAPI(app) {
     next
   ) {
     const { body: item } = req;
-
     try {
       configServicio
-        .checkIfExistsThisCategory(item.nombre)
-        .then((exists) => {
-          if (exists) {
-            configServicio
-              .create({ item })
-              .then((data) => {
-                res.status(201).json({
-                  data: data,
-                  mensaje: "OK",
-                });
-              })
-              .catch((err) => next(err));
+        .createIfNotExistsThisCategory({ item })
+        .then((data) => {
+          if (!data) {
+            res.status(200).json({
+              mensaje: `Esta categoria ya existe, ${item.nombre}`,
+            });
+          } else {
+            res.status(200).json({
+              data: data,
+              mensaje: "OK",
+            });
           }
-          res.status(400).json({
-            mensaje: "Ya existe esta categoria.",
-          });
         })
         .catch((err) => next(err));
     } catch (err) {
