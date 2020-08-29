@@ -7,7 +7,7 @@ const atributoIdSchema = Joi.string()
 const crearAtributoSchema = Joi.object({
   nombre: Joi.string().required(),
   code: Joi.optional(),
-  entrada: Joi.string().valid("seleccion", "nseleccion").required(),
+  entrada: Joi.string().valid("seleccion", "multipleseleccion").required(),
   valores: Joi.array().items(
     Joi.object().keys({
       valor: Joi.string().required(),

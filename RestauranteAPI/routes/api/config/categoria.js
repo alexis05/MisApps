@@ -60,7 +60,7 @@ function AtributosConfigAPI(app) {
         .createIfNotExistsThisCategory({ item })
         .then((data) => {
           if (!data) {
-            res.status(200).json({
+            res.status(400).json({
               mensaje: `Esta categoria ya existe, ${item.nombre}`,
             });
           } else {
