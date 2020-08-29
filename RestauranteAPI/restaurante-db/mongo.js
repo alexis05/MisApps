@@ -87,6 +87,12 @@ class MongoLib {
     });
   }
 
+  existsThisTypeOfProduct(nombre) {
+    return this.connect().then((db) => {
+      return db.collection("tipoProducto").findOne({ nombre: nombre });
+    });
+  }
+
   getByUUID(collection, uuid) {
     return this.connect().then((db) => {
       return db.collection(collection).findOne({ uuid: uuid });

@@ -51,6 +51,15 @@ class ServicioAPI {
     return false;
   }
 
+  async createIfNotExistsThisProductType({ item }) {
+    const result = await this.mongoDB.existsThisTypeOfProduct(item.nombre);
+    if (!result) {
+      const crearItem = await this.mongoDB.create("tipoProducto", item);
+      return crearItem;
+    }
+    return false;
+  }
+
   async getMisRestaurantes({ usuarioId }) {
     const all = await this.mongoDB.getMisRestaurantes(
       this.collection,

@@ -58,12 +58,18 @@ function TipoProductoConfigAPI(app) {
 
     try {
       configServicio
-        .create({ item })
+        .createIfNotExistsThisProductType({ item })
         .then((data) => {
-          res.status(201).json({
-            data: data,
-            mensaje: "OK",
-          });
+          if (!data) {
+            res.status(400).json({
+              mensaje: `Esta tipo de producto ya existe, ${item.nombre}`,
+            });
+          } else {
+            res.status(201).json({
+              data: data,
+              mensaje: "OK",
+            });
+          }
         })
         .catch((err) => next(err));
     } catch (err) {

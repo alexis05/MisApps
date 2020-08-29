@@ -19,7 +19,7 @@ const tipoProductoSchema = Joi.object({
   nombre: Joi.string().required(),
   tipo: Joi.string().valid("digital", "fisico"),
   impuesto: Joi.number(),
-  atributo: atributoIdSchema,
+  atributos: Joi.array().items(atributoIdSchema),
 });
 
 const crearCategoriaSchema = Joi.object({
