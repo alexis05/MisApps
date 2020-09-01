@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 var bodyParser = require("body-parser");
 var cors = require("cors");
+var geoip = require("geoip-lite");
 const app = express();
 app.use(cors());
 const productoApi = require("./Controllers/Producto/Producto.js");
@@ -37,7 +38,9 @@ categoriaApi(app);
 tipoProductoApi(app);
 
 app.get("/", function (req, res, next) {
-  res.send("Hola!");
+  var ip = "186.74.62.46";
+  var geo = geoip.lookup(ip);
+  res.send(`Hola! Geo.. ${JSON.stringify(geo)}`);
 });
 
 app.use(express.static(DIST_DIR));

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TagsInput from "react-tagsinput";
-
 import "react-tagsinput/react-tagsinput.css";
+import "./TagsInputs.css";
 
 class TagInput extends Component {
   constructor() {
@@ -21,12 +21,11 @@ class TagInput extends Component {
   render() {
     const inputProp = {
       className: "react-tagsinput-input",
-      placeholder: "Ej: Ropa",
+      placeholder: "Ej: Para niños",
     };
-
     return (
       <TagsInput
-        value={this.state.tags}
+        value={this.props.value}
         onChange={this.handleChange}
         inputProps={inputProp}
       />

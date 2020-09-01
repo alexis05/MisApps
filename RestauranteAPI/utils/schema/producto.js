@@ -31,6 +31,8 @@ const crearProductoSchema = Joi.object({
       atributoId: atributoIdSchema,
       precio: Joi.number(),
       precio_sin_descuento: Joi.number(),
+      sku: Joi.string(),
+      codigo_barras: Joi.string(),
       fotos: Joi.array().items(
         Joi.object().keys({
           url: Joi.string(),
@@ -52,6 +54,8 @@ const actProductoSchema = Joi.object({
     Joi.object().keys({
       precio: Joi.number(),
       precio_sin_descuento: Joi.number(),
+      sku: Joi.string(),
+      codigo_barras: Joi.string(),
       fotos: Joi.array().items(
         Joi.object().keys({
           url: Joi.string(),

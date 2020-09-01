@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import NuevoProducto from "./componentes/admin/NuevoProducto";
+import ProductoNuevo from "./componentes/admin/product";
 import PerfilTienda from "./componentes/tienda/PerfilTienda";
 import HomeBO from "./componentes/admin/HomeBO";
 import MenuBO from "./componentes/admin/menu/MenuBO";
@@ -26,6 +27,11 @@ class App extends Component {
                 exact
                 path="/Admin/Producto/Nuevo"
                 component={NuevoProducto}
+              />
+              <Route
+                exact
+                path="/Admin/Nuevo/Producto"
+                component={ProductoNuevo}
               />
               <Route
                 exact
